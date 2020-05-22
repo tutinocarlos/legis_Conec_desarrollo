@@ -1,0 +1,13 @@
+RewriteEngine on
+<Files .htaccess>
+Order allow,deny
+Deny from all
+</Files>	
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule .* index.php/$0 [PT,L]
+
+# Activar RewriteEngine
+RewriteEngine on
+ 
