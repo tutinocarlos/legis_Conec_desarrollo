@@ -6,10 +6,6 @@
 !*/cache/.htaccess
 info/*
 
-#codeigniter 3
-application
-static
-system
 *.rar
 *.zip
-.htaccess
+.htaccessgirt
