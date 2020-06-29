@@ -1,3 +1,4 @@
+<?php if(!$this->ion_auth->is_members()):?>
 <div class="col-md-6" data-select2-id="15">
 	<div class="card">
 		<?php
@@ -97,11 +98,12 @@
 		?>
 	</div>
 </div>
+<?php endif;?>
 
 <div class="col-md-12" data-select2-id="15">
 	<div class="card">
 		<div class="card-body">
-			<h4 class="card-title">Tipos en tabla</h4>
+			<h4 class="card-title">Tipos de normativas</h4>
 			<div class="table-responsive">
 				<div id="zero_config_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
 					<table id="example" class="display" style="width:100%">

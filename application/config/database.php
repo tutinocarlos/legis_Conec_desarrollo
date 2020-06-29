@@ -8,9 +8,17 @@ $query_builder = TRUE;
 
 	switch ($_SERVER['REMOTE_ADDR']) {
 
-    case "127.0.0.1":
+    case "181.13.81.251":
 			
-			$db_database = 'proyecto';
+//			$db_database = 'legis_conectadas';
+			$db_database = 'legis_conectadas';
+			$db_server = 'localhost';
+			$db_user = 'root';
+			$db_pass = '';
+    break;
+    case "192.168.1.103":
+			
+			$db_database = 'legis_conectadas';
 			$db_server = 'localhost';
 			$db_user = 'root';
 			$db_pass = '';

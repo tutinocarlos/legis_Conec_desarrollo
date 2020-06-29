@@ -16,6 +16,139 @@
 	}
 
 $(document).ready(function () {
+
+	$("#borrar_video").click(function(e){
+		
+		
+		$.confirm({
+		 columnClass: 'medium',
+			closeIcon: true,
+			icon: 'fa fa-warning',
+			title: 'Tutoriales',
+			content: 'Confirma eliminar el video?',
+			buttons: {
+
+				confirm:{
+					text: 'Proceder',
+					btnClass: 'btn btn-green', 
+					action: function () {
+						
+						var dato = new FormData();
+		
+						dato.append('id_video', $("a#borrar_video").data('id_video'));
+		
+						$.ajax({
+							type: "POST",
+							contentType: false,
+							dataType: 'json',
+							data: dato,
+							processData: false,
+										cache: false,
+							beforeSend: function () {
+								$("#sub_categoria ").empty();
+
+							},
+							url: $("body").data('base_url')+"Manager/Post/borrar_video",
+							success: function (result) {
+
+											console.log('result');
+											console.log(result);
+
+
+											if (result.status === true) {
+							//					toastr.onShown = function() {
+							//						 location.reload();
+							//						
+							//					}
+							//					toastr.options.hideMethod = 'slideUp';
+							//					toastr.options.progressBar = true;
+
+							//					toastr.success('Se ha borrado el video correctamente', 'Publicaciones');
+											} else {
+							//					toastr.error('Ocurrió un error al borrar el video', 'Publicaciones');
+
+											}
+											location.reload();
+										},
+										error: function (xhr, errmsg, err) {
+											console.log(xhr.status + ": " + xhr.responseText);
+										}
+									});
+					}
+				},
+				cancel: {
+					text: 'Cancelar',
+					btnClass: 'btn btn-red', 
+					action: function () {
+						$.alert('Acción Cancelada, no se eliminará el Video');
+					}
+				},
+
+			}
+		});
+
+	});
+
+	
+	$("#post_addVideo").click(function(e){
+		alert();	
+		e.preventDefault();
+		
+		if($('input#url_video').val() == ''){
+			$("#titulo_video_error").html('La url del video es obligatoria');
+			toastr.error('El campo URL es Obligatorio', 'Publicaciones - Videos');
+			return false;
+																											
+		}
+		
+		
+		var dato = new FormData();
+		dato.append('id_post', $(this).data('post'));
+		dato.append('titulo_video', $('input#titulo_video').val());
+		dato.append('detalle_video', $('#detalle_video').val());
+		dato.append('url_video', $('input#url_video').val());
+
+		$.ajax({
+			type: "POST",
+			contentType: false,
+			dataType: 'json',
+			data: dato,
+			processData: false,
+						cache: false,
+			beforeSend: function () {
+				$("#sub_categoria ").empty();
+
+			},
+			url: $("body").data('base_url')+"Manager/Post/add_video",
+			success: function (result) {
+
+				console.log('result');
+				console.log(result);
+				
+				
+				if (result.status === true) {
+//					toastr.onShown = function() {
+//						 location.reload();
+//						
+//					}
+//					toastr.options.hideMethod = 'slideUp';
+//					toastr.options.progressBar = true;
+					$('#form_cargar_video')[0].reset();
+					toastr.success(result.mensaje, 'Publicaciones');
+					location.reload();
+				} else {
+					$("#titulo_video_error").html('La url del video es obligatoria')
+					toastr.error(result.mensaje, 'Publicaciones');
+				}
+			},
+			error: function (xhr, errmsg, err) {
+				console.log(xhr.status + ": " + xhr.responseText);
+			}
+		});
+
+
+});
+	
 	
 	/* SUBIR ARCHIVOS ADJUNTOS */
 	$('#upload_file').submit(function(e) {
@@ -25,7 +158,7 @@ $(document).ready(function () {
 		var formData = new FormData($("form#upload_file")[0]);
 		$.ajax({
 			type: $("form#upload_file").attr('method'),
-			url :	$("form#upload_file").attr('action'), 
+			url :	$('body').data('base_url')+'Manager/Post/add_archivo_adjunto', 
 			cache: false,
 			contentType: false,
 			processData: false,
@@ -41,6 +174,8 @@ $(document).ready(function () {
 				
 	
 				if(response.status != 'error'){
+					$('#upload_file').trigger("reset");
+					$('#subir_archivos').attr('disabled','disabled');
 					toastr.success('Archivos Adjuntos<br>' + response.msg + ',<br>', 'Publicaciones');
 					$("div.comment-widgets").append(response.html);
 				}else{
@@ -232,7 +367,7 @@ $.ajax({
 		$("#sub_categoria").append(result);
 
 
-		toastr.success('Registro Editado correctamente!', 'Categorías');
+		toastr.success('Registro Editado correctamente!', 'Publicaciones ');
 	},
 	error: function (xhr, errmsg, err) {
 		console.log(xhr.status + ": " + xhr.responseText);

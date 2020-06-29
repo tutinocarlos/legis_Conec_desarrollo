@@ -25,23 +25,46 @@ $parts = explode("/", $url);
 // The second part (offset 1) is the part we look for
 $segment = '';			 
 
-//sitio remoto
 
-// if (count($parts) > 1) {
-//     $segment = $parts[2];
-// } else {
-//     throw new Exception("Full URLs please!");
-// }
+// sitio remo 38
+//	$segment = $parts[2];
 
 
-//sitio local
+//sitio local y 10.1.1.77
+//$segment = $parts[1];
 
-if (count($parts) > 1) {
-    $segment = $parts[1];
-} else {
-    throw new Exception("Full URLs please!");
-}
+	switch ($_SERVER['SERVER_ADDR']) {
+		case "127.0.0.1":
+			if (count($parts) > 1) {
+    		$segment = $parts[1];
+			} else {
+    		throw new Exception("Full URLs please!");
+			}
+      break;
 
+    case "10.1.1.77":
+			if (count($parts) > 1) {
+    		$segment = $parts[1];
+			} else {
+    		throw new Exception("Full URLs please!");
+			}
+      break;
+			
+    case "10.1.1.38":
+			if (count($parts) > 1) {
+    		$segment = $parts[2];
+			} else {
+    		throw new Exception("Full URLs please!");
+			}
+      break;
+		
+		default:
+			if (count($parts) > 1) {
+		    $segment = $parts[1];
+			} else {
+    	throw new Exception("Full URLs please!");
+			}			
+	}
 
 //transformo en objeto array no stdsclass			 
 $legislaturas2 = json_decode(json_encode($legislaturas), true);			 
@@ -53,14 +76,42 @@ $filterTitleReload = '';
 $urlLegis = '';
 $filterColor = '';			 
 if ($segment=='Provincias'){
-	
-	// sitio remo
+
+	// sitio remo 38
 	// $filterZona = $parts[3];
 	// $filterProv = $parts[4];	
 
-//sitio local 
-	$filterZona = $parts[2];
-	$filterProv = $parts[3];
+	//sitio local y 10.1.1.77
+	//$filterZona = $parts[2];
+	//$filterProv = $parts[3];
+
+	switch ($_SERVER['SERVER_ADDR']) {
+    
+		case "127.0.0.1":
+			$filterZona = $parts[2];
+			$filterProv = $parts[3];
+	
+    	break;
+					
+		case "10.1.1.77":
+			$filterZona = $parts[2];
+			$filterProv = $parts[3];
+	
+    	break;
+				
+		case "10.1.1.38":
+			$filterZona = $parts[3];
+			$filterProv = $parts[4];
+	
+    	break;
+			
+		default:
+		 $filterZona = $parts[2];
+		 $filterProv = $parts[3];	
+			
+	}
+	
+
 	
 	if (!empty($filterZona)){
 		
@@ -240,7 +291,7 @@ $total = count((array)$legislaturas);
 		margin-left: 40px;
 	}
 
-	/*
+/*
 	div.map_container {
 		height: 100%;
 	}
@@ -344,35 +395,39 @@ $total = count((array)$legislaturas);
 									<p>Tipo de organismo: <strong><?= $legislatura->organismo ?> </strong>
 									</p>
 									<?php if ($legislatura->representantes > 0): ?>
-									<p>
-										<a href="<?= base_url($segments) ?>" style="font-size: 16px;">
-											<div class="alert alert-info" role="alert">
-												<i class="fa fa-users" style="color: #5a89a9; margin: 0 10px 0 0"></i>Ver <?= $legislatura->representantes?> Representantes
-											</div>
-										</a>
-									</p>
-
+										<p>
+											<a href="<?= base_url($segments) ?>" style="font-size: 16px;">
+												<div class="alert alert-info" role="alert">
+                       		<i class="fa fa-users" style="color: #5a89a9; margin: 0 10px 0 0"></i>Ver <?= $legislatura->representantes?> Representantes
+                      	</div>
+                      </a>
+										</p>
+										
 									<?php endif;?>
 
 									<ul class="top-nav-social">
-										<?php if($legislatura->facebook_legis != ''): ?>
-										<li><a href="<?= $legislatura->facebook_legis ?>" class="facebook" target="_blank"> <i class="fa fa-facebook"></i> </a>
+											<?php if($legislatura->facebook_legis != ''): ?>
+											<li><a href="<?= $legislatura->facebook_legis ?>" class="facebook" target="_blank"> <i class="fa fa-facebook"></i> </a>
+											</li>
+											<?php endif;?>
+											<?php if($legislatura->twitter_legis!= ''): ?>
+											<li><a href="<?= $legislatura->twitter_legis ?>" class="twitter" target="_blank"> <i class="fa fa-twitter"></i> </a>
+											</li>
+											<?php endif;?>
+											<?php if($legislatura->instagram_legis!= ''): ?>
+											<li><a href="<?= $legislatura->instagram_legis ?>" class="instagram" target="_blank"> <i class="fa fa-instagram"></i> </a>
+											</li>
+											<?php endif;?>
+											<?php if($legislatura->linkedin_legis!= ''): ?>
+											<li><a href="<?= $legislatura->linkedin_legis ?>" class="linkedin" target="_blank"> <i class="fa fa-linkedin" ></i> </a>
+											</li>
+											<?php endif;?>
+											<?php if($legislatura->youtube_legis != ''): ?>
+													<li><a href="<?= $legislatura->youtube_legis ?>" class="youtube" target="_blank"> <i class="fa fa-youtube"></i> </a>
 										</li>
 										<?php endif;?>
-										<?php if($legislatura->twitter_legis!= ''): ?>
-										<li><a href="<?= $legislatura->twitter_legis ?>" class="twitter" target="_blank"> <i class="fa fa-twitter"></i> </a>
-										</li>
-										<?php endif;?>
-										<?php if($legislatura->instagram_legis!= ''): ?>
-										<li><a href="<?= $legislatura->instagram_legis ?>" class="instagram" target="_blank"> <i class="fa fa-instagram"></i> </a>
-										</li>
-										<?php endif;?>
-										<?php if($legislatura->linkedin_legis!= ''): ?>
-										<li><a href="<?= $legislatura->linkedin_legis ?>" class="linkedin" target="_blank"> <i class="fa fa-linkedin"></i> </a>
-										</li>
-										<?php endif;?>
-									</ul>
-
+										</ul>
+									
 
 								</div>
 							</div>
@@ -399,7 +454,7 @@ $total = count((array)$legislaturas);
 				<div class="map_container">
 					<div id="map" class="smart_map" style=""></div>
 					<!--<div id="map_malvinas" class="smart_map" style="width:100%;height:100%"></div>-->
-					<?php 
+				<?php 
 				$tipoCamara = '';
 				foreach($tipos_camaras as $camara){
 					
@@ -415,12 +470,12 @@ $total = count((array)$legislaturas);
 				?>
 
 
-					<div class="row" style="margin-top: 10px ">
-						<div class="small"><i class="fa fa-info-circle"></i> <i>Puede pasar el puntero del mouse para interactuar con el mapa</i>
-						</div>
+				<div class="row" style="margin-top: 10px ">
+					<div class="small"><i class="fa fa-info-circle"></i> <i>Puede pasar el puntero del mouse para interactuar con el mapa</i>
 					</div>
 				</div>
-				<!--
+				</div>
+<!--
 				<div class="row " style="margin-top: 30px " id="alert-map">
 					<div class="alert alert-warning alert-dismissible fade show" role="alert">
 						<strong>Holy guacamole!</strong> You should check in on some of those fields below.

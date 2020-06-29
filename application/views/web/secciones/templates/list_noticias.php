@@ -42,7 +42,7 @@
 				$i = 1;
 				foreach($noticias_destacadas	 as $data){
 			?>
-			<div class="col-md-4 ">
+			<div class="col-md-3 ">
 				<div class="single-bolg hover01 text-left">
 					<div class="blog-img">
 					<figure><img src="<?= base_url().$data->foto ?>" alt="<?= $data->titulo?>" class=""></figure>
@@ -68,7 +68,7 @@
 				</div>
 			</div>
 			<?php 
-							if ($i++ == 3) break;
+						//	if ($i++ == 3) break;
 				}
 			?>
 		</div>

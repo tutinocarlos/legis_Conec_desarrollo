@@ -16,11 +16,11 @@
 //		}
 
 //echo $prev_item[0]->nom_tipo_pub;
-//die();
-//echo '<pre>';
-////var_dump($publicacion);
+//echo '<pre>sa';
+//var_dump($adjuntos);
 //echo '</pre>';
-
+//
+//die();
 
 if($publicacion->estado == 0){
 	redirect(base_url('Noticias'));
@@ -47,6 +47,22 @@ if($publicacion->estado == 0){
   
     word-break: break-word;
 }
+	
+.video-responsive {
+    height: 0;
+    overflow: hidden;
+    padding-bottom: 56.25%;
+    padding-top: 30px;
+    position: relative;
+    }
+.video-responsive iframe, .video-responsive object, .video-responsive embed {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    }
+
 </style>	
 <div class="business-banner">
 	<div class="hvrbox">
@@ -81,9 +97,13 @@ if($publicacion->estado == 0){
 							<?php foreach($fotos as $data):?>
 							<?php if($data === reset($fotos)) {$activse = 'active';}else{$activse = '';}?>
 							<div class="carousel-item <?= $activse ?> ">
+						
 								<img class="img-thumbnail img-fluid  mx-auto d-block" src="<?= base_url($data->url)?>" alt="First slide">
 							</div>
 							<?php endforeach;?>
+							<div class="carousel-itm">
+								
+							</div>
 						</div>
 						<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
 							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -123,12 +143,13 @@ if($publicacion->estado == 0){
 								<?= $caracter ?></span>
 							<?= substr($string, 1)?>
 						</p>
-						
+						http://legislaturasconectadas.gob.ar/
+						http://www.legislaturasconectadas.gob.ar/Manager
 -->
-<p> <?php echo $publicacion->cuerpo  ?></p>
 						<blockquotes>
 							<?= $publicacion->resumen?>
 						</blockquotes>
+<p> <?php echo $publicacion->cuerpo  ?></p>
 						<?php if(!empty($publicacion->extra )):?>
 						<div class="promotion-box">
 							<?= $publicacion->extra?>
@@ -136,10 +157,47 @@ if($publicacion->estado == 0){
 						<?php endif;?>
 					</div>
 				</div>
-
+				<div class="row">
+				
+				<?php if($videos != ''):?>
+				<?php foreach ($videos as $video):?>
+					<div class="col-sm-12 col-md-12">
+						<div class="video-responsive">
+							<iframe  src="https://www.youtube.com/embed/<?= $video->url?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+						</div>
+					</div>
+				<?php endforeach;?>
+				<?php endif;?>
+			
+				</div>
+				<!--				archivos adjuntos-->
+				<?php if(!empty($adjuntos)):?>
+				<div class="padding-top-middle"></div>
+				<div class="row">
+					<div class="col-sm-12">
+						<h4>Archivos Adjuntos</h4>
+							<?php //var_dump($adjuntos);?>
+						<div class="">
+						<ul style=" padding-left: 0;">
+							<?php foreach($adjuntos as $adjunto):?>
+							<?php
+							// Obtenfo el nombre del archivo para mostrarlo en el front
+							$nombre_archivo = explode('/', $adjunto->url);
+							?>
+							<li style="list-style: none;">
+								<i class="fa fa-paperclip" aria-hidden="true" style="margin-right: 5px; color:#4f92b0;"></i>
+								<a href="<?= base_url($adjunto->url)?>" target="_blank"><?= end($nombre_archivo); echo ' - '.$adjunto->detalle ?></a></li>
+							<?php endforeach;?>
+					</ul>
+				</div>
+					</div>
+				</div>
+				<?php endif;?>
+<!--				FIN archivos adjuntos--
+				
 				<div class="row">
 					<div class="col-md-6">
-						<div>Tags:</div>
+<!--						<div>Tags:</div>-->
 						<div class="blog-single-tag">
 							<?php if(!empty($tags)):?>
 							<div class="blog-post-tag">
@@ -262,8 +320,12 @@ if($publicacion->estado == 0){
 		<div class="owl-carousel">
 			<?php foreach($mas_noticias as $noticia):?>
 			<div class=" single-bolg hover01" title="<?= $noticia->nombre_cate;?>">
-				<figure><img src="<?= base_url($noticia->foto)?>" class="img-thumbnail img-fluid " style="">
-				</figure>
+			
+			<?php if(!empty($noticia->foto)):?>
+				<figure><img src="<?= base_url($noticia->foto)?>" class="img-thumbnail img-fluid " style=""></figure>
+				<?php else:?>
+				<figure><img src="<?= base_url('/static/web/images/uploads/post/logoconectadas.jpg"')?>" class="img-thumbnail img-fluid " style=""></figure>
+				<?php endif;?>
 				<div class="blog-img-graph"><span><?= $noticia->nombre_cate?></span></div>
 				<div class="blog-content">
 					<?php 
@@ -272,7 +334,7 @@ if($publicacion->estado == 0){
 
 					<a href="<?= base_url($segments)?>"><?= $noticia->titulo_pub ?></a>
 					<div class=" detalles">
-						<!--
+						
 						<div><i class="fa fa-globe"></i><strong>Ámbito: </strong>
 							<?= $noticia->nombre_ambito?>
 						</div>
@@ -282,7 +344,7 @@ if($publicacion->estado == 0){
 						<div><i class="fa fa-clock-o"></i>
 							<?=  fecha_es($noticia->fecha_add,"d F a")?>
 						</div>
-						-->
+						
 					</div>
 				</div>
 			</div>

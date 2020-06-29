@@ -40,7 +40,7 @@
 <div class="card ">
 	<div class="card-body">
 		<div class="row" id="response_ajax">
-			<?php var_dump($_SESSION)?>
+			<?php // var_dump($_SESSION)?>
 		</div>
 	</div>
 </div>

@@ -27,7 +27,8 @@ class Legislaturas_model extends CI_Model
     {
  
 		
-			if ($this->ion_auth->is_members() ||  $this->ion_auth->is_admin()){
+//			if ($this->ion_auth->is_members() ||  $this->ion_auth->is_admin()){
+if($this->ion_auth->is_members() && ($this->user->id_legislatura != 1 && $this->user->id_legislatura != 91) || $this->ion_auth->is_admin() && ($this->user->id_legislatura != 1 && $this->user->id_legislatura != 91)){
 				$query = $this->db->select('id,nombre')
 									->order_by($orden)
 									->where('id',$this->user->id_legislatura)
@@ -156,6 +157,7 @@ class Legislaturas_model extends CI_Model
 																legislaturas.twitter as twitter_legis,
 																legislaturas.instagram as instagram_legis,
 																legislaturas.linkedin as linkedin_legis,
+																legislaturas.youtube as youtube_legis,
 																provincias.nombre as provincia,
 																provincias.zona as zona,
 																provincias.color as provincia_color,
@@ -297,88 +299,95 @@ class Legislaturas_model extends CI_Model
 	}
 	
 	
-	public function get_legislaturas()
-	{
-		
-			$draw = intval(2);
-      $start = intval(0);
-      $length = intval(0);
-		
-//								add.last_name as ape_add,
-//																')
-//												->where('legislaturas.id',$id)
-//												->join('users upd', 'upd.id = legislaturas.user_upd', 'LEFT')
-//												->join('users add', 'add.id = legislaturas.iduser_ad')
-//												->get('legislaturas');
+	public function get_legislaturas(){
 
-      $query = $this->db->select("legislaturas.*,
-																	tipo_organismo.nombre as organismo, 
-																	provincias.nombre as nom_provincia")
-											  ->join('provincias','provincias.id = legislaturas.id_provincia', 'LEFT')
-											  ->join('tipo_organismo','tipo_organismo.id = legislaturas.id_organismo', 'LEFT')
-												->where('legislaturas.borrado',0)
-												->order_by('provincias.nombre asc, tipo_organismo.nombre desc')
-												->get('legislaturas');
+		$draw = intval(2);
+		$start = intval(0);
+		$length = intval(0);
 
-      $data = [];
+		// add.last_name as ape_add,
+		// ')
+		// ->where('legislaturas.id',$id)
+		// ->join('users upd', 'upd.id = legislaturas.user_upd', 'LEFT')
+		// ->join('users add', 'add.id = legislaturas.iduser_ad')
+		// ->get('legislaturas');
 
-      foreach($query->result() as $r) {
-				
-				
-				$this->db->from('publicaciones')
-									->where('id_legislatura', $r->id)
-									->where('estado',1); 
-				$total_publicaciones_legislatura =  $this->db->count_all_results();  
-				
-				$total_publicaciones 	= '<a class="">'.$total_publicaciones_legislatura.'</a>';
-				
-				$class = '';
-				$estado = '<a href="#"  class="btn btn-warning btn-xs">Sin Publicar </a>';
-				$publicar = '<a href="#" data-tabla="legislaturas" data-estado="1" data-id="'.$r->id.'" class="acciones btn btn-success btn-xs">Publicar </a> ';
-				
-				if($r->estado == 1){
-//					$estado 	= '<a href="#"  class="btn btn-success btn-xs">Publicado</a>';
-					$estado 	= '<a href="#"  class="btn btn-success btn-xs"><i class="fas fa-check-circle"></i></a>';
-					$publicar = '<a href="#" data-tabla="legislaturas" data-estado="0" data-id="'.$r->id.'" class="acciones btn btn-warning btn-xs">Suspender </a>';
-				}
-					$editar = '<a href="'.base_url().'Manager/Legislaturas/edit/'.$r->id.'" data-tabla="legislaturas" data-estado="0" data-id="'.$r->id.'" class=" btn btn-info btn-xs"><i class="fas fa-pencil-alt" title="editar"></i> </a> ';
-				
-				
-					$nombre = '<a title="Editar datos: '.$r->nombre.'" href="'.base_url().'Manager/Legislaturas/edit/'.$r->id.'" >'.$r->nombre.' </a>';
-					
-		
-					$borrar = '<i  data-legis="'.$r->nombre.'" data-total_publicaciones="'.$total_publicaciones_legislatura.'" data-id="'.$r->id.'" class="borrar btn btn-danger btn-xs"><i class="fas fa-trash-alt" title="borrar"></i> </i> ';
-				
-					$cantidad_representantes = $this->contar_representantes($r->id);
-				
-					$representantes = '<i data-legis="'.$r->nombre.'" data-id="'.$r->id.'" class="import_csv btn btn-info btn-xs">'.$cantidad_representantes.'</i> ';
-		
-           $data[] = array(
-                $r->id,
-                $r->nombre = $nombre,
-                $r->organismo,
-                $r->nom_provincia,
-                $r->direccion,
-                $r->telefono,
-								$representantes ,
-                $r->estado = $estado,
-                $total_publicaciones,
-                $r->acciones = $publicar.$editar. $borrar
-           );
-      }
+		$query = $this->db->select("legislaturas.*,
+		tipo_organismo.nombre as organismo,
+		provincias.nombre as nom_provincia")
+		->join('provincias','provincias.id = legislaturas.id_provincia', 'LEFT')
+		->join('tipo_organismo','tipo_organismo.id = legislaturas.id_organismo', 'LEFT')
+		->where('legislaturas.borrado',0)
+		->order_by('provincias.nombre asc, tipo_organismo.nombre desc')
+		->get('legislaturas');
 
-      $result = array(
-               "draw" => $draw,
-                 "recordsTotal" => $query->num_rows(),
-                 "recordsFiltered" => $query->num_rows(),
-                 "data" => $data
-            );
+		$data = [];
+
+		foreach($query->result() as $r) {
+
+			$publicar = '';
+			$editar = '';
+			$this->db->from('publicaciones')->where('id_legislatura', $r->id)->where('estado',1);
+			
+			$total_publicaciones_legislatura = $this->db->count_all_results();
+			$total_publicaciones = '<a class="">'.$total_publicaciones_legislatura.'</a>';
+
+			$class = '';
+			$estado = '<a href="#" class="btn btn-warning btn-xs">Sin Publicar </a>';
+			$publicar = '<a href="#" data-tabla="legislaturas" data-estado="1" data-id="'.$r->id.'" class="acciones btn btn-success btn-xs">Publicar </a> ';
+
+			if($r->estado == 1){
+			// $estado = '<a href="#" class="btn btn-success btn-xs">Publicado</a>';
+			$estado = '<a href="#" class="btn btn-success btn-xs"><i class="fas fa-check-circle"></i></a>';
+			$publicar = '<a href="#" data-tabla="legislaturas" data-estado="0" data-id="'.$r->id.'" class="acciones btn btn-warning btn-xs">Suspender </a>';
+			}
+			$editar = '<a href="'.base_url().'Manager/Legislaturas/edit/'.$r->id.'" data-tabla="legislaturas" data-estado="0" data-id="'.$r->id.'" class=" btn btn-info btn-xs"><i class="fas fa-pencil-alt" title="editar"></i> </a> ';
 
 
-      echo json_encode($result);
-      exit();
-       
-    }
+			$nombre = '<a title="Editar datos: '.$r->nombre.'" href="'.base_url().'Manager/Legislaturas/edit/'.$r->id.'">'.$r->nombre.' </a>';
+
+
+			$borrar = '<i data-legis="'.$r->nombre.'" data-total_publicaciones="'.$total_publicaciones_legislatura.'" data-id="'.$r->id.'" class="borrar btn btn-danger btn-xs"><i class="fas fa-trash-alt" title="borrar"></i> </i> ';
+
+			$cantidad_representantes = $this->contar_representantes($r->id);
+
+			$representantes = '<i data-legis="'.$r->nombre.'" data-id="'.$r->id.'" class="import_csv btn btn-info btn-xs">'.$cantidad_representantes.'</i> ';
+			
+			if($this->ion_auth->is_members()){
+				$editar =''; 
+				$borrar ='';
+				$publicar ='';
+					$representantes = '<i data-legis="'.$r->nombre.'" data-id="'.$r->id.'" class=" btn btn-info btn-xs">'.$cantidad_representantes.'</i> ';
+				$nombre = $r->nombre;
+
+			}
+
+			$data[] = array(
+			$r->id,
+			$r->nombre = $nombre,
+			$r->organismo,
+			$r->nom_provincia,
+			$r->direccion,
+			$r->telefono,
+			$representantes ,
+			$r->estado = $estado,
+			$total_publicaciones,
+			$r->acciones = $publicar.$editar. $borrar
+			);
+		}
+
+		$result = array(
+		"draw" => $draw,
+		"recordsTotal" => $query->num_rows(),
+		"recordsFiltered" => $query->num_rows(),
+		"data" => $data
+		);
+
+
+		echo json_encode($result);
+		exit();
+
+	}
 	
 	
 		

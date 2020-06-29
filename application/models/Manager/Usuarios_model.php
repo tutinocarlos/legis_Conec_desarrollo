@@ -142,7 +142,7 @@ class Usuarios_model extends CI_Model
     		'last_name'   => $data['last_name'],
      		'username'		 => $data['usuario'],
      		'email' 			 => $data['email'],
-     		'legislatura' => $data['legislatura'],
+     		'id_legislatura' => $data['legislatura'],
 	    );
 
 		  if($this->ion_auth->update($id, $datos)){

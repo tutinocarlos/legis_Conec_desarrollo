@@ -1,0 +1,27 @@
+RewriteEngine on
+<Files .htaccess>
+Order allow,deny
+Deny from all
+</Files>
+deny from all
+allow from 10.1.0.0/16
+allow from 152.168.17.172
+allow from 190.18.62.124
+#allow from 186.136.212.248 sil viejo
+#allow from 181.47.107.7 sil viejo
+allow from 186.136.212.248
+allow from 181.44.186.52
+allow from 169.254.73.86
+allow from 190.245.100.217
+allow from 181.164.177.139
+allow from 181.47.107.7
+allow from 186.136.35.78
+allow from 181.29.6.48
+
+
+#ip silvana agrego Tutino 01/06/2020
+allow from 186.143.198.48
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule .* index.php/$0 [PT,L]

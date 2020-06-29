@@ -149,9 +149,24 @@ class Legislaturas extends MY_Controller {
 	}	
 	
 	public function edit($id){
+	
 		
-
 		if($this->input->post('botonSubmit')){	
+			
+			/* no permito editar datos a usuarios members */
+			if($this->ion_auth->is_members()){
+				
+				$grabar_datos_array = array(
+							'seccion' => 'Actualizar datos Legislaturas',
+							'mensaje' => 'Usted no tiene privilegios para ejecutar la acción',
+							'estado' => 'error',
+						);
+
+				$this->session->set_userdata('save_data', $grabar_datos_array);
+
+				redirect(base_url('Manager/Legislaturas/edit/'.$id));
+
+			}
 			
 			$this->form_validation->set_rules('nombre', 'Nombre', 'required|min_length[3]');
 				//			$this->form_validation->set_rules('lema', 'Lema', 'required|min_length[3]');
@@ -229,18 +244,18 @@ class Legislaturas extends MY_Controller {
 							/**/
 							$slider_legislatura = $this->Legislaturas_model->get_slider_legislatura($id);
 							
-							 var_dump($slider_legislatura);
+//							 var_dump($slider_legislatura);
 							
-							if(file_exists($_SERVER ['DOCUMENT_ROOT'].'/'.$slider_legislatura->slider)){
-						
-//						echo 'entonces puedo borrar';
-					
-								if(unlink($_SERVER ['DOCUMENT_ROOT'].'/'.$slider_legislatura->slider)){
-												echo 'si borro';
-								} else{
-												echo 'no borro';
-								}
-							}
+//							if(file_exists($_SERVER ['DOCUMENT_ROOT'].'/'.$slider_legislatura->slider)){
+//						
+////						echo 'entonces puedo borrar';
+//					
+//								if(unlink($_SERVER ['DOCUMENT_ROOT'].'/'.$slider_legislatura->slider)){
+//												echo 'si borro';
+//								} else{
+//												echo 'no borro';
+//								}
+//							}
 							
 							$mi_archivo = 'slider';
 							$config['upload_path'] = '';
@@ -276,7 +291,7 @@ class Legislaturas extends MY_Controller {
 	//							var_dump( $this->upload->data());
 
 							$data_upd = array(
-								'slider' => '/static/web/images/slider/'.$config['file_name']
+								'slider' => 'static/web/images/slider/'.$config['file_name']
 							);
 
 	//							$config['file_name'].'.'.$file_ext; 
@@ -416,13 +431,26 @@ class Legislaturas extends MY_Controller {
 					
 						$this->session->set_userdata('save_data', $grabar_datos_array);
 						
+				/*redirijo segun tipo de usuario*/
+						if($this->ion_auth->is_admin() && $this->user->id_legislatura !=91){
+								redirect(base_url('Manager/Legislaturas/edit/'.$id));
+						}
 						redirect(base_url('Manager/Legislaturas/listado'));
 				}
+				/*redirijo segun tipo de usuario*/
+						if($this->ion_auth->is_admin() && $this->user->id_legislatura !=91){
+							redirect(base_url('Manager/Legislaturas/edit/'.$id));
+						}
+			
 						$this->session->set_userdata('save_data', $grabar_datos_array);
 		}
 
 			if(!$legislatura = $this->Legislaturas_model->get_legislatura($id)){
 				
+				/*redirijo segun tipo de usuario*/
+				if($this->ion_auth->is_admin() && $this->user->id_legislatura !=91){
+						redirect(base_url('Manager/Legislaturas/edit/'.$id));
+					}
 				 redirect(base_url('Manager/Legislaturas/listado'));
 			
 			};
@@ -502,7 +530,7 @@ class Legislaturas extends MY_Controller {
     }
 
 	public function index(){
-		die('llego');
+
 		if (!$this->ion_auth->logged_in())
     {
 
@@ -685,7 +713,7 @@ class Legislaturas extends MY_Controller {
 	
 	public function grabar_datos($id=NULL){
 
-		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_super())
+		if (!$this->ion_auth->logged_in())
     {
       redirect('auth/login');
     }else{
@@ -933,16 +961,48 @@ class Legislaturas extends MY_Controller {
     }
 	
 	
-	public function eliminar_imagen(){
-		
+	public function eliminar_imagen_slider(){
 
+		$response = array();
+
+		
+		if (file_exists($this->input->post('url'))) {
+			
+			if(unlink($this->input->post('url'))){
+				$response['estado'] = true;
+			}	
+			
+		if($this->db->set('slider', 'static/web/images/slider/banner_1.png')->where('id', $this->input->post('id_legis'))->update('legislaturas')){
+			$response['estado'] = true;
+			$response['mensaje'] = 'Se ha eliminado correctamente la imagen';
+		} 
+			
+
+	}
+			echo json_encode($response);
+	}
+	
+	public function eliminar_imagen(){
+
+		
 		$image_delete = $this->input->post('url');
 		
+
+		
 		$response = array();
+		
 		if (file_exists($image_delete)) {
+			
 			if(unlink($image_delete)){
 				$response['estado'] = true;
-			}
+			}	
+
+			
+//		if (file_exists($image_delete)) {
+//			if(unlink($image_delete)){
+//				$response['estado'] = true;
+//			}
+			
 
 			if($this->db->where('id'	, $this->input->post('id'))->delete('legis_imagenes')){
 				
@@ -958,6 +1018,8 @@ class Legislaturas extends MY_Controller {
 				$response['cantidad'] = false;
 			}
 
+		}else{
+			echo ' no esta';
 		}
 		
 		echo json_encode($response);
@@ -966,7 +1028,7 @@ class Legislaturas extends MY_Controller {
 
  	public function import_csv(){
 			
-					var_dump($_POST); die();
+
 			
 			/*function que me cambia el orden de los apellidos y nombre de los representantres
 			de las legislaturas conectadas sql funciona bien en phpMyAdmin

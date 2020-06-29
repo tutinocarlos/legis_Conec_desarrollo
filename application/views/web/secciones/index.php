@@ -329,7 +329,6 @@ foreach ($provincias2 as $provincia){
 					*/
 					?>
 					
-					
 					<div class="row" style="margin-top: 10px ">
 						<div class="small"><i class="fa fa-info-circle"></i> <i>Puede pasar el puntero del mouse para interactuar con el mapa</i></div>
 					</div>
@@ -346,7 +345,7 @@ foreach ($provincias2 as $provincia){
 						Tu navegador no implementa el elemento <code>video</code>.
 						</video>
 -->
-					<iframe width="100%" height="315" src="https://www.youtube.com/embed/TVm95QxKHOg?controls=0&autoplay=1&showinfo=0&rel=0" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen ></iframe>
+					<iframe width="100%" height="315" src="https://www.youtube.com/embed/Lv5cHWEbxjg?controls=0&autoplay=1&showinfo=0&rel=0" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen ></iframe>
 					</div>
 					<!--
 					<div class="detalles_legislaturas_conectadas">
@@ -368,7 +367,7 @@ foreach ($provincias2 as $provincia){
 						<p>Legislaturas Conectadas es una red interactiva, que busca comunicar a los Poderes Legislativos de Argentina entre sí y con la ciudadanía.
 						<br>Contamos con tres medios de comunicación
 						<ol>	
-							<li>La plataforma interactiva www.legislaturasconectadas.gov.ar que elaboramos entre todos.</li>
+							<li>La plataforma interactiva www.legislaturasconectadas.gob.ar que elaboramos entre todos.</li>
 							<li>Nuestras RRSS:
 								<ul>
 									<li>INSTAGRAM @legislaturasconectadas</li><li> FB @legislaturas.conectadas.arg </li><li> TWITTER @lconectadas</li>
@@ -425,7 +424,7 @@ foreach ($provincias2 as $provincia){
 		<div class="row">
 			<div class="col-md-12">
 				<div class="cta-content">
-					<h3>Te invitamos a interiorizarte sobre las leyes y proyectos del lugar donde vivís y las actividades de las Legislaturas</h3>
+					<h3>Te invitamos a interiorizarte sobre las leyes y proyectos y las actividades de las Legislaturas</h3>
 					<a href="<?= base_url('Contacto')?>" class="bussiness-btn-larg">Quiero saber más &raquo;</a>
 				</div>
 			</div>

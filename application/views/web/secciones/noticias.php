@@ -72,7 +72,7 @@
 						<?php 
 							$segments = array('Noticias',convert_accented_characters(url_title($data->titulo), 'underscore', TRUE),$data->id);
 						?>
-						<a href="<?= base_url($segments) ?>"><?php echo  ucfirst(mb_strtolower($data->titulo,'UTF-8')) ?></a>
+						<a href="<?= base_url($segments) ?>"><?php echo $data->titulo?></a>
 						<div class=" detalles">
 						<?php
 							if(strip_tags($data->resumen)== ''){

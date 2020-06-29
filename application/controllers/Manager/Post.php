@@ -13,6 +13,7 @@ class Post extends MY_Controller {
 		$this->load->model('/Manager/Legislaturas_model');
 		$this->load->model('/Manager/Subcategorias_model');
 		$this->load->model('/Manager/Post_model');
+		$this->load->model('/Manager/Contenidos_model');
 		
 		$this->page_title = 'Publicaciones';
 // 		$this->output->enable_profiler(TRUE);
@@ -127,6 +128,8 @@ define('SMTP_IP','10.1.1.62');
 		
 	
 	public function edit_post($id){
+		
+
 
 		$publicacion = $this->Post_model->get_post($id);
 		$imagenes = $this->Post_model->get_images($id);
@@ -197,7 +200,6 @@ define('SMTP_IP','10.1.1.62');
 //			}
 			
 			$seccion = $this->load->view('manager/secciones/post/listados','$datos', TRUE);
-		
 			$panel = $this->load_panel();
 		
 		
@@ -271,7 +273,8 @@ define('SMTP_IP','10.1.1.62');
 	}    
 	
 	public function index($id_post=null){
-;
+
+
 		if (!$this->ion_auth->logged_in())
 		{
 			redirect('auth/login');
@@ -329,10 +332,15 @@ define('SMTP_IP','10.1.1.62');
 				'resumen' => $this->input->post('resumen_prev',FALSE) ,
 				'cuerpo' => $this->input->post('cuerpo_prev',FALSE) ,
 				'extra' => $this->input->post('extra_prev',FALSE) ,
-				'id_user_login' => $this->user->id ,
+//				'id_user_login' => $this->user->id ,
 			);
 			
 			if($this->input->post('botonSubmit_edit')){
+				
+				unset($datos['id_usuario']);
+				
+				$datos['user_upd'] = $this->user->id;
+				$datos['fecha_upd'] = $this->fecha_now;
 	
 				// parametos 1-id publicacion, 2-array de datos, 3-tabla
 				if($this->Post_model->update_post($id_post, $datos, 'publicaciones')){
@@ -468,12 +476,15 @@ define('SMTP_IP','10.1.1.62');
 	/* AGREGAR ARCHIVOS ADJUNTOS */
 	public function add_archivo_adjunto(){
 
+//		var_dump($_POST);
+//		var_dump($_FILES);
+//		die();
+		
 		$status = "";
-    $msg = "";
-    $file_element_name = 'userfile';
+		$msg = "";
+		$file_element_name = 'userfile';
   
-    if ($status != "error")
-    {
+    if ($status != "error"){
         $config['upload_path'] = 'static/web/uploads/adjuntos';
         $config['allowed_types'] = '*';
         $config['max_size'] = 1024 * 8;
@@ -484,11 +495,11 @@ define('SMTP_IP','10.1.1.62');
         if (!$this->upload->do_upload($file_element_name))
         {
           $status = 'error';
-           echo  $msg = $this->upload->display_errors('', '');
+          $msg = $this->upload->display_errors('', '');
         }
         else
         {
-            $data = $this->upload->data();
+						$data = $this->upload->data();
 					
 						$url = $config['upload_path'].'/'.$data['file_name'];
 						
@@ -499,11 +510,10 @@ define('SMTP_IP','10.1.1.62');
 							'url' => $url,
 						);
 					
-
-            $file_id = $this->Post_model->insert_adjunto($datos);
+							$file_id = $this->Post_model->insert_adjunto($datos);
 					
-            if($file_id)
-            {
+							if($file_id) {
+							
 							$file = $this->Post_model->get_adjunto($file_id);
 							
 //							var_dump($file);
@@ -540,11 +550,7 @@ define('SMTP_IP','10.1.1.62');
     }
     echo json_encode($response);
 		
-		
-		
-		
 	}
-	
 	
 	public function add_media(){
 		
@@ -567,6 +573,7 @@ define('SMTP_IP','10.1.1.62');
 			'post_id' 		=> $this->session->userdata('post_id'),
 			'post_titulo' => $this->session->userdata('post_titulo'),
 			'imagenes' 		=> $imagenes,
+			'videos' 		=> $this->Contenidos_model->buscar_videos($this->session->userdata('post_id')),
 		);
 			
 			$seccion = $this->load->view('manager/secciones/post/add_media',$datos, TRUE);
@@ -594,42 +601,100 @@ define('SMTP_IP','10.1.1.62');
 		}
 		
 	}
+	public function borrar_video(){
 	
-	public function add_video(){
+		if($this->db->delete('post_videos', array('id' => $this->input->post('id_video')))){
+			$status = true;
+			$estado = "success";
+			$mensaje = "Se ha Borrado Correctamente";
+		}else{
+			$estado = "error";
+			$mensaje = "Ocurrió un error al borrar el video";
+			$status = false;
+		}
+		$grabar_datos_array = array(
+				'seccion' => 'Publicaciones Videos',
+				'mensaje' => $mensaje,
+				'estado' => $estado,
+				'open_video' => true,
+			);
+		$this->session->set_userdata('save_data', $grabar_datos_array);
 
-		var_dump($_POST);die();
-		if($this->session->userdata('post_id') && $this->session->userdata('post_titulo')){
+		$response = array(
+			'status'=>$status
+		);
+	 	echo json_encode($response);
+}
+	public function add_video(){
+		
+		if($this->input->post('url_video') == ''){
+			$response = array(
+				'status'   =>false,
+				'mensaje' =>'EL campo URL es Obligatorio '
+			);
+			echo json_encode($response);
+			die();
+		}
+		
+
+	/*
+	array(4) {
+  ["id_post"]=>
+  string(3) "294"
+  ["titulo_video"]=>
+  string(68) "Subir Archivos (Imágenes) con CodeIgniter y Ajax - Librería Upload"
+  ["detalle_video"]=>
+  string(0) ""
+  ["url_video"]=>
+  string(43) "https://www.youtube.com/watch?v=OVs5-vmDv_U"
+}
+*/
+
+		
+//		if($this->session->userdata('post_id') && $this->session->userdata('post_titulo')){
+
 														
 		if (!$this->ion_auth->logged_in())
 		{
 				redirect('auth/login');
 		}
-		
-		$datos = array(
-			'user' 				=> $this->user,
-			'post_id' 		=> $this->session->userdata('post_id'),
-			'post_titulo' => $this->session->userdata('post_titulo'),
-		);
 			
-		$seccion = $this->load->view('manager/secciones/post/add_media',$datos, TRUE);
-			$panel = $this->load_panel();
-			
-		$scripts =  array(
-					base_url().'static/manager/scripts/add_media.js', 
-				);
 			$data = array(
-				'page_title' => $this->page_title .' - Agregar Multimedia',
-				'content' => $seccion,
-				'header' => $panel['header'],
-				'panel' => $panel['panel'],
-				'script' => $scripts
+			 'id_post'=> $this->input->post('id_post'),
+			 'titulo'=> $this->input->post('titulo_video'),
+			 'descripcion'=> $this->input->post('detalle_video'),
+			 'url'=> str_replace('https://www.youtube.com/watch?v=','',$this->input->post('url_video')),
+				'user_add'=>$this->user->id
 			);
-
-			$this->load->view('manager/head');
-			$this->load->view('manager/index',$data);
-			$this->load->view('manager/footer',$data);
+			
+			if($this->Post_model->Guardar_datos('post_videos', $data)){
+				
+				$status = true;
+				$estado = "success";
+				$mensaje = "Se ha Grabado Correctamente";
+			
+			}else{
+				
+				$estado = "error";
+				$mensaje = "Ocurrió un error al Cargar el video";
+				$status = false;
+				
+			}
+			$response = array(
+				'status' =>$status	
+				);
 		
-		}
+		$grabar_datos_array = array(
+				'seccion' => 'Publicaciones Videos',
+				'mensaje' => $mensaje,
+				'estado' => $estado,
+				'open_video' => true,
+			);
+		$this->session->set_userdata('save_data', $grabar_datos_array);
+		
+		echo json_encode($response);
+			exit();
+//		}
 		
 	}
 	

@@ -44,6 +44,8 @@ function selectColumns ( editor, csv, header ) {
 
 $(document).ready(function () {
 	
+	  $('.image-popup-vertical-fit').magnificPopup({type:'image'});
+	
 	// display data obtenida de la lectura de archivo csv
 function displayHTMLTable(results){
 	
@@ -435,6 +437,87 @@ console.log('results');
 	});
 
 
+	
+	/* BORRAR IMENGES SLIDER */
+	
+		$("a.borrar_imagen_slider").click( function () {
+
+
+		var url = $(this).data('url');
+		var id_legis = $(this).data('legis');
+	
+
+		$.confirm({
+			closeIcon: true,
+			icon: 'fa fa-warning',
+			title: 'Borrar Imagenes',
+			content: 'Desea eliminar la imagen del Slider?',
+			buttons: {
+
+				confirm:{
+					text: 'Proceder',
+					btnClass: 'btn btn-green', 
+					action: function () {
+
+						var dato = new FormData();
+
+						dato.append('url', url);
+						dato.append('foto', 'slider');
+						dato.append('id_legis', id_legis);
+
+						$.ajax({
+						type: "POST",
+						contentType: false,
+						dataType: 'json',
+						data: dato,
+						processData: false,
+						cache: false,
+						beforeSend: function () {
+						$(".preloader").fadeIn();
+						},
+						url: $("body").data('base_url') + "Manager/Legislaturas/eliminar_imagen_slider",
+						success: function (result) {
+							$(".preloader").fadeOut();
+							console.log('result');
+							console.log(result);
+							if (result.estado == true) {
+	
+								toastr.success(result.mensaje, 'Imágenes');
+																	location.reload();
+
+							} else {
+							toastr.error('Registro no Borrado !', 'Imágenes');
+							}
+//									location.reload();
+						},
+						error: function (xhr, errmsg, err) {
+						console.log(xhr.status + ": " + xhr.responseText);
+						}
+						});
+
+
+
+					}
+				},
+				cancel: {
+					text: 'Cancelar',
+					btnClass: 'btn btn-red', 
+					action: function () {
+						$.alert('Acción Cancelada, no se borrará la imagen');
+					}
+				},
+//								somethingElse: {
+//									text: 'Something else',
+//									btnClass: 'btn-blue',
+//									keys: ['enter', 'shift'],
+//									action: function () {
+//										$.alert('Something else?');
+//									}
+//								}
+			}
+		});
+
+	});
 
 });
 

@@ -232,6 +232,7 @@ $(document).ready(function () {
 
 
 function getUrlParameter(sParam, url) {
+	alert();
 	url = url || window.location.search.substring(1); //empty
 	var sPageURL = url;
 	var sURLVariables = sPageURL.split('&');

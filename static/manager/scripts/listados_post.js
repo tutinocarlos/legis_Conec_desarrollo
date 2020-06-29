@@ -96,7 +96,7 @@ $(document).ready(function () {
 	});
 
 	$(".card-body").on("click", "a.acciones", function () {
-alert();
+
 		var dato = new FormData();
 		dato.append('id', $(this).data('id'));
 		dato.append('tabla', $(this).data('tabla'));

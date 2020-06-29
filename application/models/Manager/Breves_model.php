@@ -109,10 +109,11 @@ class Breves_model extends CI_Model
 		$start = intval(0);
 		$length = intval(0);
 		
-		$query = $this->db->select('*')
-		->order_by('id DESC')
-		->where('status ',1)
-		->get("suscriptores");
+		if($this->ion_auth->is_admin() && $this->user->id_legislatura != 91){
+			$query = $this->db->select('*')->order_by('id DESC')->where('status ',1)->where('origen', $this->user->id_legislatura)->get("suscriptores");
+		}else{
+			$query = $this->db->select('*')->order_by('id DESC')->where('status ',1)->get("suscriptores");
+		}
 
 		$data = [];
 
@@ -154,7 +155,9 @@ class Breves_model extends CI_Model
 			JOIN legislaturas ON legislaturas.id =users.id_legislatura 
 			WHERE legislaturas.id = 103*/
 			
-			if($this->ion_auth->is_admin() || $this->ion_auth->is_members()){
+			if($this->ion_auth->is_admin() || ($this->ion_auth->is_members() && $this->user->id_legislatura !=91 )){
+		
+
 		$query = $this->db->select('
 						users.id_legislatura as legis_user,
 						newsletters.id as id_news, 
@@ -172,7 +175,8 @@ class Breves_model extends CI_Model
 				->get("newsletters");
 				
 			}
-			if($this->ion_auth->is_super()){
+			if($this->ion_auth->is_super() || ($this->ion_auth->is_members() && $this->user->id_legislatura ==91 ) || ($this->ion_auth->is_admin() && $this->user->id_legislatura == 91 )){
+
 						$query = $this->db->select('
 						users.id_legislatura as legis_user,
 						newsletters.id as id_news, 
@@ -198,23 +202,33 @@ class Breves_model extends CI_Model
 		$data = [];
 
 		foreach($query->result() as $r) {
+			$acciones = '';
+			$borrar = '';
+			$enviar = '';
 
 			$usuario_alta = $this->ion_auth->user($r->iduser_ins)->row();
 
 			$cant_suscriptores 	= $this->contar_suscriptores($r->id_news, FALSE);
 			$cant_enviados					 =  $this->contar_suscriptores($r->id_news, TRUE);
 			$cant_publicaciones = $this->contar_publicaciones($r->id_news);
-
+			
 
 			$status = '<a href="#" class="btn btn-danger btn-xs">Sin enviar</a>';
-
+			
+			if(!$this->ion_auth->is_members()){
 			$enviar = '<a href="#" data-publicaciones="'.$cant_publicaciones.'" data-suscriptores="'.$cant_suscriptores.'" data-subject="'.$r->subject.'" data-estado="0" data-id_news="'.$r->id_news.'" class="acciones_abrir_modal btn btn-success btn-xs" id="acciones_abrir_modal">Enviar </a>';
 			$borrar = ' <a href="#" id="borrar_news" data-tabla="newsletters" data-estado="1" data-id="'.$r->id_news.'" class="borrar_news btn btn-danger btn-xs"><i class="fas fa-trash-alt" title="Borrar"></i> </a>';
+				
+			}
+
 
 			if($r->status == 1){
 				$acciones = '';
 				$status = '<a href="#" id="link_enviado" class="btn btn-success btn-xs">Enviado</a>';
+				if(!$this->ion_auth->is_members()){
 					$enviar = '<a href="#" data-publicaciones="'.$cant_publicaciones.'" data-suscriptores="'.$cant_suscriptores.'" data-subject="'.$r->subject.'" data-estado="re-enviar" data-id_news="'.$r->id_news.'" class="acciones_abrir_modal btn btn-info btn-xs" id="acciones_abrir_modal">Re enviar </a>';
+					
+				}
 			}
 
 			// fecha de envio
@@ -243,7 +257,8 @@ class Breves_model extends CI_Model
 				fecha_es($r->dt_ins, "d/m/a", FALSE), 
 				$fecha_envio,
 				$status,
-				$r->iduser_ins = $usuario_alta->last_name.', '.$usuario_alta->first_name ,
+				'',
+//				$r->iduser_ins = $usuario_alta->last_name.', '.$usuario_alta->first_name ,
 				$enviar.$borrar
 			);
 		}	
@@ -294,23 +309,27 @@ class Breves_model extends CI_Model
 
 	
 	public function get_suscriptores_dt(){
-echo $_POST['search']['value']; die();
+
+		if($this->ion_auth->is_admin() && $this->user->id_legislatura != 91){
+			$this->db->where('origen', $this->user->id_legislatura);
+		}
 		$select_column = array('id', 'name', 'lastname', 'email', 'status', 'origen');
 		$order_column = array('id', 'name', 'lastname', 'email');
 
 		$this->db->select($select_column);
+		
+		
 		$this->db->from('suscriptores');
 //		$this->db->where('status',1);
-		$this->db->where('origen',$this->user->id_legislatura);
+	//	$this->db->where('origen',$this->user->id_legislatura);
 
-		if(isset($_POST['search']['value']) !=''){
-			echo 'aca';
+		if(trim($_POST['search']['value']) !=''){
 
 			$this->db->like('name',$_POST['search']['value']);
 			$this->db->or_like('lastname',$_POST['search']['value']);
 			$this->db->or_like('email',$_POST['search']['value']);
 		}else{
-			echo 'otra';
+	//		$this->db->where('origen',$this->user->id_legislatura);
 		}
 
 		if(isset($_POST['order'])){
@@ -328,7 +347,7 @@ echo $_POST['search']['value']; die();
 		}
 
 		$query = $this->db->get();
-		echo $sql = $this->db->last_query();
+//		echo $sql = $this->db->last_query();
 		return $query->result();
 	}
 

@@ -12,7 +12,7 @@ class MY_controller extends CI_Controller {
 				$this->load->model('/Manager/Legislaturas_model');
 				$this->load->model('/Manager/Provincias_model');
 				$this->load->model('/Manager/Tipos_camaras_model');
-			
+				date_default_timezone_set('America/Argentina/Buenos_Aires');
 			 $this->fecha_now = date('Y-m-d H:i:s');	
 				$this->user = $this->ion_auth->user()->row();
 			
@@ -31,8 +31,7 @@ class MY_controller extends CI_Controller {
 			
 				$this->provincias 	 = $this->Provincias_model->get_provincias();
 				$this->tipos_camaras = $this->Tipos_camaras_model->get_tipos_camaras();
-				
-	
+
 
  		}
 	
@@ -90,12 +89,32 @@ class MY_controller extends CI_Controller {
 			$user = $this->ion_auth->user()->row();
 			$datos = array (
 			'nav'=> $user->id,
-				'user' => $this->user,
+			'user' => $this->user,
 			);
 
+			if($this->ion_auth->is_super() || ($this->ion_auth->is_admin() && $this->user->id_legislatura == 1)){
+				
+				$panel =  $this->load->view('manager/etiquetas/nav',$datos,TRUE);
+				
+			}elseif($this->ion_auth->is_admin() && $this->user->id_legislatura == 91){
+				
+				$panel =  $this->load->view('manager/etiquetas/nav_legis',$datos,TRUE);
+				
+			}elseif($this->ion_auth->is_admin() && $this->user->id_legislatura != 91){
+				
+				$panel =  $this->load->view('manager/etiquetas/nav_admin',$datos,TRUE);
+				
+			}elseif($this->ion_auth->is_members() && $this->user->id_legislatura == 91){
+				
+				$panel =  $this->load->view('manager/etiquetas/nav_legis',$datos,TRUE);
+
+			}else{
+				$panel =  $this->load->view('manager/etiquetas/nav_members',$datos,TRUE);
+			}
+			
 			$data = array(
 			'header' => $this->load->view('manager/etiquetas/header', $datos, TRUE),
-			'panel' => $this->load->view('manager/etiquetas/nav',$datos,TRUE)
+			'panel' =>$panel
 			);
 
 			return $data;

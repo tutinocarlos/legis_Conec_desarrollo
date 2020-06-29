@@ -5,7 +5,8 @@
 !*/cache/index.html
 !*/cache/.htaccess
 info/*
-
+*.sql
 *.rar
 *.zip
 .htaccessgirt
+/static/web/images/uploads/post/*

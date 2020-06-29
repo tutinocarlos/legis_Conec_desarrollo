@@ -16,15 +16,11 @@ class Tipo_normativa extends MY_Controller {
 
 	public function index(){
 		
-		if (!$this->ion_auth->logged_in())
-    {
-      redirect('auth/login');
-    }else{
-			if($this->input->is_ajax_request())
-    {
-				
-		
-			return $data_select = $this->Tipo_normativa_model->get_tipo_normativa();
+		if (!$this->ion_auth->logged_in()){
+			redirect('auth/login');
+		}else{
+			if($this->input->is_ajax_request()){
+				return $data_select = $this->Tipo_normativa_model->get_tipo_normativa();
 		} 
 			
 			$user = $this->ion_auth->user()->row();

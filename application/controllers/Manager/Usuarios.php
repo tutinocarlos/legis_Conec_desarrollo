@@ -123,6 +123,7 @@ if ( $this->_enviar_email( $email_data, 'tutinocarlos@gmail.com' ) ){
 	}
 		
 	public function editar($edit_user = false){
+		
 
 		if ($this->ion_auth->is_super())
 		{
@@ -133,6 +134,7 @@ if ( $this->_enviar_email( $email_data, 'tutinocarlos@gmail.com' ) ){
 				}
 
 			if($this->input->post("botonSubmit")){
+
 			$usuario = $this->ion_auth->user($this->input->post('id_usuario'))->result();
 			$usuario = $usuario[0];
 				$this->form_validation->set_rules('first_name', 'Nombre', 'required|min_length[3]');

@@ -1,3 +1,4 @@
+<?php if(!$this->ion_auth->is_members()):?>
 <div class="col-md-12" data-select2-id="15">
 	<div class="card">
 		<?php
@@ -94,7 +95,7 @@
 		?>
 	</div>
 </div>
-
+<?php endif;?>
 <div class="col-md-12" data-select2-id="15">
 	<div class="card">
 		<div class="card-body">

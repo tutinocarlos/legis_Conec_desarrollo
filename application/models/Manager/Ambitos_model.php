@@ -52,15 +52,19 @@ class Ambitos_model extends CI_Model
 
 
 		foreach($query->result() as $r) {
+			$publicar = '';
+			$editar = '';
 			$estado = '<span class="badge badge-danger">Sin Publicar</span>';
-			$publicar = '<a href="#" data-tabla="ambito" data-estado="1" data-id="'.$r->id.'" class="acciones btn btn-danger btn-xs">Publicar </a>';
-			
-			if($r->estado == 1){
-
-				$estado = '<span class="badge badge-success">Publicado</span>';
-				$publicar = '<a href="#" data-tabla="ambito" data-estado="0" data-id="'.$r->id.'" class="invisible acciones btn btn-danger btn-xs">Suspender </a>';
+			if(!$this->ion_auth->is_members()){
+				$publicar = '<a href="#" data-tabla="ambito" data-estado="1" data-id="'.$r->id.'" class="acciones btn btn-danger btn-xs">Publicar </a>';
+				$editar = '<a href="'. base_url() .'Manager/Ambitos/buscar_item/3" data-tabla="ambito" data-estado="0" data-id="3" class=" btn btn-info btn-xs"><i class="fas fa-pencil-alt" title="editar"></i> </a>';
 			}
-			$editar = '<a href="'. base_url() .'Manager/Ambitos/buscar_item/3" data-tabla="ambito" data-estado="0" data-id="3" class=" btn btn-info btn-xs"><i class="fas fa-pencil-alt" title="editar"></i> </a>';
+			if($r->estado == 1){
+				$estado = '<span class="badge badge-success">Publicado</span>';
+				if(!$this->ion_auth->is_members()){
+					$publicar = '<a href="#" data-tabla="ambito" data-estado="0" data-id="'.$r->id.'" class="invisible acciones btn btn-danger btn-xs">Suspender </a>';
+				}
+			}
 				 $data[] = array(
 							$r->id,
 							$r->nombre,

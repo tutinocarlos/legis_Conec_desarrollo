@@ -58,30 +58,30 @@ class Tipo_publicacion_model extends CI_Model
      
     }
 
-		public function get_sub_categorias()
-    {
+		public function get_sub_categorias(){
 			
 			$draw = intval(2);
-      $start = intval(0);
-      $length = intval(1);
+			$start = intval(0);
+			$length = intval(1);
 
+			$query = $this->db->select("sub_categorias.*, categorias.nombre as nombre_categoria")
+									->join('categorias', 'categorias.id = sub_categorias.id_categoria')
+									->get("sub_categorias");
 
-      $query = $this->db->select("sub_categorias.*, categorias.nombre as nombre_categoria")
-												->join('categorias', 'categorias.id = sub_categorias.id_categoria')
-												->get("sub_categorias");
+			$data = [];
 
-
-      $data = [];
-
-
-      foreach($query->result() as $r) {
+			foreach($query->result() as $r) {
+				$publicar ='';
 				$estado = '<span class="badge badge-danger">Sin Publicar</span>';
-				$publicar = '<button type="button" class="acciones btn btn-success btn-sm" data-tabla="sub_categorias" data-estado="1" data-id="'.$r->id.'">Publicar</button>';
+
+					$publicar = '<button type="button" class="acciones btn btn-success btn-sm" data-tabla="sub_categorias" data-estado="1" data-id="'.$r->id.'">Publicar</button>';
+
 				
 				if($r->estado == 1){
-					
 					$estado = '<span class="badge badge-success">Publicado</span>';
-					$publicar = '<button type="button" class="acciones btn btn-danger btn-sm" data-tabla="sub_categorias" data-estado="0" data-id="'.$r->id.'">Suspender</button>';
+	
+						$publicar = '<button type="button" class="acciones btn btn-danger btn-sm" data-tabla="sub_categorias" data-estado="0" data-id="'.$r->id.'">Suspender</button>';
+	
 				}
            $data[] = array(
                 $r->id,
@@ -119,8 +119,7 @@ class Tipo_publicacion_model extends CI_Model
        
     }
 	
-		public function get_tipo_publicacion()
-    {
+		public function get_tipo_publicacion(){
 			
 			$draw = intval(2);
       $start = intval(0);
@@ -180,55 +179,58 @@ class Tipo_publicacion_model extends CI_Model
        
     }
 
-		public function get_tipos()
-    {
+		public function get_tipos(){
+		$draw = intval(2);
+		$start = intval(0);
+		$length = intval(1);
+
+
+		$query = $this->db->select("*")->get("tipo_publicacion");
+
+
+		$data = [];
+
+		$editar = '';
+		foreach($query->result() as $r) {
+			$publicar ='';
+			$editar ='';
+			$estado = '<a href="#" class="btn btn-danger btn-xs">Sin Publicar </a>';
 			
-			$draw = intval(2);
-      $start = intval(0);
-      $length = intval(1);
-
-
-      $query = $this->db->select("*")
-											->get("tipo_publicacion");
-
-
-      $data = [];
-
-$editar = '';
-      foreach($query->result() as $r) {
-				$estado = '<a href="#"  class="btn btn-danger btn-xs">Sin Publicar </a>';
+			if(!$this->ion_auth->is_members()){
 				$publicar = '<a href="#" data-tabla="tipo_publicacion" data-estado="1" data-id="'.$r->id.'" class="acciones btn btn-success btn-xs">Publicar </a> ';
+				$editar = '<a href=" '.base_url().'Manager/Tipo_publicacion/editar_datos/'.$r->id.'" data-tabla="tipo_publicacion" data-estado="0" data-id="197" class=" btn btn-info btn-xs"><i class="fas fa-pencil-alt" title="editar"></i> </a>';
 				
-				if($r->estado == 1){
-					
-					$estado = '<a href="#"  class="btn btn-success btn-xs">Publicado </a>';
+			}
+
+			if($r->estado == 1){
+				$estado = '<a href="#" class="btn btn-success btn-xs">Publicado </a>';
+				if(!$this->ion_auth->is_members()){
 					$publicar = '<a href="#" data-tabla="tipo_publicacion" data-estado="0" data-id="'.$r->id.'" class="acciones btn btn-danger btn-xs">Suspender </a> ';
 				}
-					$editar = '<a href=" '.base_url().'Manager/Tipo_publicacion/editar_datos/'.$r->id.'" data-tabla="tipo_publicacion" data-estado="0" data-id="197" class=" btn btn-info btn-xs"><i class="fas fa-pencil-alt" title="editar"></i> </a>';
-					
-           $data[] = array(
-                $r->id,
-                $r->nombre,
-                $r->detalle,
-                $r->estado = $estado,
-                $r->acciones = $publicar.$editar
-           );
-      }
+			}
+
+			$data[] = array(
+			$r->id,
+			$r->nombre,
+			$r->detalle,
+			$r->estado = $estado,
+			$r->acciones = $publicar.$editar
+			);
+		}
 
 
-      $result = array(
-               "draw" => $draw,
-                 "recordsTotal" => $query->num_rows(),
-                 "recordsFiltered" => $query->num_rows(),
-                 "data" => $data
-            );
+		$result = array(
+		"draw" => $draw,
+		"recordsTotal" => $query->num_rows(),
+		"recordsFiltered" => $query->num_rows(),
+		"data" => $data
+		);
 
 
-      echo json_encode($result);
- 
-           
-    }
-	
+		echo json_encode($result);
+
+
+		}
 		public function check($data){
 			
 			$query = $this->db->select('*')

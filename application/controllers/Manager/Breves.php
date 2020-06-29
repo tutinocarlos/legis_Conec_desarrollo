@@ -337,11 +337,17 @@ echo $xx;die();
 				$suscriptores =  $this->Breves_model->make_datatables();
 				
 				 $data = [];
-
+					$edit_dato = '';
+					$borrar_dato = '';
 				 foreach($suscriptores as $r) {
 				 	$ver_dato = '<a href="#" data-tabla="suscriptores" data-estado="1" data-id="'.$r->id.'" class="ver_suscriptor btn btn-success btn-xs"><i class="fas fa-search" title="Ver suscriptor"></i> </a>';
+						
+						if(!$this->ion_auth->is_members()){
+							
 				 	$edit_dato = '<a href="#" data-tabla="suscriptores" data-estado="1" data-id="'.$r->id.'" class="editar_suscriptor btn btn-warning btn-xs"><i class="fas fa-edit" title="Editar suscriptor"></i> </a>';
-				 	$borrar_dato = '<a href="#" data-tabla="suscriptores" data-estado="1" data-id="'.$r->id.'" class="borrar_suscriptor btn btn-danger btn-xs"><i class="fas fa-trash-alt" title="Borrar"></i> </a>';			
+				 	$borrar_dato = '<a href="#" data-tabla="suscriptores" data-estado="1" data-id="'.$r->id.'" class="borrar_suscriptor btn btn-danger btn-xs"><i class="fas fa-trash-alt" title="Borrar"></i> </a>';	
+						}
+						
 				 	$data[] = array(
 
 				 		$r->id,

@@ -16,6 +16,7 @@ class Home extends MY_Controller {
 			$this->load->model('/Manager/Legislaturas_model');
 			$this->load->model('/Manager/Tipos_camaras_model');
 
+
 	}
 
 
@@ -262,7 +263,7 @@ class Home extends MY_Controller {
 		$this->pagination->initialize($config);
 
 		$publicaciones 						= $this->Contenidos_model->get_paginador_noticias('publicaciones',$config['per_page'],$offset = 0);
-		$publicaciones_destacadas = $this->Contenidos_model->get_publicaciones_destacadas('publicaciones', 3);
+		$publicaciones_destacadas = $this->Contenidos_model->get_publicaciones_destacadas('publicaciones', 4);
 		
 
 	/* OBTENGO PRIMER FOTO DE LA PUBLICACION*/
@@ -390,6 +391,8 @@ class Home extends MY_Controller {
 	}
 	public function noticias($offset = 0)
 	{
+
+
 			$noticias =  $this->Contenidos_model->list_noticias();
 		//paginacion noticias
 			$config['base_url'] = base_url('Noticias');
@@ -413,7 +416,7 @@ class Home extends MY_Controller {
  			$config["next_link"] = FALSE;
  			$config["prev_link"] = FALSE;
 		
-    	$this->pagination->initialize($config);
+			$this->pagination->initialize($config);
 			$noticias = $this->Contenidos_model->get_paginador_noticias('publicaciones',$config['per_page'], $offset );
 		
 
@@ -543,7 +546,7 @@ class Home extends MY_Controller {
 		
 		$scripts = '';
 		
-		if(count($html) > 1){
+//		if(count($html) > 1){
 			$scripts =  array(
 				base_url().'static/web/scripts/publicaciones.js?ver='.time(), 
 				base_url().'static/manager/assets/extra-libs/DataTables/datatables.js?ver='.time(), 
@@ -555,7 +558,7 @@ class Home extends MY_Controller {
 			);
 //			die(''.$tipo[0]->detalle);
 			$tipo[0]->nombre = $tipo[0]->detalle;
-		}
+//		}
 
 		$data = array(
 			'tematicas' 			=> $tematicas,
@@ -585,7 +588,13 @@ class Home extends MY_Controller {
 	public function publicacion($title,$id){
 		
 		$publicacion = $this->Contenidos_model->buscar_item('publicaciones',$id);
+		
+		if(is_null($publicacion)){
+			redirect('Publicaciones/1/Normativas');
+		}
+		
 		$fotos = $this->Contenidos_model->buscar_fotos($id);
+		$adjuntos = $this->Contenidos_model->buscar_adjuntos($id);
 		
 		$prev_item = $this->Contenidos_model->buscar_item_prev('publicaciones',$id, $publicacion->leg_id);
 		$netx_item = $this->Contenidos_model->buscar_item_next('publicaciones',$id, $publicacion->leg_id);
@@ -596,6 +605,7 @@ class Home extends MY_Controller {
 			'publicacion' => $publicacion,
 			'titulo_seccion' => 'Normativas',
 			'fotos' => $fotos,
+			'adjuntos' => $adjuntos,
 		);
 		
 		$seccion = $this->load->view('web/secciones/publicacion',$data, TRUE);
@@ -624,9 +634,11 @@ class Home extends MY_Controller {
 	*/
 	public function noticia($title,$id){
 
-		
 		$publicacion = $this->Contenidos_model->buscar_item('publicaciones',$id);
-
+		
+		if(is_null($publicacion)){
+			redirect('Noticias');
+		}
 
 		$mas_noticas = $this->Contenidos_model->buscar_mas_noticias('publicaciones',$id, $publicacion->leg_id);
 		
@@ -645,16 +657,18 @@ class Home extends MY_Controller {
 //		echo $publicacion->leg_id; die();
 
 		$fotos = $this->Contenidos_model->buscar_fotos($id);
+		$videos = $this->Contenidos_model->buscar_videos($id);
+		$adjuntos = $this->Contenidos_model->buscar_adjuntos($id);
 		$noticias =  $this->Contenidos_model->list_noticias_by_legis($publicacion->leg_id);
-
-
 
 		$data = array(
 			'fotos' => $fotos,
-			'tags' => $tags,
+			'tags'	 => $tags,
 			'publicacion' => $publicacion,
 			'datos_barra_lateral' => $datos_barra_lateral,
 			'mas_noticias' => $mas_noticas,
+			'videos' 		=> $videos,
+			'adjuntos' => $adjuntos,
 		);
 
 		$seccion = $this->load->view('web/secciones/noticia',$data, TRUE);
@@ -766,10 +780,7 @@ class Home extends MY_Controller {
 	
 	public function buscador_ajax(){
 			
-	 	$cadena = $this->input->post('search'); 
-
-
-
+		$cadena = $this->input->post('search'); 
 		$normativas = $this->Contenidos_model->home_buscador_normativas($cadena);
 		$noticias = $this->Contenidos_model->home_buscador_noticias($cadena);
 		$legislaturas = $this->Contenidos_model->home_buscador_legislaturas($cadena);

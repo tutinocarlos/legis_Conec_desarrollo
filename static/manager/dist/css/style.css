@@ -1,29 +1,28 @@
-.contenedor-video {
-
+.contenedor-video{
+	
 	padding: 20px 0;
 	background-color: lightblue;
-
+	
 }
 
-.table-responsive {
+.table-responsive{
 	padding: 0 20px;
-
+	
 }
 
-span.aclaracion {
+span.aclaracion{
 	font-weight: 300;
 	font-style: italic;
 	font-size: 13px;
-	color: darkgray;
+	color:darkgray;
 }
-
-div.fondo_imagen {
+div.fondo_imagen{
 	min-height: 200px;
 }
 
-span.titulos_accordian {
+span.titulos_accordian{
 	padding-left: 15px;
-	font-size: 18px !important;
+	font-size: 18px!important;
 }
 
 
@@ -37,13 +36,12 @@ div#accordian-4  i{
 
 }
 */
-.acciones,.reset_pw,.edit_usr{
+.acciones {
 	margin: 0 5px !important;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button {
-	padding: 10px 2px;
-	 !important
+	padding: 10px 2px;!important
 }
 
 /*
@@ -13176,7 +13174,7 @@ Main sidebar
 ******************/
 .left-sidebar {
 	position: absolute;
-	width: 230px !important;
+	width: 250px;
 	height: 100%;
 	top: 0px;
 	z-index: 10;
@@ -13201,7 +13199,7 @@ sidebar navigation
 }
 
 .sidebar-nav ul .sidebar-item {
-	width: 230px !important;
+	width: 250px;
 	/*******************
            First level
            ******************/

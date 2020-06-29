@@ -57,6 +57,9 @@
     border-color: #404040!important;
     padding: 10px!important;
   }
+	.publicaciones_home{
+		background-color: #fff!important;
+	}
 
 </style>
 <!--aca corto-->
@@ -150,8 +153,14 @@
 					</div>
 						
 				</div>
+<style>
+	#portfolio{
+		background-image: url('/static/web/images/11.jpg');
+		background-size: cover;
+	}
+</style>
 <div class="business-portfolio-1x" id="portfolio">
-	<div class="container">
+	<div class="container fondo_lista">
 		<div class="bussiness-portfolio-light ">
 			<div class="portfolio-body">
 				<div class="col-md-12">
@@ -190,7 +199,7 @@
 
 <?php
 // Nombre de la imagen
-$path = base_url('static/web/images/logos/logo1.png');
+$path = 'http://10.1.1.77/static/web/images/logos/logo1.png';
  
 // Extensión de la imagen
 $type = pathinfo($path, PATHINFO_EXTENSION);

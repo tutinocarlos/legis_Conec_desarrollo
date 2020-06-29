@@ -6,6 +6,7 @@ $(function () {
 
 
 
+	  $('.image-popup-vertical-fit').magnificPopup({type:'image'});
 
 
 
@@ -123,6 +124,14 @@ $(function () {
 	});
 });
 
+
+
+
+function ytVidId(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+
 function buscar_video(url) {
 
 	if (url == '') {
@@ -135,6 +144,14 @@ function buscar_video(url) {
 		toastr.error('La url no posee el parámetro correcto ', 'Videos');
 		return false;
 	}
+	
+	if(ytVidId(url) === false){
+				toastr.error('La url no posee el formato correcto ', 'Videos');
+		return false;
+	}
+	
+	
+	
 	var youTubeURL = 'https://www.googleapis.com/youtube/v3/videos?id=' + IdVideo + '&part=snippet&key=AIzaSyCXDz8DxWsZEJwZffnXSTOZviYIi7k2vDE'; //&key=<YOUR_API_KEY>&
 	//jqueryGritter(youTubeURL,'','info','');
 	$.ajax({

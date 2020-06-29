@@ -93,8 +93,8 @@ class Post_model extends CI_Model
 
 		}
 	}
-	
 	/*AGREGAR ADJUNTOS*/
+	
 	
 	public function insert_adjunto($datos){
 		$insert = $this->db->insert('post_adjuntos',$datos);
@@ -227,23 +227,23 @@ class Post_model extends CI_Model
 		}
 	}
 	
-	public function get_post_ajax()
-	{
+	public function get_post_ajax(){
 
-		$draw = intval(2);
-		$start = intval(0);
+		$draw 		= intval(2);
+		$start 	= intval(0);
 		$length = intval(0);
-		
+		$grupo  = $this->ion_auth->get_users_groups($this->user->id)->result();
 
-		if ($this->ion_auth->is_members() ||  $this->ion_auth->is_admin()){
+	if($this->ion_auth->is_members() && ($this->user->id_legislatura != 1 && $this->user->id_legislatura != 91) || $this->ion_auth->is_admin() && ($this->user->id_legislatura != 1 && $this->user->id_legislatura != 91)){
 
 			$query = $this->db->select('publicaciones.*')
 			->order_by('id DESC')
 			->where('id_legislatura',$this->user->id_legislatura)
-//			->where('borrado !=',1)
+			->where('borrado !=',1)
 			->get("publicaciones");
+		
 		}else{
-//			die('ddd'.$this->input->post('tipo_tabla'));
+
 			$query = $this->db->select('publicaciones.*')
 			->order_by('id DESC')
 
@@ -262,8 +262,8 @@ class Post_model extends CI_Model
 
 
 			foreach($query->result() as $r) {
-				$tipo				= $this->Tipo_publicacion_model->get_tipo($r->id_tipo);
-				$legislatura  = $this->Legislaturas_model->get_legislatura($r->id_legislatura);
+				$tipo								= $this->Tipo_publicacion_model->get_tipo($r->id_tipo);
+				$legislatura = $this->Legislaturas_model->get_legislatura($r->id_legislatura);
 				
 			if($r->estado != 0){
 					$data[] = array(
@@ -300,21 +300,30 @@ class Post_model extends CI_Model
 					$estado 	= '<a href="#"  class="btn btn-success btn-xs">Publicado</a>';
 					$publicar = '<a href="#" data-tabla="publicaciones" data-estado="0" data-id="'.$r->id.'" class="acciones btn btn-danger btn-xs">Suspender </a> ';
 				}
-				if (!$this->ion_auth->is_super() && !$this->ion_auth->is_admin() ){
+				
+				if ($this->ion_auth->is_members()){
 					$publicar = '';
 					$borrar = '';
+					$editar = '';
 				}else{
 
 					$borrar = '<a href="#" data-tabla="publicaciones" data-estado="1" data-id="'.$r->id.'" class="borrar_pub btn btn-danger btn-xs"><i class="fas fa-trash-alt" title="Borrar"></i> </a> ';
+				$editar = '<a href="'.base_url().'Manager/Post/edit_post/'.$r->id.'" data-tabla="publicaciones" data-estado="0" data-id="'.$r->id.'" class=" btn btn-info btn-xs"><i class="fas fa-pencil-alt" title="editar"></i> </a> ';
+					
 				}
 
-
+				
 				$legislatura  = $this->Legislaturas_model->get_legislatura($r->id_legislatura);
-				$usuario 			= $this->ion_auth->user($r->id_usuario)->row();
+				$usuario = '';
+				$usuario 					= $this->ion_auth->user($r->id_usuario)->row();
+				
+				$usuario_edit ='';
+				$usuario_edit = $this->ion_auth->user($r->user_upd)->row();
+//				var_dump($usuario_edit);
 				$usuario_alta = $this->ion_auth->user($r->id_user_login)->row();
-				$tipo					= $this->Tipo_publicacion_model->get_tipo($r->id_tipo);
+				
+				$tipo									= $this->Tipo_publicacion_model->get_tipo($r->id_tipo);
 
-				$editar = '<a href="'.base_url().'Manager/Post/edit_post/'.$r->id.'" data-tabla="publicaciones" data-estado="0" data-id="'.$r->id.'" class=" btn btn-info btn-xs"><i class="fas fa-pencil-alt" title="editar"></i> </a> ';
 
 				$controller = 'Noticias/';
 				if($tipo['nombre'] != 'Noticia'){
@@ -328,13 +337,15 @@ class Post_model extends CI_Model
 //$ver ='';
 
 				$data[] = array(
-					$r->numero  = '<span class="'.$class.'">'.$r->id.'</span>',
-					$r->id_tipo = $tipo['nombre'],
+					$r->numero  								= '<span class="'.$class.'">'.$r->id.'</span>',
+					$r->id_tipo								 = $tipo['nombre'],
 					$r->titulo,
 					$r->id_legislatura 	= $legislatura->nombre,
-					$r->id_user_login 	= $usuario->last_name.', '.$usuario->first_name ,
-					$r->estado 			  = $estado,
-					$r->acciones 			  = $publicar.$editar.$ver.$borrar
+					$r->id_user_login 		= $usuario->last_name.', '.$usuario->first_name ,
+//					$r->user_upd	,
+					$r->usuario_edit				= $usuario_edit->last_name.', '.$usuario_edit->first_name ,
+					$r->estado 			  				= $estado,
+					$r->acciones 					  = $publicar.$editar.$ver.$borrar
 				);
 			}
 

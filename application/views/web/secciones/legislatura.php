@@ -1,5 +1,5 @@
 <?php
-//var_dump($legislatura);
+var_dump($legislatura);
 
 ?>
 <style>
@@ -81,6 +81,10 @@
 										<?php endif;?>
 										<?php if($legislatura->linkedin!= ''): ?>
 										<li><a href="<?= $legislatura->linkedin ?>" class="linkedin" target="_blank"> <i class="fa fa-linkedin"></i> </a>
+										</li>
+										<?php endif;?>										
+										<?php if($legislatura->youtube!= ''): ?>
+										<li><a href="<?= $legislatura->youtube ?>" class="youtube" target="_blank"> <i class="fa fa-youtube"></i> </a>
 										</li>
 										<?php endif;?>
 									</ul>

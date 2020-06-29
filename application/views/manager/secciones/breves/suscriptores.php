@@ -12,34 +12,8 @@ td.dt-body-right > a{
 
 </style>
 <div class="row">
-
-	<div class="col-sm-7">
-  <div class="card card-body">
-	<div class="card">
-		<div class="card-body" id="list_suscriptores">
-			<h4 class="card-title">Listado de Suscrtiptores</h4>
-			<div class="table-responsive">
-				<div id="zero_config_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
-					<table id="suscriptores" class="display" style="width:100%">
-						<thead>
-							<tr>
-								<th style="width:3%;">ID</th>
-								<th>Nombre</th>
-								<th>Apellido</th>
-								<th>Email</th>
-								<th>Acciones</th>
-								<th>Origen</th>
-							</tr>
-						</thead>
-	
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-  </div>
-	</div>
-	<div class="col-sm-4">
+	<?php if(!$this->ion_auth->is_members()):?>
+	<div class="col-sm-12">
   <div class="card card-body">
    <form id="add_suscriptor">
    	
@@ -83,6 +57,34 @@ td.dt-body-right > a{
    </form>
 	</div>
 	</div>
+	<?php endif;?>
+	<div class="col-sm-12">
+  <div class="card card-body">
+	<div class="card">
+		<div class="card-body" id="list_suscriptores">
+			<h4 class="card-title">Listado de Suscrtiptores</h4>
+			<div class="table-responsive">
+				<div id="zero_config_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+					<table id="suscriptores" class="display" style="width:100%">
+						<thead>
+							<tr>
+								<th style="width:3%;">ID</th>
+								<th>Nombre</th>
+								<th>Apellido</th>
+								<th>Email</th>
+								<th>Acciones</th>
+								<th>Origen</th>
+							</tr>
+						</thead>
+	
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+  </div>
+	</div>
+
 	</div>
 
 

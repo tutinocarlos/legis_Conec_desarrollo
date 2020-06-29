@@ -31,10 +31,10 @@
 	<link href="<?= base_url() ?>static/manager/dist/css/jquery-confirm.min.css?ver="<?= time() ?> rel="stylesheet">
 
 
-	<link href="<?= base_url() ?>static/manager/assets/libs/magnific-popup/dist/magnific-popup.css?ver="<?= time() ?> rel="stylesheet">
 
 	<link href="<?= base_url() ?>static/manager/assets/extra-libs/DataTables/datatables_checkbox.min.css?ver="<?= time() ?> rel="stylesheet">
 
+	<link href="<?= base_url() ?>static/manager/assets/libs/magnific-popup/dist/magnific-popup.css?ver="<?= time() ?> rel="stylesheet">
 
 
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

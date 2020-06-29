@@ -90,7 +90,7 @@
 			<!-- footer -->
 			<!-- ============================================================== -->
 			<footer class="footer text-center">
-				© 2019 LEGISLATURA CIUDAD AUTONOMA DE BUENOS AIRES, DIRECCION: PERU 160, C1067AAD (CABA) / TEL: (011) 4338-3000
+				© 2019-<?= date('Y')?> - LEGISLATURA CIUDAD AUTONOMA DE BUENOS AIRES, DIRECCION: PERU 160, C1067AAD (CABA) / TEL: (011) 4338-3000
 			</footer>
 			<!-- ============================================================== -->
 			<!-- End footer -->

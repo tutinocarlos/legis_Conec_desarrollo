@@ -119,117 +119,121 @@ class Tipo_normativa_model extends CI_Model
        
     }
 	
-		public function get_tipo_normativa()
-    {
-			
-			$draw = intval(2);
-      $start = intval(0);
-      $length = intval(1);
+		public function get_tipo_normativa(){
+
+		$draw = intval(2);
+		$start = intval(0);
+		$length = intval(1);
 
 
-      $query = $this->db->select("*")
-												->get("tipo_normativa");
+		$query = $this->db->select("*")->get("tipo_normativa");
 
+		$data = [];
 
-      $data = [];
-
-      foreach($query->result() as $r) {
-				$estado = '<span class="badge badge-danger">Sin Publicar</span>';
-					$publicar = '<button type="button" class="acciones btn btn-success btn-sm" data-tabla="tipo_normativa" data-estado="1" data-id="'.$r->id.'">Publicar</button>';
-				
-				if($r->estado == 1){
-					
-					$estado = '<span class="badge badge-success">Publicado</span>';
-					$publicar = '<button type="button" class="acciones btn btn-danger btn-sm" data-tabla="tipo_normativa" data-estado="0" data-id="'.$r->id.'">Suspender</button>';
+		foreach($query->result() as $r) {
+			$publicar ='';
+			$estado = '<span class="badge badge-danger">Sin Publicar</span>';
+			if (!$this->ion_auth->is_members()){
+			$publicar = '<button type="button" class="acciones btn btn-success btn-sm" data-tabla="tipo_normativa" data-estado="1" data-id="'.$r->id.'">Publicar</button>';
+			}
+			if($r->estado == 1){
+				$estado = '<span class="badge badge-success">Publicado</span>';
+				if (!$this->ion_auth->is_members()){
+				$publicar = '<button type="button" class="acciones btn btn-danger btn-sm" data-tabla="tipo_normativa" data-estado="0" data-id="'.$r->id.'">Suspender</button>';
 				}
-				if (!$this->ion_auth->is_super() && !$this->ion_auth->is_admin() ){
-					$editar = '<a href="'.base_url().'Manager/Tipo_normativa/editar_datos/'.$r->id.'" data-tabla="tipo_normativa" data-estado="0" data-id="'.$r->id.'" class=" btn btn-info btn-xs"><i class="fas fa-pencil-alt" title="editar"></i> </a> ';
-							
-					}
-           $data[] = array(
-                $r->id,
-                $r->nombre,
-                $r->detalle,
-                $r->estado = $estado,
-                $r->acciones = $publicar
-           );
-      }
+			}
+			if (!$this->ion_auth->is_super() && !$this->ion_auth->is_admin() ){
+				$editar = '<a href="'.base_url().'Manager/Tipo_normativa/editar_datos/'.$r->id.'" data-tabla="tipo_normativa" data-estado="0" data-id="'.$r->id.'" class=" btn btn-info btn-xs"><i class="fas fa-pencil-alt" title="editar"></i> </a> ';
+			}
+			$data[] = array(
+			$r->id,
+			$r->nombre,
+			$r->detalle,
+			$r->estado = $estado,
+			$r->acciones = $publicar
+			);
+		}
 
 
-      $result = array(
-               "draw" => $draw,
-                 "recordsTotal" => $query->num_rows(),
-                 "recordsFiltered" => $query->num_rows(),
-                 "data" => $data
-            );
+		$result = array(
+		"draw" => $draw,
+		"recordsTotal" => $query->num_rows(),
+		"recordsFiltered" => $query->num_rows(),
+		"data" => $data
+		);
 
 
-      echo json_encode($result);
-      exit();
-       
-     $query = $this->db->select('*')
-                          ->where('estado',1)
-                          ->order_by('id','desc')
-                          ->get('tipo_normativa');
+		echo json_encode($result);
+		exit();
+
+		$query = $this->db->select('*')
+		->where('estado',1)
+		->order_by('id','desc')
+		->get('tipo_normativa');
+
+
+
+		if ($query->result() > 0){
+
+		return $query->result();
+
+		}
+
+		}
+
+		public function get_tipos(){
+
+		$draw = intval(2);
+		$start = intval(0);
+		$length = intval(1);
+
+
+		$query = $this->db->select("*")->get("tipo_normativa");
+
+
+		$data = [];
+
+		$editar = '';
+		foreach($query->result() as $r) {
+			$publicar ='';
+			$estado = '<a href="#" class="btn btn-danger btn-xs">Sin Publicar </a>';
 			
-			
-       
-      if ($query->result() > 0){
-
-          return $query->result();
- 
-      }
-       
-    }
-
-		public function get_tipos()
-    {
-			
-			$draw = intval(2);
-      $start = intval(0);
-      $length = intval(1);
-
-
-      $query = $this->db->select("*")
-											->get("tipo_normativa");
-
-
-      $data = [];
-
-$editar = '';
-      foreach($query->result() as $r) {
-				$estado = '<a href="#"  class="btn btn-danger btn-xs">Sin Publicar </a>';
+			if(!$this->ion_auth->is_membres()){
 				$publicar = '<a href="#" data-tabla="tipo_normativa" data-estado="1" data-id="'.$r->id.'" class="acciones btn btn-success btn-xs">Publicar </a> ';
-				
-				if($r->estado == 1){
-					
-					$estado = '<a href="#"  class="btn btn-success btn-xs">Publicado </a>';
-					$publicar = '<a href="#" data-tabla="tipo_normativa" data-estado="0" data-id="'.$r->id.'" class="acciones btn btn-danger btn-xs">Suspender </a> ';
+			}
+
+			if($r->estado == 1){
+
+			$estado = '<a href="#" class="btn btn-success btn-xs">Publicado </a>';
+			
+				if(!$this->ion_auth->is_membres()){
+				$publicar = '<a href="#" data-tabla="tipo_normativa" data-estado="0" data-id="'.$r->id.'" class="acciones btn btn-danger btn-xs">Suspender </a> ';
 				}
-					$editar = '<a href=" '.base_url().'Manager/Tipo_normativa/editar_datos/'.$r->id.'" data-tabla="tipo_normativa" data-estado="0" data-id="197" class=" btn btn-info btn-xs"><i class="fas fa-pencil-alt" title="editar"></i> </a>';
-					
-           $data[] = array(
-                $r->id,
-                $r->nombre,
-                $r->detalle,
-                $r->estado = $estado,
-                $r->acciones = $publicar.$editar
-           );
-      }
+			}
+			$editar = '<a href=" '.base_url().'Manager/Tipo_normativa/editar_datos/'.$r->id.'" data-tabla="tipo_normativa" data-estado="0" data-id="197" class=" btn btn-info btn-xs"><i class="fas fa-pencil-alt" title="editar"></i> </a>';
+
+			$data[] = array(
+			$r->id,
+			$r->nombre,
+			$r->detalle,
+			$r->estado = $estado,
+			$r->acciones = $publicar.$editar
+			);
+		}
 
 
-      $result = array(
-               "draw" => $draw,
-                 "recordsTotal" => $query->num_rows(),
-                 "recordsFiltered" => $query->num_rows(),
-                 "data" => $data
-            );
+		$result = array(
+		"draw" => $draw,
+		"recordsTotal" => $query->num_rows(),
+		"recordsFiltered" => $query->num_rows(),
+		"data" => $data
+		);
 
 
-      echo json_encode($result);
- 
-           
-    }
+		echo json_encode($result);
+
+
+		}
 	
 		public function check($data){
 			

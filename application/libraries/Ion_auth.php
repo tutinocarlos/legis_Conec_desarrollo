@@ -443,14 +443,25 @@ class Ion_auth
 
 		return $this->ion_auth_model->in_group($admin_group, $id);
 	}
+	
+	public function is_legis($id_legis=FALSE){
+		
+		if($id_legis == 91 ){
+			return TRUE;
+		}else{
+			return FALSE;
+		}
+	}
 	public function is_members($id = FALSE)
 	{
+		
+		
 		$this->ion_auth_model->trigger_events('is_members');
 
-		$admin_group = $this->config->item('members_group', 'ion_auth');
+		$members_group = $this->config->item('members_group', 'ion_auth');
 
 
-		return $this->ion_auth_model->in_group($admin_group, $id);
+		return $this->ion_auth_model->in_group($members_group, $id);
 	}
 
 	/**

@@ -6,48 +6,16 @@ class Contenidos_model extends CI_Model
 
 	/*listado de normativas del home*/
 	public function get_listado_normativas_ajax(){
-//		'tematica' <font color='#888a85'>=&gt;</font> 
-//    <b>array</b> <i>(size=2)</i>
-//      0 <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>'6'</font> <i>(length=1)</i>
-//      1 <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>'10'</font> <i>(length=2)</i>
-//  'ambito' <font color='#888a85'>=&gt;</font> 
-//    <b>array</b> <i>(size=1)</i>
-//      0 <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>'1'</font> <i>(length=1)</i>
-//  'provincias' <font color='#888a85'>=&gt;</font> 
-//    <b>array</b> <i>(size=2)</i>
-//      0 <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>'6'</font> <i>(length=1)</i>
-//      1 <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>'10'</font> <i>(length=2)</i>
-//  'tipo_normativa' <
-//		var_dump($this->input->post('tematica'));
-//		
-//		if(isset($_POST['tematica'])){
-//			
-//			$datos = $this->input->post('tematica');
-//			
-//		 foreach($this->input->post('tematica') as $key =>$value){
-//			 
-//			echo $key . '->'. $value;
-//		 }
-//			
-//		}else{
-//			echo 'no';
-//		}
-//		die();
 		
-//		$value=$this->db->escape($value);
-//$value2=$this->db->escape($value2);
-//$this->db->from('sometable');
-//$this->db->where("($field = $value || $field2 = $value)");
-//$this->db->where("($field3 = $value2 || $field4 = $value2)");
-//$this->db->get(); 
+
 		
 			$draw   =  intval($this->input->post("draw"));
-      $start  =  intval($this->input->post("start"));
-      $length =  intval($this->input->post("length"));
+			$start  =  intval($this->input->post("start"));
+			$length =  intval($this->input->post("length"));
 			$data = array();
 		
-		
-		
+		$query1 = "SELECT * FROM publicaciones WHERE publicaciones.estado = 1  AND publicaciones.borrado = 0 AND publicaciones.id_tipo = 1";
+		$resultados1 = $this->db->query($query1);
 		$query = '	SELECT publicaciones.id as id_publicacion, publicaciones.titulo as titulo_publicacion,publicaciones.resumen as resumen_publicacion,ambito.nombre as ambito,tipo_normativa.nombre as tipo_normativa,legislaturas.nombre as nombre_legis,legislaturas.id as id_legis,legislaturas.logo as logo_legis,provincias.id as provincia,
 		categorias.nombre as nombre_tematica';
 
@@ -73,7 +41,7 @@ class Contenidos_model extends CI_Model
 //			$this->db->where("publicaciones.is_legis_conectadas", 0);	
 //			$this->db->where("publicaciones.id_tipo", 1)	;
 							
-		$query .= ' WHERE  (publicaciones.is_legis_conectadas = 0 AND publicaciones.estado = 1  AND publicaciones.borrado = 0 AND publicaciones.estado = 1 AND publicaciones.id_tipo = 1 )' ;
+		$query .= ' WHERE  ( publicaciones.estado = 1  AND publicaciones.borrado = 0 AND publicaciones.estado = 1 AND publicaciones.id_tipo = 1 )' ;
 		
 			if(isset($_POST['tematica'])){
 				$query .= ' AND (';
@@ -125,11 +93,12 @@ class Contenidos_model extends CI_Model
 
 //		
 //		
-		
-      $resultados = $this->db->query($query);
-//		
+				$query .=' LIMIT '.$start.','.$length;
+
+				$resultados = $this->db->query($query);
+
 //		var_dump($resultados->result());
-      foreach($resultados->result() as $r) {
+			foreach($resultados->result() as $r) {
 				
 			
 			$segments = array('Publicacion',convert_accented_characters(url_title($r->titulo_publicacion), 'underscore', TRUE),$r->id_publicacion);
@@ -149,8 +118,8 @@ class Contenidos_model extends CI_Model
 			}
       $result = array(
 					"draw" => $draw,
-					"recordsTotal" => $resultados->num_rows(),
-					"recordsFiltered" => $resultados->num_rows(),
+					"recordsTotal" => $resultados1->num_rows(),
+					"recordsFiltered" => $resultados1->num_rows(),
 					"data" => $data
 			);
 
@@ -430,6 +399,17 @@ class Contenidos_model extends CI_Model
 
 	}
 	
+	public function buscar_adjuntos($id_post){
+		$query= 	$this->db->select('*')
+												->where('id_post',$id_post)
+												->get('post_adjuntos');
+
+		if ($query->result() > 0){
+				return $query->result();
+		}
+		
+	}	
+	
 	public function buscar_foto($id_post){
 		$query= 	$this->db->select('*')
 												->where('id_post',$id_post)
@@ -516,6 +496,19 @@ class Contenidos_model extends CI_Model
 				return $query->result();
 		}
 	}
+	
+		
+	public function buscar_videos($id_post){
+		$query = $this->db->select('*')
+                          ->where('id_post',$id_post)
+                          ->get('post_videos');
+       
+		if ($query->result() > 0){
+				return $query->result();
+		}
+	}
+	
+	
 	
 	/*
 	Envio $id_cate si estoy listando el filtro de las categorias de las lista de noticias de legis
@@ -965,17 +958,21 @@ class Contenidos_model extends CI_Model
 	
 	/*recupero toda la data de la tabla */
 	public function get_all_data($tabla, $estado=1){
-		$query = $this->db->select($tabla.'.*,'.$tabla.'.id as id_'.$tabla)
-												->where('estado',$estado)
-                        ->get($tabla);
+/* MODIFICADO EL 30/05/2020 SEGUN PEDIDO ARCHIVO CAMBIO ORDEN DE CABA DPS DE CHUBUT */
+		if($tabla == 'provincias'){
+			$query = $this->db->select($tabla.'.*,'.$tabla.'.id as id_'.$tabla)
+				->where('estado',$estado)
+				->order_by('provincias.nombre asc')
+				->get($tabla);
+			
+		}else{
+			$query = $this->db->select($tabla.'.*,'.$tabla.'.id as id_'.$tabla)->where('estado',$estado)->get($tabla);
+		}
  
-      if ($query->result() > 0)
-      {
-          return $query->result();
-      }
-       
-      return FALSE;
-		
+		if ($query->result() > 0){
+				return $query->result();
+		}
+		return FALSE;
 	}
      
 }

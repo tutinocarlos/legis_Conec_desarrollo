@@ -94,8 +94,8 @@ $.ajax({
 		e.preventDefault();
 		var dato = new FormData();
 		dato.append('id_post', $(this).data('post'));
-		dato.append('titulo_video', $('input#titulo_video').val();
-		dato.append('detalle_video', $('input#detalle_video').val();
+		dato.append('titulo_video', $('input#titulo_video').val());
+		dato.append('detalle_video', $('input#detalle_video').val());
 
 		$.ajax({
 			type: "POST",
@@ -128,8 +128,6 @@ $.ajax({
 				console.log(xhr.status + ": " + xhr.responseText);
 			}
 		});
-		
-		
-	});
+
 
 });

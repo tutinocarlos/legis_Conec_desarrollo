@@ -56,6 +56,30 @@ if($publicacion->estado == 0){
 
 							</p>
 						</div>
+				<!--				archivos adjuntos-->
+				<?php if(!empty($adjuntos)):?>
+				<div class="padding-top-middle"></div>
+				<div class="row">
+					<div class="col-sm-12">
+						<h4>Archivos Adjuntos</h4>
+							<?php //var_dump($adjuntos);?>
+						<div class="">
+						<ul style=" padding-left: 0;">
+							<?php foreach($adjuntos as $adjunto):?>
+							<?php
+							// Obtenfo el nombre del archivo para mostrarlo en el front
+							$nombre_archivo = explode('/', $adjunto->url);
+							?>
+							<li style="list-style: none;">
+								<i class="fa fa-paperclip" aria-hidden="true" style="margin-right: 5px; color:#4f92b0;"></i>
+								<a href="<?= base_url($adjunto->url)?>" target="_blank"><?= end($nombre_archivo); echo ' - '.$adjunto->detalle ?></a></li>
+							<?php endforeach;?>
+					</ul>
+				</div>
+					</div>
+				</div>
+				<?php endif;?>
+<!--				FIN archivos adjuntos--
 					</div>
 					<div class="col-md-4">
 						<div class="project-quick-info">

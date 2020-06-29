@@ -1,3 +1,4 @@
+
 @import url("https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800");
 @import url("https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800");
 @import url("https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800");
@@ -8,7 +9,6 @@
 .search-box .app-search .form-control {
 	border-radius: 0px
 }
-
 label {
 	margin-top: 10px;
 }
@@ -11301,7 +11301,7 @@ html[dir=ltr] body .p-l-0 {
 #main-wrapper {}
 
 #main-wrapper[data-sidebartype=full] .page-wrapper {
-	margin-left: 230px !important
+	margin-left: 250px
 }
 
 @media (min-width:768px) {
@@ -12034,7 +12034,7 @@ ul.list-style-none li a:hover {
 }
 
 #navbarSupportedContent {
-	background: #1f262d !important
+	background: #1f262d  !important
 }
 
 .search-box .app-search {
@@ -16612,7 +16612,7 @@ label {
 	padding: 20px;
 	max-width: 400px;
 	width: 90%;
-	margin: 5% 0
+	margin: 10% 0
 }
 
 .auth-wrapper #recoverform {

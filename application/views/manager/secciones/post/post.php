@@ -1,4 +1,4 @@
-<style>
+	<style>
 
 
 </style>
@@ -40,7 +40,7 @@ $js = array(
 								if ($this->ion_auth->is_super()){
 							?>
 							<div class="row">
-								<div class="col-md-4">
+								<div class="col-md-6">
 									<div class="form-group ">
 										<label>Publicacióna de Legislaturas Conectadas:</label>
 										<?php 
@@ -56,7 +56,7 @@ $js = array(
 									</div>
 								</div>
 
-								<div class="col-md-4">
+								<div class="col-md-6">
 									<div class="form-group ">
 										<label>Publicación destacada:</label>
 										<?php 

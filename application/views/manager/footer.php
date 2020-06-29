@@ -33,10 +33,10 @@
 
 
 
-
     <script src="<?= base_url() ?>static/manager/dist/js/jquery-confirm.min.js?ver=<?= time()?>"></script>
     <script src="<?= base_url() ?>static/manager/dist/js/custom.js?ver=<?= time()?>"></script>
 
+    <script src="<?= base_url() ?>static/manager/assets/libs/magnific-popup/dist/jquery.magnific-popup.min.js?ver=<?= time()?>"></script>
 
     <?php 
 
@@ -62,6 +62,16 @@ if (isset($_SESSION['save_data'])){
   toggle: true
 		})</script>";
 	}
+	
+		
+	if(isset($_SESSION['save_data']['open_video'])){
+		
+		echo "<script>$('#Toggle-3').collapse({
+  toggle: true
+		})</script>";
+	}
+	
+	
 	
 	$this->session->unset_userdata('save_data');
 }

@@ -21,6 +21,7 @@ function fill_datatable(provincias = [],tematicas = [],tipo_normativa = [],ambit
 		var oTable = $('#publicaciones').DataTable({
 
 			dom: '<"html5buttons"B>lTfgitp',
+
 			buttons: [ {
 					extend: 'copy'
 				}, {
@@ -72,17 +73,20 @@ function fill_datatable(provincias = [],tematicas = [],tipo_normativa = [],ambit
 				}
 			],
 			language: {
-			url: $("body").data('base_url') + 'static/manager/translate/spanish.json'
+			url: $("body").data('base_url') + 'static/manager/translate/spanish.json',
+				
 		},
-			"pageLength" : 10,
+			
+			"pageLength" :5,
 			"columnDefs": [{ 
 			"targets": [0],
 			"orderable": false
 			}],
+			
 
 			"processing": true,
 			"serverSide": true,
-			"searching": false,
+			"searching": true,
 				ajax: {
 				data:{
 				tematica: tematicas,

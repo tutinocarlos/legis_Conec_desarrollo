@@ -7,7 +7,7 @@
 img {
 margin-right: 3px;
 border: 1px solid #000;
-	padding: 15px;
+/*	padding: 15px;*/
 }
 	
 .videos {
@@ -21,27 +21,6 @@ border: 1px solid #000;
 
 </style>
 
-
-<div class="col-md-6 col-lg-2 col-xlg-3">
-	<a href="<?= base_url()?>Manager/Legislaturas">
-		<div class="card card-hover">
-			<div class="box  text-center" style="background-color: #00b19d;">
-				<h1 class="font-light text-white"><i class="fas fa-pencil-alt"></i></h1>
-				<h6 class="text-white">Agregar Organismo</h6>
-			</div>
-		</div>
-	</a>
-</div>
-<div class="col-md-6 col-lg-2 col-xlg-3">
-	<a href="<?= base_url()?>Manager/Legislaturas/listado">
-		<div class="card card-hover">
-			<div class="box  text-center" style="background: #f7aa47;">
-				<h1 class="font-light text-white"><i class="fas fa-building"></i></h1>
-				<h6 class="text-white">Listar Organismo</h6>
-			</div>
-		</div>
-	</a>
-</div>
 	<div class="col-md-12" data-select2-id="15">
 
 	<div class="card ">
@@ -372,9 +351,15 @@ $js = array(
 			<div class="form-group col-lg-6 col-sm-12">
 			
 				<div style="margin-top: 30px;"><h4>Imágen para Slider de la Portada</h4></div>
-							<div class="col-lg-6">
+				<div class="col-lg-6">
 					<img src="<?= base_url($legislatura->slider)?>" alt="" class="img-fluid">
 				</div>
+				<div class="col-lg-4">
+				<?php if($legislatura->slider != 'static/web/images/slider/banner_1.png'):?>
+					<a href="#" data-url="<?= $legislatura->slider?>" data-estado="1" data-legis="<?=$legislatura->id?>" class="borrar_imagen_slider btn btn-danger btn-xs"><i class="fas fa-trash-alt" title="Borrar"></i> </a>
+					<?php endif;?>
+				</div>
+
 					<?php
 						$data = array(
 							'class' => '',
@@ -417,7 +402,7 @@ $js = array(
 				<?php else:?>
 				
 					<?php foreach ($imagenes as $data):?>
-					<div class="col-lg-3 col-md-6" id="file_<?= $data->id;?>">
+					<div class="col-lg-4 col-md-6" id="file_<?= $data->id;?>">
 						<div class="card" id="imagen_<?= $data->id;?>" data-imagen="<?= $data->id;?>">
 							<div class="el-card-item">
 								<div class="el-card-avatar el-overlay-1"> <img src="<?= base_url($data->url)?>" alt="">

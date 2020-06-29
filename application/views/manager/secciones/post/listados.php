@@ -7,7 +7,7 @@
 </style>
 <div class="row">
 <!-- Column -->
-	
+	<?php if (!$this->ion_auth->is_members	()):?>
 <div class="col-md-3 col-lg-2 col-xlg-3">
 	<a href="<?= base_url('Manager/Post')?>">
 		<div class="card card-hover">
@@ -18,6 +18,8 @@
 		</div>
 	</a>
 </div>
+<?php endif;	?>
+<?php if ($this->ion_auth->is_super()):?>
 <div class="col-md-3 col-lg-2 col-xlg-3">
 	<a href="<?= base_url('Manager/Usuarios')?>">
 		<div class="card card-hover">
@@ -28,6 +30,7 @@
 		</div>
 	</a>
 </div>
+<?php endif;	?>
 
 <!-- Column -->
 
@@ -47,6 +50,7 @@
 								<th style="width:400px;">Titulo</th>
 								<th>Legislatura:</th>
 								<th>Usuario:</th>
+								<th>Editado:</th>
 								<th>Estado:</th>
 								<th>Acciones</th>
 							</tr>
@@ -58,6 +62,7 @@
 								<th>Titulo</th>
 								<th>Legislatura:</th>
 								<th>Usuario:</th>
+								<th>Editado:</th>
 								<th>Estado:</th>
 								<th>Acciones</th>
 							</tr>

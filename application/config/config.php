@@ -1,7 +1,18 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$config['base_url'] = 'http://ci2';
+	switch ($_SERVER['REMOTE_ADDR']) {
+
+    case "181.13.81.251":
+					$config['base_url'] = 'http://testargentina.ddns.net';
+				break;
+		case "192.168.1.103":
+				$config['base_url'] = 'http://ci2';
+			break;
+		case "10.1.1.27":
+				$config['base_url'] = 'http://ci2';
+			break;
+	}
 
 $config['titulo_sitio_web'] = "Legislaturas Conectadas";
 
@@ -33,7 +44,7 @@ $config['index_page'] = '';
 | WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
 */
 $config['uri_protocol']	= 'REQUEST_URI';
-$config['mi_variable']	= 'esto es lo que paso';
+$config['mi_variable']	= '';
 
 /*
 |--------------------------------------------------------------------------
@@ -140,7 +151,8 @@ $config['composer_autoload'] = FALSE;
 | DO NOT CHANGE THIS UNLESS YOU FULLY UNDERSTAND THE REPERCUSSIONS!!
 |
 */
-$config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-@=+';
+$config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-()@!';
+																																		
 
 /*
 |--------------------------------------------------------------------------
@@ -306,7 +318,7 @@ $config['cache_query_string'] = FALSE;
 | https://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-$config['encryption_key'] = 'mykey';
+$config['encryption_key'] = 'H69I21wpq0tRgGh8XjAzQn4abo7FMLeK';
 
 /*
 |--------------------------------------------------------------------------

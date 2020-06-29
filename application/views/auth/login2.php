@@ -23,6 +23,10 @@
 	.msg{
 		margin: 15px 0;
 	}
+	span#eye{
+		background-color: #fff!important;
+		cursor: pointer!important;
+	}
 	</style>
 </head>
 
@@ -70,7 +74,10 @@
 								<div class="input-group-prepend">
 									<span class="input-group-text bg-success text-white" id="basic-addon2"><i class="fas fa-pencil-alt"></i></span>
 								</div>
-								<input type="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1"  value="" name="password">
+								<input type="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1"  value="" name="password" id="txtpassword">
+								<div class="input-group-append"  onclick="mostrarPassword()">
+									<span id="eye" class="input-group-text"><i class=" fas fa-eye-slash" id="icon"></i></span>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -159,7 +166,20 @@
 		});
 		
 		
+			function mostrarPassword(){
+				var cambio = document.getElementById("txtpassword");
+				if(cambio.type == "password"){
+					cambio.type = "text";
+				$('#icon').removeClass('fa fa-eye-slash').addClass('fa fa-eye');
+				}else{
+				cambio.type = "password";
+				$('#icon').removeClass('fa fa-eye').addClass('fa fa-eye-slash');
+				}
+
+			};
+		
 		$("#recupero").click(function(){
+			
 			
 			var  email = $.trim($("#recupero_email").val());
 			
