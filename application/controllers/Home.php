@@ -15,11 +15,206 @@ class Home extends MY_Controller {
 			$this->load->model('/Manager/Contenidos_model');
 			$this->load->model('/Manager/Legislaturas_model');
 			$this->load->model('/Manager/Tipos_camaras_model');
-
+			
+			$this->Contenidos_model->insert_log();
+			
+			
+//			$this->output->enable_profiler(TRUE);
 
 	}
 
+	public function rest(){
+		
+		$url = "https://apis.datos.gob.ar/georef/api/provincias?nombre=Santiago del Estero";
 
+		//  Initiate curl
+$ch = curl_init();
+// Disable SSL verification
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+// Will return the response, if false it print the response
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+// Set the url
+curl_setopt($ch, CURLOPT_URL,$url);
+// Execute
+$result=curl_exec($ch);
+// Closing
+curl_close($ch);
+
+// Will dump a beauty json :3
+		echo '<pre>';
+		var_dump($result);
+		echo '</pre>';
+		die();
+		$unparsed_json = file_get_contents("https://apis.datos.gob.ar/georef/api/provincias?nombre=Santiago del Estero");
+
+$json_object = json_decode($unparsed_json);
+var_dump(json_decode($json_object));die();
+		
+		
+    $json = file_get_contents($url);
+    $obj = json_decode($json);
+
+    var_dump($obj);die();
+		
+		$query = $this->db->select('*')->get('_paises');
+		
+		$paises = $query->result();
+		
+		foreach($paises as $pais){
+			if(trim($pais->nombre_pais) != ""){
+				
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, "https://restcountries.eu/rest/v2/name/".$pais->nombre_pais);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				
+			$res = json_decode(curl_exec($ch));
+
+			curl_close($ch);
+				echo '<pre>';
+					var_dump($res);
+			 		echo '</pre>';die();
+				if (array_key_exists('latlng', $res[0])) {
+//						echo '<pre>';
+//					var_dump($res[0]->latlng);
+//			 		echo '</pre>';die();
+
+						$data_ins = array(
+						'lat_pais'=>$res[0]->latlng[0],
+						'long_pais'=>$res[0]->latlng[1],
+					);
+					if($this->db->where('id_pais', $pais->id_pais)->update('_paises', $data_ins)){
+						echo '<br>Grabo: ';
+					}else{
+						echo '<br>NO Grabo: ';
+						
+					}
+						
+				}
+			
+			}
+			
+		}
+		
+		
+		
+		die();
+		
+		
+//foreach($continente as $data){
+//if($data->nombre_continente = 'Americas'){
+//	
+//	$buscar = $data->nombre_continente;
+//		$datos = json_decode(file_get_contents('https://restcountries.eu/rest/v2/region/'.$buscar));
+// echo '<pre>';
+//	var_dump($datos);
+// echo '</pre>';
+//}
+//	
+//}
+	
+		
+$ch = curl_init();
+
+curl_setopt($ch, CURLOPT_URL, "https://restcountries.eu/rest/v2/region/Americas");
+curl_setopt($ch, CURLOPT_URL, "https://apis.modernizacion.cl/dpa/comunas");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$res = json_decode(curl_exec($ch));
+
+curl_close($ch);
+//echo count($res);
+				
+ echo '<pre>';
+	var_dump($res);
+ echo '</pre>';die();
+
+			
+
+		
+		foreach($res as $data){
+			
+			$imagen = file_get_contents($data->flag);
+			$flag = explode('/',$data->flag );
+//			var_dump($flag);die();
+
+//			if(copy($data->flag,$_SERVER['DOCUMENT_ROOT'] .'/static/web/images/paises/flags/'.$flag[4])){
+//				
+//				echo '<br>copia';
+//			}else{
+//				echo '<br>no copia';
+//			}
+			
+		
+				$sub = $data->region;
+				$query = $this->db->select('*')->where('nombre_pais',$data->name)->get('_paises');
+				 $total = $query->result();
+			
+				if(count($total) == 0){
+					
+					
+					$continente = $data->subregion;
+					$query = $this->db->select('*')->where('nombre_pais',$data->name)->get('_paises');
+				 	$total = $query->result();
+					
+					
+					$query = $this->db->select('*')->where('nombre_subcontinente',$data->subregion)->get('_subcontinentes');
+				 	$total = $query->row();
+					$id_subcontinente = $total->id_subcontinente;
+					
+					$data_ins = array(
+						'nombre_pais'=>$data->name,
+						'bandera_pais'=>'static/web/images/paises/flags/'.$flag[4],
+						'capital_pais'=>$data->capital,
+						'habitantes_pais'=>$data->population,
+						'superficie_pais'=>$data->area,
+						'codigo_pais'=>$data->alpha3Code,
+						'subcontinente_pais'=>$id_subcontinente,
+					);
+					if($this->db->insert('_paises', $data_ins)){
+						echo '<br>Grabo: '.$data->name;
+					}else{
+						echo '<br>NO Grabo: '.$data->name;
+						
+					}
+
+				}
+
+			
+		};
+
+		
+	}
+
+	public function enviar_contacto__(){
+
+//echo '<pre>';
+//		var_dump($_POST);
+//echo '</pre>';
+//die();
+ $this->load->library('email');
+		
+		
+		$data = array(
+				 'nombre'     => 'Carlos ',
+				 'apellido'   => 'Tutino',
+				 'email'      => 'carlos.tutino@legislatura.gov.ar',
+				 'mensaje'      => utf8_encode ('este es mi menasaje conáaaa  áá'),
+					'ip'									=> get_ip_address(),
+				
+				);
+		$email_data = array(
+			'datos'   => $data,
+			'subject' => 'Legislaturas conectadas - Consulta Online'
+		);
+		
+		if ( $this->_enviar_email( $email_data ) ){
+			echo 'si';
+		}	
+		if ( $this->_enviar_email( $email_data, true ) ){
+			echo 'si 2';
+		}
+//		 echo $this->email->print_debugger();
+	
+	}	
 	public function enviar_contacto(){
 		
 		$captcha_answer = $this->input->post('g-recaptcha-response');
@@ -32,7 +227,7 @@ class Home extends MY_Controller {
 			$this->form_validation->set_rules('email', 'Email', 'required|valid_email');	
 			$this->form_validation->set_rules('legislatura', 'Legislatura', 'required');	
 			$this->form_validation->set_rules('mensaje', 'Mensaje', 'required|min_length[10]');	
-			$this->form_validation->set_rules('g-recaptcha-response', 'Captcha', 'callback_recaptcha');	
+//			$this->form_validation->set_rules('g-recaptcha-response', 'Captcha', 'callback_recaptcha');	
 		
 			$this->form_validation->set_error_delimiters('<label  class="error" >', '</label>');
 		
@@ -40,60 +235,33 @@ class Home extends MY_Controller {
 		//seteo mensaje 
 			
 			if($this->form_validation->run() === true){
+				
 
 				$data = array(
-				 'nombre'     => $this->input->post('nombre'),
-				 'apellido'   => $this->input->post('apellido'),
-				 'email'      => $this->input->post('email'),
-				 'legilstura' => $this->input->post('legislatura'),
-				 'mensaje'    => $this->input->post('mensaje'),
-					'subject' 			=> 'Contacto Legislaturas Conectadas '
+					'nombre'     => $this->input->post('nombre'),
+					'apellido'   => $this->input->post('apellido'),
+					'email'      => $this->input->post('email'),
+					'Legislatura' => $this->input->post('legislatura'),
+					'mensaje'    => $this->input->post('mensaje'),
+					'ip'				 => get_ip_address(),
 				);
 
-			 $email_data = array(
-			 'datos' => $data,
-			 'subject' => 'Contacto formulario web'
-			 );
-
-				
-				$html =  $this->load->view('emails/consultas', $email_data, TRUE);				
-
-				
-				$emailTo = array(
-				'carlos.tutino@legislatura.gov.ar' => 'Carlos',
-				'silvana.conte@legislatura.gov.ar' => 'Silvana',
-				'dirivero@legislatura.gov.ar' => 'Diego',
+				$email_data = array(
+					'datos'   => $data,
+					'subject' => 'Legislaturas conectadas - Consulta Online'
 				);
-		
-				$emailTo = 'carlos.tutino@legislatura.gov.ar';
-				$emailCC = 'carlos.tutino@legislatura.gov.ar';
-				$envio = sendMail($emailTo,$emailCC,$emailCCO='',$email_data['subject'], $html,$attach=FALSE );
+				if ( $this->_enviar_email( $email_data ) ){
+					$succesForm = true;
+				}	
+				if ( $this->_enviar_email( $email_data, true ) ){
+					$succesCopia = true;
+				}
 
-						$response = array(
-      		'success' => true,
-						// 'mensaje' => 'Mensaje enviado -> '.$envio['metodo'],
-						// 'email' => $suscriptor->email,
-						// 'enviados' => $this->Breves_model->contar_suscriptores($this->input->post('id_news'), TRUE)
-      	);
-				
-				
-// // unset($email_data["datos"]["uri"]);
-//
-// /* function enviar_email */
-// if ( $this->_enviar_email( $email_data ) )
-// {
-// $response = array(
-// 'success' => true
-// );
-//
-// }else{
-// $response = array(
-// 'error_envio'=> true,
-// );
-// }
-			
-		//echo json_encode($response);
-				
+				$response = array(
+					'successForm' => $succesForm,
+					'successCopia' => $succesCopia,
+
+					);
 				
 			}else{
 				
@@ -264,6 +432,22 @@ class Home extends MY_Controller {
 
 		$publicaciones 						= $this->Contenidos_model->get_paginador_noticias('publicaciones',$config['per_page'],$offset = 0);
 		$publicaciones_destacadas = $this->Contenidos_model->get_publicaciones_destacadas('publicaciones', 4);
+		$notificaciones = $this->Contenidos_model->obtener_publicaciones('publicaciones',3, $orden='id DESC', $limit = 1);
+		
+		$notificacion_emergente = $notificaciones['post'];
+//		echo '<pre>';
+		var_dump($notificacion_emergente); 
+//		echo '</pre>';
+//		
+//		die();
+			/* OBTENGO PRIMER FOTO DE LA PUBLICACION*/
+		foreach($notificacion_emergente as $data){
+//			var_dump($data);
+			if($foto = $this->Contenidos_model->buscar_foto($data->id)){
+				$data->foto = $foto[0]->url;
+			}
+		}		
+		
 		
 
 	/* OBTENGO PRIMER FOTO DE LA PUBLICACION*/
@@ -273,18 +457,18 @@ class Home extends MY_Controller {
 				$data->foto = $foto[0]->url;
 			}
 		}		
-		
+	/* OBTENGO PRIMER FOTO DE LA PUBLICACION*/
 		foreach($publicaciones_destacadas as $data){
 				
 			if($foto = $this->Contenidos_model->buscar_foto($data->id)){
 				$data->foto = $foto[0]->url;
 			}
 		}
-	/* OBTENGO PRIMER FOTO DE LA PUBLICACION*/
 
 		$data = array(
 		'noticias' =>$publicaciones,
-		'noticias_destacadas' =>$publicaciones_destacadas
+		'noticias_destacadas' =>$publicaciones_destacadas,
+		'notificacion_emergente' =>$notificacion_emergente
 		);
 
 		$render = $this->load->view('web/secciones/templates/list_noticias',$data, TRUE); 
@@ -310,6 +494,10 @@ class Home extends MY_Controller {
 
 		);
 
+//		
+//		echo '<pre>';
+//		var_dump($sliders);
+//		echo '</pre>';die();
 		$seccion = $this->load->view('web/secciones/index',$datos, TRUE);
 		
 		$csss =  array(
@@ -517,12 +705,27 @@ class Home extends MY_Controller {
 	public function get_listado_publicaciones_ajax(){
 		
 		if($this->input->is_ajax_request()){
+			if($_POST['listado_nuevo']){
+				$listado_publicaciones =  $this->Contenidos_model->get_listado_normativas_ajax2();
+			}else{
+				$listado_publicaciones =  $this->Contenidos_model->get_listado_normativas_ajax();
+			};
 		
-			$listado_publicaciones =  $this->Contenidos_model->get_listado_normativas_ajax();
+		
 			return $listado_publicaciones;
 				
 		}
-	}
+	}	
+	public function get_listado_publicaciones_ajax2(){
+		
+		if($this->input->is_ajax_request()){
+			
+			$listado_publicaciones =  $this->Contenidos_model->get_listado_normativas_ajax2();
+			return $listado_publicaciones;
+			}
+		
+				
+		}
 	
 		/* LISTADO DE NORMATIVAS DEL FRONTEND id de tipo de publicacion y nombre  */	
 	public function publicaciones($id_tipo, $nombre_tipo){
@@ -565,7 +768,7 @@ class Home extends MY_Controller {
 			'tipo_normativas' => $tipo_normativa,
 			'ambitos' 				=> $ambito,
 			'provincias' 			=> $provincias,
-			'filtro' 					=> $filtro,
+			//'filtro' 					=> $filtro,
 			'html'						=> $html,
 			'titulo' 					=> $tipo,
 			'titulo_seccion' 	=> 'Normativas',
@@ -734,6 +937,47 @@ class Home extends MY_Controller {
 		
 	}
 	
+	public function links(){
+		
+			if($this->input->is_ajax_request()){
+		
+			$listado_links =  $this->Contenidos_model->get_links_ajax();
+			return $listado_links;
+				
+		}
+		
+
+//		$listado_legislaturas =  $this->Contenidos_model->get_listado_legislaturas_links();
+		$listado_links =  $this->Contenidos_model->get_listado_links();
+
+//		$legislaturas =  $this->Legislaturas_model->list_legislaturas();
+		$datos = array(
+			'titulo_seccion'=>'Links de Interes',
+//			'legislaturas'=>$listado_legislaturas,
+			'links'=>$listado_links,
+			
+		);
+		$seccion = $this->load->view('web/secciones/links',$datos, TRUE);
+
+		$scripts =  array(
+			base_url().'static/web/scripts/links.js?ver='.time(), 
+			base_url().'static/manager/assets/extra-libs/DataTables/datatables.js?ver='.time(),
+		);
+		$data = array(
+				'nav' => $this->nav,
+				'fecha' => $this->fecha,
+				'content' => $seccion,
+				'script' => $scripts
+		);
+
+		$this->load->view('web/head',$data);
+		$this->load->view('web/index',$data);
+		$this->load->view('web/footer',$data);
+
+		
+		
+	}
+	
 	public function get_paginador(){
 	
 		$offset = $this->input->post('offset');
@@ -842,13 +1086,15 @@ class Home extends MY_Controller {
 			if ($query->result() > 0){
 				
 				$user =  $query->row();
+				
+
 
 				$password = randon_password(5);
 				
 				$usuario = $this->ion_auth->user($user->id)->row();
 
 				$data = array(
-						're_password' =>0,
+						're_password' =>1,
 						'password' =>$password,
 				);
 			
@@ -856,19 +1102,36 @@ class Home extends MY_Controller {
 						
 						$messages = $this->ion_auth->messages_array();
 						$message = "Se ha enviado un correo electrónico para el reseteo de la contraseña<br>Revise su correo";
-						$data = array(
-							"nombre" => $usuario->first_name,
-							"apellido" => $usuario->last_name,
-							"identity" => $usuario->email,
-							"temporal" => $password,
-							'datoss'=> ' continuar'
-						);
+$data = array(
+			"nombre" => $usuario->first_name,
+			"apellido" => $usuario->last_name,
+			"identity" => $usuario->email,
+			"temporal" => $password,
+			'datoss'=> 'completar el proceso'
+		);
+			
+		$this->load->library('email');
+		$this->load->helper('url');
+    /* configuro el envio */
+		$html = $this->load->view($this->config->item('email_templates', 'ion_auth').$this->config->item('reset_pwd', 'ion_auth'), $data, true);
+			
+		$subject = 'Cambio de contraseña - Legislaturas Conectadas';
+	/*NUEVO*/
+		$this->email->from('webmaster@legislaturasconectadas.gob.ar', 'Legislaturas Conectadas - Cambio de contraseña de acceso');
+			
+		$this->email->to($usuario->email,'Cambio de contraseña de acceso');
+		$this->email->subject('Legislaturas Conectadas - cambio de contraseña');
+			
+	 	$this->email->message($html);   
 
-						$html = $this->load->view($this->config->item('email_templates', 'ion_auth').$this->config->item('reset_pwd', 'ion_auth'), $data, true);
-
-						$subject = 'Cambio de contraseña - Legislaturas Conectadas';
-
-						$set_pass = semdMailGmail($usuario->email,$subject, $html,$attach=FALSE );
+    if($this->email->send())
+    {
+			$message .= '<br> Se ha enviado email al usuario';
+			$status = true;
+    }else{
+			$message .= '<br> Error al enviar email al usuario';
+			$status = false;
+		}
 
 						}
 						else
@@ -885,7 +1148,7 @@ class Home extends MY_Controller {
 		}
 		
 		$response = array(
-				'estado'=>$set_pass['status'],
+				'estado'=>$status,
 				'password'=>$password,
 				'message'=>$message,
 //				'html'=>$html

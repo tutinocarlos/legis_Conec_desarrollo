@@ -90,14 +90,14 @@ $js = array(
 													<?php echo form_error('id_legislatura','<div class="invalid-feedback" style="display:block;">',"</div>");?>
 												</div>
 												<div class="form-group col-md-2">
-													<label>Tipo de publicación: </label>
+													<label>Tipo de publicaciónes: </label>
 													<?= 	form_dropdown('tipo', $data_select_tipo,$post->id_tipo, $js); ?>
 
 													<?php echo form_error('tipo','<div class="invalid-feedback" style="display:block;">',"</div>");?>
 												</div>
 												<div class="form-group  col-md-2 ">
 													<label>Tipo de Normativa: </label>
-													<?= 	form_dropdown('normativa', $data_select_normativa, $post->id_tipo_normativa, $js); ?>
+													<?= 	form_dropdown('normativa', $data_select_normativa, $post->id_tipo_normativa, 1,$js); ?>
 													<?php echo form_error('normativa','<div class="invalid-feedback" style="display:block;">',"</div>");?>
 													<span class="aclaracion">* Campo requerido, <strong>si el tipo de Publicación es 'Normativa'</strong></span>
 												</div>

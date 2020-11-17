@@ -5,7 +5,7 @@
 						<div class="business-main-menu">
 							<nav class="navbar navbar-expand-lg navbar-light bg-light btco-hover-menu">
 								<a class="navbar-brand" href="<?= base_url()?>home">
-									<img src="<?= base_url()?>static/web/images/logos/logo1.png" class="d-inline-block align-top" alt="">
+									<img src="<?= base_url()?>static/web/images/logos/LC_logo.png" class="d-inline-block align-top" alt="">
 								</a>
 								<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 									<span class="navbar-toggler-icon"></span>
@@ -37,6 +37,9 @@
 
 										<li class="nav-item">
 											<a class="nav-link" href="<?= base_url('Contacto')?>">Contacto</a>
+										</li>									
+										<li class="nav-item">
+											<a class="nav-link" href="<?= base_url('Links')?>">Links de Interes</a>
 										</li>
 									</ul>
 

@@ -1,6 +1,6 @@
 //https://ckeditor.com/latest/samples/toolbarconfigurator/index.html#basic
 
-//CKEDITOR.replace('cuerpo');
+// 
 //
 //CKEDITOR.replace('resumen');
 //
@@ -95,9 +95,6 @@ $(document).ready(function () {
 	})
 
 
-
-
-
 	var base_url = $('body').data('base_url');
 	//quito foco de boton de envio del POST
 	$("submit[name='botonSubmit']").blur();
@@ -121,6 +118,37 @@ $(document).ready(function () {
 
 
 	// anulo la seleccion del usuario 
+	$("#publicacion").on("change", "select#id_pais", function () {
+		var dato = new FormData();
+		dato.append('id', $(this).val());
+
+		$.ajax({
+			type: "POST",
+			contentType: false,
+			//    				dataType: 'json',
+			data: dato,
+			processData: false,
+			cache: false,
+			beforeSend: function () {
+				$("#legis_id ").empty();
+
+			},
+			url: $("body").data('base_url') + "Manager/Paises/get_legis_pais",
+			success: function (result) {
+
+				console.log('result');
+				console.log(result);
+				$("select#legis_id").html(result);
+
+				//    					toastr.success('Registro Editado correctamente!', 'Categorías');
+			},
+			error: function (xhr, errmsg, err) {
+				console.log(xhr.status + ": " + xhr.responseText);
+			}
+		});
+		
+
+	});
 	$("#publicacion").on("change", ".tab-content #id_legislatura", function () {
 		$("#id_user ").empty();
 		var dato = new FormData();

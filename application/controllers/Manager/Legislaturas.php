@@ -14,6 +14,7 @@ class Legislaturas extends MY_Controller {
 			$this->load->library('form_validation');
 		 	$this->load->model('/Manager/Legislaturas_model');
 		 	$this->load->model('/Manager/Categorias_model');
+		 	$this->load->model('/Manager/Pais_model');
 			$this->load->helper('file');
 			$this->image_properties = array(
 				'src'   => '/static/web/images/logos/logoconectadas.jpg',
@@ -149,8 +150,7 @@ class Legislaturas extends MY_Controller {
 	}	
 	
 	public function edit($id){
-	
-		
+
 		if($this->input->post('botonSubmit')){	
 			
 			/* no permito editar datos a usuarios members */
@@ -244,18 +244,18 @@ class Legislaturas extends MY_Controller {
 							/**/
 							$slider_legislatura = $this->Legislaturas_model->get_slider_legislatura($id);
 							
-//							 var_dump($slider_legislatura);
+							 var_dump($slider_legislatura);
 							
-//							if(file_exists($_SERVER ['DOCUMENT_ROOT'].'/'.$slider_legislatura->slider)){
-//						
-////						echo 'entonces puedo borrar';
-//					
+							if(file_exists($_SERVER ['DOCUMENT_ROOT'].'/'.$slider_legislatura->slider)){
+						
+//						echo 'entonces puedo borrar';
+					
 //								if(unlink($_SERVER ['DOCUMENT_ROOT'].'/'.$slider_legislatura->slider)){
 //												echo 'si borro';
 //								} else{
 //												echo 'no borro';
 //								}
-//							}
+							}
 							
 							$mi_archivo = 'slider';
 							$config['upload_path'] = '';
@@ -408,6 +408,7 @@ class Legislaturas extends MY_Controller {
 						'user_upd' => $this->user->id,
 						'id_provincia' => $this->input->post('provincia'),
 						'id_organismo' => $this->input->post('organismo'),
+						'url_normativas' => $this->input->post('url_normativas'),
 					);
 					
 					
@@ -530,7 +531,7 @@ class Legislaturas extends MY_Controller {
     }
 
 	public function index(){
-
+//		die('llego');
 		if (!$this->ion_auth->logged_in())
     {
 
@@ -713,12 +714,11 @@ class Legislaturas extends MY_Controller {
 	
 	public function grabar_datos($id=NULL){
 
-		if (!$this->ion_auth->logged_in())
+		if (!$this->ion_auth->logged_in() )
     {
       redirect('auth/login');
     }else{
 
-			
 			$this->form_validation->set_rules('nombre', 'Nombre', 'required|min_length[3]');
 //			$this->form_validation->set_rules('lema', 'Lema', 'required|min_length[3]');
 			$this->form_validation->set_rules('url', 'URL', 'required|min_length[3]');
@@ -754,6 +754,8 @@ class Legislaturas extends MY_Controller {
 					'fecha_ins' => $this->fecha_now ,
 					'id_provincia' => $this->input->post('provincia') ,
 					'id_organismo' => $this->input->post('organismo') ,
+					'url_normativas' => $this->input->post('url_normativas') ,
+					'estado' => 1 ,
 					
 				);
 
@@ -850,7 +852,6 @@ class Legislaturas extends MY_Controller {
 					
 
 
-					die();
 					$data['uploadSuccess'] = $this->upload->data();
 
 					if (!$this->input->post('url_video') == null){
@@ -897,11 +898,13 @@ class Legislaturas extends MY_Controller {
 //		var_dump($_POST);
 
 		$user = $this->ion_auth->user()->row();
-		$data_select_provincia = $this->Categorias_model->obtener_contenido_select('provincias', 'id ASC');
+		$data_select_pais = $this->Pais_model->obtener_contenido_select('_paises', 'id_pais ASC');
+//		$data_select_provincia = $this->Categorias_model->obtener_contenido_select('provincias', 'id ASC');
 		$data_select_tipo_organismo = $this->Categorias_model->obtener_contenido_select('tipo_organismo', 'id ASC');	
 
 		$datos = array(
-			'data_select_provincia' => $data_select_provincia,
+			'data_select_provincia' => '',
+			'data_select_paises' => $data_select_pais,
 			'data_select_tipo_organismo' => $data_select_tipo_organismo,
 			'user' => $user,
 			'imagen' => $this->imagen,
@@ -960,8 +963,7 @@ class Legislaturas extends MY_Controller {
         }
     }
 	
-	
-	public function eliminar_imagen_slider(){
+		public function eliminar_imagen_slider(){
 
 		$response = array();
 
@@ -982,27 +984,18 @@ class Legislaturas extends MY_Controller {
 			echo json_encode($response);
 	}
 	
+	
+	
 	public function eliminar_imagen(){
-
 		
+
 		$image_delete = $this->input->post('url');
 		
-
-		
 		$response = array();
-		
 		if (file_exists($image_delete)) {
-			
 			if(unlink($image_delete)){
 				$response['estado'] = true;
-			}	
-
-			
-//		if (file_exists($image_delete)) {
-//			if(unlink($image_delete)){
-//				$response['estado'] = true;
-//			}
-			
+			}
 
 			if($this->db->where('id'	, $this->input->post('id'))->delete('legis_imagenes')){
 				
@@ -1018,8 +1011,6 @@ class Legislaturas extends MY_Controller {
 				$response['cantidad'] = false;
 			}
 
-		}else{
-			echo ' no esta';
 		}
 		
 		echo json_encode($response);
@@ -1027,8 +1018,6 @@ class Legislaturas extends MY_Controller {
 	
 
  	public function import_csv(){
-			
-
 			
 			/*function que me cambia el orden de los apellidos y nombre de los representantres
 			de las legislaturas conectadas sql funciona bien en phpMyAdmin
@@ -1066,11 +1055,6 @@ class Legislaturas extends MY_Controller {
 //			}
 //
 //			die();
-			
-			
-			
-			
-			
 			
 		$this->form_validation->set_rules('file', 'file', 'callback_file_csv_checks');
 		 

@@ -3,6 +3,19 @@
 <html lang="en">
 
 <head>
+<?php	if($_SERVER['SERVER_ADDR'] == '10.1.1.77'): ?>
+		
+		<!-- Google Tag Manager -->
+		<script>
+			(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+		'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+		})(window,document,'script','dataLayer','GTM-TQ6PJCK');
+			</script>
+		<!-- End Google Tag Manager -->
+		
+	<?php	endif; ?>
 	<title> Legislaturas Conectadas </title>
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
@@ -84,10 +97,17 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.7/js/uikit-icons.min.js?ver=<?= time()?>"></script>
 
 
-
 </head>
 
 <body data-base_url="<?= base_url();?>">
+<?php	if($_SERVER['SERVER_ADDR'] == '10.1.1.77'):?>
+		<!-- Google Tag Manager (noscript) -->
+	<noscript>
+	<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TQ6PJCK"
+	height="0" width="0" style="display:none;visibility:hidden"></iframe>
+	</noscript>
+	<!-- End Google Tag Manager (noscript) -->
+<?php	endif; ?>
 
 	<!-- Preloader -->
 	<div id="fakeloader"> </div>

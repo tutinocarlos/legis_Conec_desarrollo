@@ -20,3 +20,11 @@ $hook['pre_system'][] =[
 	'filepath'	=>'hooks',
 	'params'			=>[],
 	];
+
+$hook['pre_controller'] = array(
+        'class'    => 'Log',
+        'function' => 'getRealIP',
+        'filename' => 'log.php',
+        'filepath' => 'hooks',
+        'params'   => []
+);

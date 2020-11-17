@@ -21,9 +21,9 @@ if (($this->ion_auth->is_members() && $this->user->id_legislatura == 91) || ($th
 				<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">Parámetros </span></a>
 					<ul aria-expanded="false" class="collapse  first-level">
 						<li class="sidebar-item">
-						<a href="<?= base_url() ?>Manager/Tipo_publicacion" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> Tipo Publicación </span></a></li>
+						<a href="<?= base_url() ?>Manager/Tipo_publicacion" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> Tipo Publicación SAS</span></a></li>
 						<li class="sidebar-item">
-						<a href="<?= base_url() ?>Manager/Tipo_normativa" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> Tipo Normativa </span></a></li>
+						<a href="<?= base_url() ?>Manager/Tipo_normativa" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> Tipo Normativa CASAS </span></a></li>
 
 
 

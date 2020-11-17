@@ -1,5 +1,7 @@
 <?php
-var_dump($legislatura);
+//echo '<pre>';
+////var_dump($videos);
+//echo '</pre>';
 
 ?>
 <style>
@@ -21,6 +23,10 @@ var_dump($legislatura);
 	div.html5buttons {
 		text-align: left !important;
 	}
+	
+
+	
+	}
 
 </style>
 <div class="business-banner">
@@ -37,7 +43,7 @@ var_dump($legislatura);
 </div>
 <div class="bussiness-project-details blog-list-layout">
 	<div class="padding-top-middle"></div>
-	<div class="container">
+	<div class="container fuid-xs">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="row">
@@ -144,20 +150,42 @@ var_dump($legislatura);
 
 			</div>
 		</div>
+<!--		SECCION VIDEOS CARGADOS -->
+	<div class="padding-top-middle"></div>
+		<section class="videos">
+			<div class="row">
+				
+		<?php if(!empty($videos)):?>
+		<?php foreach($videos as $data):?>
+	<div class="col col-md-12">
+			<h2><?= $data->titulo_video ?></h2>
+		
+	</div>
+	<div class="col col-md-8 offset-md-4">
+		
+			<div class="embed-responsive embed-responsive-16by9">
+  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/<?= $data->url_video ?>" allowfullscreen></iframe>
+	</div>
+</div>
+		<?php endforeach;?>
+		<?php endif; ?>
+			</div>
+			
+		</section>
 		<?php if($legislatura->id != 91):?>
+	<div class="padding-top-middle"></div>
 		<section class="representantes">
 			<h2>Representantes</h2>
 
 			<div class="table-responsive  text-center" style="font-size: 12px;">
-				<div id="zero_config_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+				<div id="zero_config_wrapper tabla-representantes" class="fuid-xs dataTables_wrapper container-fluid dt-bootstrap4">
 					<table id="representantes" class="display" style="width: 100%;">
 						<thead>
 							<tr>
 								<th>Apellido</th>
 								<th>Nombre</th>
 								<th>Bloque</th>
-								<th>Fecha de Inicio</th>
-								<th>Fecha Fin</th>
+								<th>Preríodo</th>
 							</tr>
 						</thead>
 
@@ -309,8 +337,8 @@ var_dump($legislatura);
 
 
 	/*paso la imagen en base64 al archivo legislatura.js*/
-	var img_base64 = '<?php echo img_base64('http://10.1.1.77/'.$legislatura->logo)?>';
-	/*var img_base64 = '<?php echo img_base64(base_url($legislatura->logo))?>';*/
+	//var img_base64 = '<?php //echo img_base64('http://10.1.1.77/'.$legislatura->logo)?>';
+	var img_base64 = '<?php echo img_base64(base_url($legislatura->logo))?>';
 	/*paso el nombre del organismo  al archivo legislatura.js*/
 	var organismo = '<?= $legislatura->nombre?>';
 

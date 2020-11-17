@@ -1,7 +1,66 @@
 $(document).ready(function () {
+	
+	var oTable2 = $('#publicaciones2').DataTable({
 
-	fill_datatable();
-;
+	language: {
+		url: $("body").data('base_url') + 'static/manager/translate/spanish.json',
+
+	},
+	"pagingType": "simple",
+	"pageLength": 50,
+	"columnDefs": [{
+		"targets": [0],
+		"orderable": false
+}],
+
+
+//		"processing": true,
+//		"serverSide": true,
+	"searching": true,
+			"ajax": {
+				"url": $("body").data('base_url') + "Home/get_listado_publicaciones_ajax2",
+				"type": "POST"
+			},
+
+
+});	
+	
+	
+			var oTable2 = $('#publicaciones2xx').DataTable({
+
+			language: {
+			url: $("body").data('base_url') + 'static/manager/translate/spanish.json',
+				
+		},
+			
+			"pageLength" :50,
+			"columnDefs": [{ 
+			"targets": [0],
+			"orderable": false
+			}],
+			
+			"pagingType": "simple",
+			"processing": true,
+			"serverSide": true,
+			"searching": true,
+				ajax: {
+				data:{
+				tematica: tematicas,
+				ambito: ambito,
+				provincias: provincias,
+				tipo_normativa: tipo_normativa,
+				listado_nuevo: true,
+
+				},
+				url:  $("body").data('base_url') + "Home/get_listado_publicaciones_ajax",
+				type: 'POST'
+				},
+
+
+		});
+
+//	fill_datatable2(); // descomentar para activar nuevamnente la version anterior de listado de normativas
+
 	var provincias = [];
 	var tematicas = [];
 	var tipo_normativa = [];
@@ -16,6 +75,9 @@ $(document).ready(function () {
 //	$(this).addClass('active');
 //	});
 	
+	
+//	comento esta funcion para mostrar los nuevo datos pedidos por Diego 01/07/2020
+	/*
 function fill_datatable(provincias = [],tematicas = [],tipo_normativa = [],ambito = []){
 	
 		var oTable = $('#publicaciones').DataTable({
@@ -103,6 +165,7 @@ function fill_datatable(provincias = [],tematicas = [],tipo_normativa = [],ambit
 		});
 	
 }
+*/
 //		var oTable = $('#publicaciones').DataTable(); 
 	
 	

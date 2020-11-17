@@ -3,9 +3,11 @@ use PHPMailer\PHPMailer\PHPMailer ;
 use PHPMailer\PHPMailer\Exception ;
 
 
-function semdMailGmail($emailTo,$subject, $html,$attach=FALSE ){
-	
-require_once  APPPATH .'third_party/PHPMailer/Exception.php';
+function semdMailGmail($emailTo,$emailFrom,$subject, $html,$attach=FALSE,$nombre_y_apellido ){
+//
+//	echo '<br>',$emailTo;
+//	echo '<br>',$emailFrom;
+	require_once  APPPATH .'third_party/PHPMailer/Exception.php';
 require_once  APPPATH .'third_party/PHPMailer/PHPMailer.php';
 require_once  APPPATH .'third_party/PHPMailer/SMTP.php';
 	$mail = new PHPMailer();
@@ -16,26 +18,30 @@ $mail->CharSet = 'UTF-8';
 // 0 = off (producción)
 // 1 = client messages
 // 2 = client and server messages
-$mail->SMTPDebug  = 0;
+$mail->SMTPDebug  = 0;	
 //Ahora definimos gmail como servidor que aloja nuestro SMTP
-$mail->Host       = 'smtp.gmail.com';
+$mail->Host       = 'smtp.mysetup.com.ar';
 //El puerto será el 587 ya que usamos encriptación TLS
-$mail->Port       = 587;
+$mail->Port       = 465;
 //Definmos la seguridad como TLS
+//$mail->SMTPSecure = 'tls';
 $mail->SMTPSecure = 'tls';
+
 //Tenemos que usar gmail autenticados, así que esto a TRUE
 $mail->SMTPAuth   = true;
 //Definimos la cuenta que vamos a usar. Dirección completa de la misma
-$mail->Username   = "legisconectadas.test@gmail.com";
+$mail->Username   = "info@mysetup.com.art";
 //Introducimos nuestra contraseña de gmail
-$mail->Password   = "chapazapata2021";
+$mail->Password   = "barbara2020";
 	
 //Definimos el remitente (dirección y, opcionalmente, nombre)
-$mail->SetFrom('legisconectadas.test@gmail.com', 'Legislaturas Conectadas');
-//Esta línea es por si queréis enviar copia a alguien (dirección y, opcionalmente, nombre)
-$mail->AddReplyTo('legislaturasconectadas.test@gmail.com','Legislaturas Conectadas');
-//Y, ahora sí, definimos el destinatario (dirección y, opcionalmente, nombre)
-$mail->AddAddress($emailTo, 'El Destinatario');
+$mail->SetFrom($emailTo, $nombre_y_apellido);
+	
+$mail->AddReplyTo($emailFrom,$nombre_y_apellido);
+
+	$mail->AddAddress($emailTo);
+	
+//$mail->addCC($emailCC);	
 //Definimos el tema del email
 $mail->Subject = $subject;
 //Para enviar un correo formateado en HTML lo cargamos con la siguiente función. Si no, puedes meterle directamente una cadena de texto.
@@ -44,7 +50,7 @@ $mail->MsgHTML($html);
 $mail->AltBody = 'This is a plain-text message body';
 //Enviamos el correo
 if(!$mail->Send()) {
-	$return  = array(
+	$retorno  = array(
 		"status"=> false,
 		"error"=> $mail->ErrorInfo
 	);
@@ -58,8 +64,7 @@ $retorno  = array(
 }
 
 
-function sendMail($emailTo,$subject, $html,$attach=FALSE ){
-
+function sendMail($emailTo,$emailCC,$emailCCO,$subject, $html,$attach=FALSE ){
 
 require_once  APPPATH .'third_party/PHPMailer/Exception.php';
 require_once  APPPATH .'third_party/PHPMailer/PHPMailer.php';
@@ -124,11 +129,12 @@ require_once  APPPATH .'third_party/PHPMailer/SMTP.php';
 	}
 
 		// $mail->SMTPDebug = 1; //Alternative to above constant
-	$mail->setFrom('dirivero@legislatura.gov.ar', 'legis conectadas test');
-	$mail->addReplyTo('dirivero@legislatura.gov.ar','legis conectadas test');
+	$mail->setFrom('tutinocarlos@gmail.com', 'legis conectadas test');
+//	$mail->addReplyTo('dirivero@legislatura.gov.ar','legis conectadas test');
 
 	$mail->addAddress($emailTo);
 		
+	$mail->addCC($emailCC);
 	// Email subject
 	$mail->Subject = $subject;
 

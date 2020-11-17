@@ -63,6 +63,8 @@ class Categorias_model extends CI_Model
 				->join('users', 'users.id = categorias.user_upd')
 				->get('categorias');
 			
+			
+			$this->db->last_query();
 				if ($query->result() > 0)
     {
       return $query->row();
@@ -76,8 +78,9 @@ class Categorias_model extends CI_Model
 			$draw = intval(2);
       $start = intval(0);
       $length = intval(0);
+			$editar ='';
 
-      $query = $this->db->get("categorias");
+      $query = $this->db->where('es_borrado','0')->get("categorias");
 
       $data = [];
 

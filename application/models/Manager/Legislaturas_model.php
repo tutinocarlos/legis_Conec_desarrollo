@@ -164,11 +164,13 @@ if($this->ion_auth->is_members() && ($this->user->id_legislatura != 1 && $this->
 																provincias.camara as camara,
 																tipo_camara.nombre as tipo_camara,
 																tipo_camara.color as color_camara,
-																tipo_organismo.nombre as organismo")
+																tipo_organismo.nombre as organismo,
+																_paises.nombre_pais as pais")
 												->join('provincias','provincias.id = legislaturas.id_provincia')
 												->join('tipo_organismo','tipo_organismo.id = legislaturas.id_organismo')
 												->join('tipo_camara','tipo_camara.id = provincias.camara')
-												->order_by('provincias.nombre asc, tipo_organismo.nombre desc')
+												->join('_paises','_paises.id_pais = provincias.id_pais')
+												->order_by('_paises.nombre_pais asc, provincias.nombre asc, tipo_organismo.nombre desc')
 												->where('legislaturas.estado',1)
 												->get('legislaturas');
 										
@@ -238,6 +240,7 @@ if($this->ion_auth->is_members() && ($this->user->id_legislatura != 1 && $this->
 																legislaturas.lema,
 																legislaturas.email,
 																legislaturas.url,
+																legislaturas.url_normativas,
 																legislaturas.logo,
 																legislaturas.slider,
 																legislaturas.fecha_ins,
@@ -266,7 +269,7 @@ if($this->ion_auth->is_members() && ($this->user->id_legislatura != 1 && $this->
 												->join('tipo_organismo','tipo_organismo.id = legislaturas.id_organismo','LEFT')
 												->get('legislaturas');
 
-
+//echo $this->db->last_query();
 		if ($query->result() > 0){
 
 				return $query->row();
@@ -404,13 +407,13 @@ if($this->ion_auth->is_members() && ($this->user->id_legislatura != 1 && $this->
 
 		foreach($query->result() as $r) {
 
+			$periodo = $r->fecha_desde.'-'.$r->fecha_hasta;
 
 			$data[] = array(
 				$r->apellido,
 				$r->nombre,
 				$r->bloque,
-				$r->fecha_desde,
-				$r->fecha_hasta
+				$periodo
 			);
 		}
 

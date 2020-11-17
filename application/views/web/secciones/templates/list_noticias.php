@@ -1,8 +1,9 @@
 <style>
 	
-	div.single-bolg{
+	div.single-blog{
 		background-color: #fff;
 		font-size: 14px;
+		min-height: 300px;
 	}
 
 	div.blog-content a{
@@ -33,6 +34,15 @@
     color: #ffffff;
     font-size: 12px;
 }
+	figure{
+		max-height: 145px;
+	}
+/*
+	.item_noticia{
+		min-height: 407px;
+		max-height: 407px;
+	}
+*/
 </style>
 
 <div class="business-blog-1x">
@@ -42,8 +52,8 @@
 				$i = 1;
 				foreach($noticias_destacadas	 as $data){
 			?>
-			<div class="col-md-3 ">
-				<div class="single-bolg hover01 text-left">
+			<div class="col-md-3 item_noticia ">
+				<div class="single-blog hover01 text-left">
 					<div class="blog-img">
 					<figure><img src="<?= base_url().$data->foto ?>" alt="<?= $data->titulo?>" class=""></figure>
 					<div class="blog-img-graph"><span><?= $data->nombre_legis?></span></div>

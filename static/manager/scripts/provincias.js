@@ -1,5 +1,12 @@
 $(document).ready(function () {
+	
+	if(!inicial){
+	
+	$('textarea#comentario' ).ckeditor();
+//	$('textarea#detalles').css('display', 'none');
+	$("#comentario").text(CKEDITOR.instances.comentario.getData());
 
+		 }
 
 	$('.minicolors-input_prov').minicolors({
 		//			control: $(this).attr('data-control') || 'hue',
@@ -7,7 +14,7 @@ $(document).ready(function () {
 
 		change: function (value, opacity) {
 			console.log(value);
-			$('span.provincia').css('background-color', value);
+			$('span.color').css('background-color', value);
 		},
 		theme: 'bootstrap'
 
@@ -51,7 +58,7 @@ $(document).ready(function () {
 		"pageLength": 50,
 
 		"ajax": {
-			"url": $("body").data('base_url') + "Manager/Provincias",
+			"url": $("body").data('base_url') + "Manager/Provincias/",
 			"type": "GET"
 		}
 	});
@@ -73,14 +80,14 @@ $(document).ready(function () {
 			beforeSend: function () {
 				$(".preloader").fadeIn();
 			},
-			url: $("body").data('base_url') + "Manager/Provincias/status_normativa",
+			url: $("body").data('base_url') + "Manager/Provincias/status",
 			success: function (result) {
 				console.log('result');
 				console.log(result.estado);
 				if (result.estado == true) {
-					toastr.success('Registro Editado correctamente!', 'Tipos');
+					toastr.success('Registro Editado correctamente!', 'Provincias');
 				} else {
-					toastr.error('Registro no Actualizado!', 'Tipos');
+					toastr.error('Registro no Actualizado!', 'Provincias');
 				}
 				//					 location.reload();
 

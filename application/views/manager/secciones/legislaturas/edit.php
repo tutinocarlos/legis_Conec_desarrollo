@@ -226,6 +226,31 @@ $js = array(
 					<!--						<input type="text" class="form-control" name="detalle" placeholder="Last Name Here">-->
 				</div>
 			</div>
+			<div style="margin-top: 30px;"><h4>Normativas</h4></div>
+			<div class="row">
+								<div class="col-sm-6">
+					<?php
+						$data = array(
+							'class' => '',
+						);
+						echo form_label('URL Normativas:', 'url_normativas', $data);
+						$data = array(
+							'name'  => 'url_normativas',
+							'id'    => 'url_normativas',
+							'class' => 'form-control ',
+							'value' => $legislatura->url_normativas
+//						'placeholder' =>	'Detalle categoría',
+//						'required'    => 	'required'
+							);
+
+							echo form_input($data);	
+							echo form_error('url_normativas','<div class="invalid-feedback" style="display:block;">',"</div>");
+
+						?>
+						<span class="aclaracion">Ingrese la URL de destino.</span>
+					<!--						<input type="text" class="form-control" name="detalle" placeholder="Last Name Here">-->
+				</div>
+			</div>
 
 		<div style="margin-top: 30px;"><h4>Redes Sociales</h4></div>
 			<div class="row">

@@ -1,9 +1,9 @@
 		<?php
-
-// echo '<pre>';
-//// var_dump($slider);
-//// var_dump($this->provincias);
-// echo '</pre>';
+//
+ echo '<pre>';
+ var_dump($notificacion_emergente);
+////// var_dump($this->provincias);
+ echo '</pre>';
 //
 //	$prov_nombre_actual= '';
 //
@@ -167,9 +167,17 @@ foreach ($provincias2 as $provincia){
 //	
 //	die();
 	?>
-<?php if(empty($slider)):?>
+<?php 
+	
+
+
+	
+	if(empty($slider)):?>
  
-<div class="business-main-slider">
+ 
+ <?php 
+	?>
+<div class="business-main-slider hidden-xs">
 	<div class="owl-carousel main-slider">
 	 <div class="item">
 			<div class="hvrbox">
@@ -179,17 +187,27 @@ foreach ($provincias2 as $provincia){
 	</div>
             
 	<?php else:?>
-<div class="rev_slider_wrapper">
+	
+	
+<div class="rev_slider_wrapper d-none d-sm-block">
  
         <!-- the ID here will be used in the JavaScript below to initialize the slider -->
-        <div id="rev_slider_1" class="rev_slider" data-version="5.4.5" style="">
+        <div id="rev_slider_1" class=" slider  rev_slider" data-version="5.4.5" style="" >
  
             <ul> 
 		<?php foreach($slider as $slide):?>
                 
 			<?php
+				$color_fondo ='';
+				if($slide->slider != 'static/web/images/slider/banner_1.png'){
+
+							$color_fondo = 'background: rgb(245 245 245 / 74%);';
+
+				}
+
+													
 			// inicio del if para no repetir las provincia
-			if($prov_nombre_actual == $slide->nombre_prov){ 
+			if($prov_nombre_actual == 'cas'){ 
 				
 					$prov_nombre_actual='';
 			}else{
@@ -210,7 +228,7 @@ foreach ($provincias2 as $provincia){
 			?>               
 				<li data-transition="fade" data-link="<?=  base_url($segments) ?>" data-target="">
                         <!-- BEGIN TEXT LAYER -->
-<div class=" tp-caption sfr font-extra-bold tp-resizeme letter-space-4 header-1 title-line-2" data-x="center" data-hoffset="0" data-y="center" data-voffset="-100" data-frames="[{&quot;delay&quot;:800,&quot;speed&quot;:1000,&quot;frame&quot;:&quot;0&quot;,&quot;from&quot;:&quot;x:[175%];y:0px;z:0;rX:0;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:1;&quot;,&quot;mask&quot;:&quot;x:[-100%];y:0;s:inherit;e:inherit;&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power3.easeOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:300,&quot;frame&quot;:&quot;999&quot;,&quot;to&quot;:&quot;auto:auto;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;}]" style="z-index: 6; font-size: 50px; color: #005e83; text-transform: ; font-family: myriad-pro, sans-serif; white-space: nowrap; font-weight: 700; visibility: inherit; transition: none 0s ease 0s; text-align: inherit; line-height: 50px; border-width: 0px; margin: 0px; padding: 0px; letter-spacing: 0px; min-height: 90px; min-width: 0px; max-height: none; max-width: none; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform-origin: 50% 50% 0px;" id="layer-241302230"
+<div class=" tp-caption sfr font-extra-bold tp-resizeme letter-space-4 header-1 title-line-2" data-x="center" data-hoffset="0" data-y="center" data-voffset="-100" data-frames="[{&quot;delay&quot;:800,&quot;speed&quot;:1000,&quot;frame&quot;:&quot;0&quot;,&quot;from&quot;:&quot;x:[175%];y:0px;z:0;rX:0;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:1;&quot;,&quot;mask&quot;:&quot;x:[-100%];y:0;s:inherit;e:inherit;&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power3.easeOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:300,&quot;frame&quot;:&quot;999&quot;,&quot;to&quot;:&quot;auto:auto;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;}]" style="<?= $color_fondo?>z-index: 6; font-size: 50px; color: #005e83; text-transform: ; font-family: myriad-pro, sans-serif; white-space: nowrap; font-weight: 700; visibility: inherit; transition: none 0s ease 0s; text-align: inherit; line-height: 50px; border-width: 0px; margin: 0px; padding: 10px; letter-spacing: 0px;  min-width: 0px; max-height: none; max-width: none; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform-origin: 50% 50% 0px;" id="layer-<?= $slide->id_legis ?>"
 >
 
 							<?php
@@ -233,8 +251,9 @@ foreach ($provincias2 as $provincia){
 							//FIN diferenciar entre las legislaturas y legis conectadas
 								?>
 </div>
-<!-- END TEXT LAYER -->        
-                    <img src="<?= base_url($slide->slider);?>" alt="Sky" class="rev-slidebg">
+<!-- END TEXT LAYER --> 
+       
+			<img src="<?= base_url($slide->slider);?>"  alt="Poder Legislativo de la Provincia de <?= $slide->nombre_prov ?>" class="rev-slidebg" data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat">
                 </li>
            					<?php 
 																			}
@@ -286,6 +305,7 @@ foreach ($provincias2 as $provincia){
 					<div class="business-title-middle">
 				<div class="padding-top-middle"></div>
 						<h2>Parlamentos de la Argentina</h2>
+						<p class="d-block d-sm-none">Seleccione la provincia para más info</p>
 						<span class="title-border-middle"></span>
 					</div>
 				</div>
@@ -304,16 +324,19 @@ foreach ($provincias2 as $provincia){
 				<div class="col-md-6">
 					<div class="map_container" >
 						<div id="map" class="smart_map" style="width:100%;height:100%" ></div>
+					</div>					<div class="map_container" >
+						<div id="map2" class="smart_map" style="width:100%;height:100%" ></div>
 					</div>
 					<?php 
 					$tipoCamara = '';
 					foreach($this->tipos_camaras as $camara){
 
 						$tipoCamara .= '
-						<div class="row" style="margin-top: 30px ">
-							<div class="col-md-1" style="background: '.$camara["color"].'"></div>
-							<div class="col-md-11"> '.$camara["detalle"].'</div>
+						<div class="row container-fluid" style="margin-top: 30px ">
+							<div class="col-1 col-md-1" style="background: '.$camara["color"].'; height:30px"></div>
+							<div class="col-10 col-md-11"> '.$camara["detalle"].'</div>
 						</div>
+						<div class="d-block d-sm-none"><p></p></div>
 						';
 
 					}
@@ -329,7 +352,7 @@ foreach ($provincias2 as $provincia){
 					*/
 					?>
 					
-					<div class="row" style="margin-top: 10px ">
+					<div class="row  d-none d-sm-block" style="margin-top: 10px ">
 						<div class="small"><i class="fa fa-info-circle"></i> <i>Puede pasar el puntero del mouse para interactuar con el mapa</i></div>
 					</div>
 				</div>
@@ -376,7 +399,7 @@ foreach ($provincias2 as $provincia){
 							<li>Una síntesis digital de noticias: “Breves en Imágenes”</li>
 						</ol>
 						<div class="row">
-						 <div class="col-md-3"><img style="width: 150px" class="img-fluid " src="<?php echo base_url()?>static/web/images/logos/logo2.jpg" alt="Logo" style="padding: 10px"> </div><div class="col-md-9"><strong> la RED interparlamentaria ABIERTA a la participación CIUDADANA.</strong></div>
+						 <div class="col-md-3"><img style="width: 150px" class="img-fluid " src="<?php echo base_url()?>static/web/images/logos/LC_logo2.jpg" alt="Logo" style="padding: 10px"> </div><div class="col-md-9"><strong> la RED interparlamentaria ABIERTA a la participación CIUDADANA.</strong></div>
 						</div>
 						</p>
 						<!--
@@ -402,10 +425,11 @@ foreach ($provincias2 as $provincia){
 		<section id="noticias">
 <div class="business-cta-1x">
 	<div class="cta-content">
-		<h2>Últimas Noticias</h2>
+<!--		<h2>Últimas Noticias</h2>-->
+	<a href="<?= base_url('Noticias')?>" class="bussiness-btn-larg">IR A NOTICIAS PROVINCIALES Y DE LA CABA </a>
+<div class="padding-top-middle"></div>
 		<?php echo $noticias ?>
-<!--		<a href="<?php //echo base_url('Noticias')?>" class="bussiness-btn-larg">Más noticias »</a>-->
-		<a href="<?= base_url('Noticias')?>" class="bussiness-btn-larg">IR A NOTICIAS PROVINCIALES Y DE LA CABA </a>
+
 	</div>
 </div>
 </section>
@@ -471,3 +495,42 @@ foreach ($provincias2 as $provincia){
 	';	
 ?>	
 </script>
+
+
+<?php
+if(!empty($notificacion_emergente)){
+
+
+$segments = array('Noticias',url_title($notificacion_emergente[0]->titulo, 'underscore', TRUE),$notificacion_emergente[0]->id);
+
+?>
+<!--MODAL-->
+<!-- Modal -->
+<div class="modal fade" id="nodal_notificaciones" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+<!--			<h3><?= $notificacion_emergente[0]->titulo?></h3>-->
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<a href="<?= base_url($segments)?>">
+					<img src="<?= base_url($notificacion_emergente[0]->foto)?>" alt="" style="width: 800px;">
+				</a>
+			</div>
+<!--
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+-->
+		</div>
+	</div>
+</div>
+
+<?php
+}
+
+?>

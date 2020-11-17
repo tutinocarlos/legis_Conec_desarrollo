@@ -1,7 +1,7 @@
 <html>
 
 <body>
-<!--	<img alt="Legislaturas Conectadas" src="http://www.legislaturasconectadas.gob.ar/static/web/images/logos/logo1.png" style="width: 80px; height: 33px;" />-->
+<!--	<img alt="Legislaturas Conectadas" src="http://www.legislaturasconectadas.gob.ar/static/web/images/logos/LC_logo.png" style="width: 80px; height: 33px;" />-->
 	<p>Se ha creado un cuenta en el sitio Legislaturas Conectadas</p>
 	<h2>
 		<p>Bienvenido <?php echo  $nombre;?>, <?php echo $apellido; ?></p>

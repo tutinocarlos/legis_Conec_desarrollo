@@ -5,9 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = TRUE;
 
-
 	switch ($_SERVER['REMOTE_ADDR']) {
-
     case "181.13.81.251":
 			
 //			$db_database = 'legis_conectadas';
@@ -19,6 +17,20 @@ $query_builder = TRUE;
     case "192.168.1.103":
 			
 			$db_database = 'legis_conectadas';
+			$db_server = 'localhost';
+			$db_user = 'root';
+			$db_pass = '';
+    break;    
+		case "192.168.0.11":
+			echo 'acas';
+			$db_database = 'legis_conectadas';
+			$db_server = 'localhost';
+			$db_user = 'root';
+			$db_pass = '';
+    break;    
+		case "127.0.0.1":
+			
+			$db_database = 'legis_conectadas_1';
 			$db_server = 'localhost';
 			$db_user = 'root';
 			$db_pass = '';
@@ -39,7 +51,7 @@ $query_builder = TRUE;
     break;
 						
 		default:
-			$db_database = 'proyecto';
+			$db_database = 'proyectos';
 			$db_server = '10.1.1.38';
 			$db_user = 'admin';
 			$db_pass = 'admin';

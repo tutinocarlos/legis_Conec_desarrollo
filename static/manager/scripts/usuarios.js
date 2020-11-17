@@ -88,9 +88,9 @@ $(document).ready(function () {
 							$("#salida").html(result.html);
 
 							if (result.estado == true) {
-								toastr.success('Password Actualizada correctamente!', 'Usuarios');
+								toastr.success(result.message, 'Usuarios');
 							} else {
-								toastr.error('Password no Actualizada!', 'Usuarios');
+								toastr.error(result.message, 'Usuarios');
 							}
 			//					 location.reload();
 

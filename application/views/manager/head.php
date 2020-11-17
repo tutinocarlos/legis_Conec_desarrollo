@@ -21,7 +21,8 @@
 	<link href="<?= base_url() ?>static/manager/assets/libs/quill/dist/quill.snow.css?ver="<?= time() ?> rel="stylesheet">
 	<link href="<?= base_url() ?>static/manager/assets/libs/jquery-minicolors/jquery.minicolors.css?ver="<?= time() ?> rel="stylesheet">
 
-
+<!--mapa -->
+	<link href="<?= base_url() ?>static/manager/assets/libs/pais/jquery-jvectormap-2.0.3.css?ver="<?= time() ?> rel="stylesheet">
 	<!--		add_media-->
 	<link href="<?= base_url() ?>static/manager/assets/libs/ligthbox/lightbox.css?ver="<?= time() ?> rel="stylesheet">
 	<link href="<?= base_url() ?>static/manager/assets/libs/jquery-steps/jquery.steps.css?ver="<?= time() ?> rel="stylesheet">
@@ -43,7 +44,22 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
-
+<?php
+			/*
+	CARGA DINAMICA DE css propios de cada pagina
+	*/
+		if(isset($css)){
+			
+		if(is_array($css)){
+//	var_dump($css); die();
+			foreach($css as $data){
+			
+    echo ' <link rel="stylesheet" href="'.$data.'?ver='.time().'">';
+			}
+			
+		}
+		}
+	?>
 
 
 </head>

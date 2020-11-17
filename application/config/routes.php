@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+$route['403_override'] = 'errors/forbidden';
 
 $route['default_controller'] 					= 'home';
 $route['Manager/formulario'] 							= 'Manager/manager/formulario';
@@ -23,6 +24,7 @@ $route['Legislaturas_conectadas/(:num)/(:any)']					= 'home/get_legislatura_id/$
 $route['Categorias/(:any)/(:num)/(:any)/(:num)'] 	= 'home/categorias/$1/$2/$3/$4';
 
 $route['Contacto'] 													= 'home/contacto';
+$route['Links'] 													= 'home/links';
 
 $route['reset_password'] 							= 'auth/change_password';
 $route['Manager/login']									= 'Auth/login';
@@ -34,6 +36,8 @@ $route['Manager/profile'] 							= 'Manager/manager/profile';
 $route['Manager/sub_categorias'] = 'Manager/Contenidos/sub_categorias';
 $route['Manager/Ambito'] 								= 'Manager/Ambitos';
 $route['Manager/Tematicas'] 					= 'Manager/Categorias';
+$route['Manager/Paises'] 					= 'Manager/Paises';
 $route['Manager/Tutoriales/visor/(:any)/(:any)'] 					= 'Manager/Tutoriales/visor/$1/$2';
 $route['404_override'] 										= 'errors/error_404';
 $route['translate_uri_dashes'] 		= FALSE;
+

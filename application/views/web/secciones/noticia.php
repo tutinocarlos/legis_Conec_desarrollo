@@ -16,15 +16,15 @@
 //		}
 
 //echo $prev_item[0]->nom_tipo_pub;
-//echo '<pre>sa';
-//var_dump($adjuntos);
-//echo '</pre>';
-//
 //die();
 
-if($publicacion->estado == 0){
-	redirect(base_url('Noticias'));
-}
+//var_dump($publicacion);
+
+
+
+//if($publicacion->estado == 0){
+//	redirect(base_url('Noticias'));
+//}
 ?>
 <style>
 	.blog-img-graph {
@@ -54,15 +54,14 @@ if($publicacion->estado == 0){
     padding-bottom: 56.25%;
     padding-top: 30px;
     position: relative;
-    }
+	}
 .video-responsive iframe, .video-responsive object, .video-responsive embed {
     height: 100%;
     left: 0;
     position: absolute;
     top: 0;
     width: 100%;
-    }
-
+}
 </style>	
 <div class="business-banner">
 	<div class="hvrbox">
@@ -97,13 +96,9 @@ if($publicacion->estado == 0){
 							<?php foreach($fotos as $data):?>
 							<?php if($data === reset($fotos)) {$activse = 'active';}else{$activse = '';}?>
 							<div class="carousel-item <?= $activse ?> ">
-						
 								<img class="img-thumbnail img-fluid  mx-auto d-block" src="<?= base_url($data->url)?>" alt="First slide">
 							</div>
 							<?php endforeach;?>
-							<div class="carousel-itm">
-								
-							</div>
 						</div>
 						<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
 							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -140,16 +135,15 @@ if($publicacion->estado == 0){
 						?>
 <!--
 						<p><span>
-								<?= $caracter ?></span>
-							<?= substr($string, 1)?>
+								<?php //$caracter ?></span>
+							<?php //substr($string, 1)?>
 						</p>
-						http://legislaturasconectadas.gob.ar/
-						http://www.legislaturasconectadas.gob.ar/Manager
 -->
 						<blockquotes>
 							<?= $publicacion->resumen?>
 						</blockquotes>
-<p> <?php echo $publicacion->cuerpo  ?></p>
+<!--						quito la letamas grande 07/05/2020 pedido por Sil-->
+							<p> <?php echo $publicacion->cuerpo  ?></p>
 						<?php if(!empty($publicacion->extra )):?>
 						<div class="promotion-box">
 							<?= $publicacion->extra?>
@@ -157,18 +151,18 @@ if($publicacion->estado == 0){
 						<?php endif;?>
 					</div>
 				</div>
+
 				<div class="row">
-				
-				<?php if($videos != ''):?>
-				<?php foreach ($videos as $video):?>
+					<?php if(!empty($videos)):?>
+					<?php foreach ($videos as $video):?>
 					<div class="col-sm-12 col-md-12">
 						<div class="video-responsive">
 							<iframe  src="https://www.youtube.com/embed/<?= $video->url?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 						</div>
 					</div>
+				
 				<?php endforeach;?>
 				<?php endif;?>
-			
 				</div>
 				<!--				archivos adjuntos-->
 				<?php if(!empty($adjuntos)):?>
@@ -193,8 +187,7 @@ if($publicacion->estado == 0){
 					</div>
 				</div>
 				<?php endif;?>
-<!--				FIN archivos adjuntos--
-				
+<!--				FIN archivos adjuntos-->
 				<div class="row">
 					<div class="col-md-6">
 <!--						<div>Tags:</div>-->
@@ -315,17 +308,20 @@ if($publicacion->estado == 0){
 			<h2>Noticias Relacionadas</h2>
 		</div>
 		<hr>
+		
+<!--		array(3) { [0]=> object(stdClass)#64 (7) { ["id_pub"]=> string(3) "325" ["titulo_pub"]=> string(37) "Homenaje a los Patriotas -25 de mayo " ["fecha_add"]=> string(19) "2020-06-03 13:59:21" ["id_tipo_pub"]=> string(1) "2" ["nom_tipo_pub"]=> string(7) "Noticia" ["nombre_cate"]=> string(13) "Comunicación" ["nombre_ambito"]=> string(8) "Nacional" } [1]=> object(stdClass)#65 (7) { ["id_pub"]=> string(3) "328" ["titulo_pub"]=> string(69) "Los Poderes Legislativos de Argentina sesionan durante la pandemia " ["fecha_add"]=> string(19) "2020-06-03 17:21:56" ["id_tipo_pub"]=> string(1) "2" ["nom_tipo_pub"]=> string(7) "Noticia" ["nombre_cate"]=> string(13) "Comunicación" ["nombre_ambito"]=> string(8) "Nacional" } [2]=> object(stdClass)#66 (8) { ["id_pub"]=> string(3) "329" ["titulo_pub"]=> string(24) "Legislaturas Conectadas " ["fecha_add"]=> string(19) "2020-06-03 17:25:12" ["id_tipo_pub"]=> string(1) "2" ["nom_tipo_pub"]=> string(7) "Noticia" ["nombre_cate"]=> string(13) "Comunicación" ["nombre_ambito"]=> string(8) "Nacional" ["foto"]=> string(48) "static/web/images/uploads/post/329_0_logo-lc.jpg" } }-->
 		<?php if($mas_noticias):?>
 		<?php //var_dump($mas_noticias)?>
 		<div class="owl-carousel">
 			<?php foreach($mas_noticias as $noticia):?>
 			<div class=" single-bolg hover01" title="<?= $noticia->nombre_cate;?>">
-			
+					
 			<?php if(!empty($noticia->foto)):?>
 				<figure><img src="<?= base_url($noticia->foto)?>" class="img-thumbnail img-fluid " style=""></figure>
 				<?php else:?>
 				<figure><img src="<?= base_url('/static/web/images/uploads/post/logoconectadas.jpg"')?>" class="img-thumbnail img-fluid " style=""></figure>
 				<?php endif;?>
+				
 				<div class="blog-img-graph"><span><?= $noticia->nombre_cate?></span></div>
 				<div class="blog-content">
 					<?php 

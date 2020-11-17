@@ -763,7 +763,7 @@ die();
 			
 				$respuesta = sendemails('carlos.tutino@legislatura.gov.ar',$data_news['titulo'],$html,$attach=FALSE);
 			
-				var_dump($respuesta);
+//				var_dump($respuesta);
 			
 			
 		}

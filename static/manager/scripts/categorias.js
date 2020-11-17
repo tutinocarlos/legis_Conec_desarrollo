@@ -19,7 +19,7 @@ $(document).ready(function () {
 		language: {
 			url: $("body").data('base_url') + '/static/manager/translate/spanish.json'
 		},
-		"pageLength": 30,
+		"pageLength": 50,
 
 		"ajax": {
 			"url": $("body").data('base_url') + "Manager/Categorias/get_categorias",

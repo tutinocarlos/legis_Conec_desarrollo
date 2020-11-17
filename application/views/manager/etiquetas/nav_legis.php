@@ -36,6 +36,7 @@
 			<?php if (!$this->ion_auth->is_members() ):;?>
 			<?php endif;?>
 		<?php if ($this->ion_auth->is_admin() && $this->user->id_legislatura == 91):; // usuarios legis conectadas?>
+			<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?= base_url() ?>Manager/Links/" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">Links de Interes</span></a></li>
 		<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">Configuración </span></a>
 			<ul aria-expanded="false" class="collapse  first-level">
 
@@ -43,11 +44,14 @@
 				<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">Parámetros </span></a>
 					<ul aria-expanded="false" class="collapse  first-level">
 						<li class="sidebar-item">
-						<a href="<?= base_url() ?>Manager/Tipo_publicacion" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> Tipo Publicación </span></a></li>
+						<a href="<?= base_url() ?>Manager/Tipo_publicacion" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class=""> Tipo Publicación ss</span></a></li>
 						<li class="sidebar-item">
-						<a href="<?= base_url() ?>Manager/Tipo_normativa" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> Tipo Normativa </span></a></li>
+						<a href="<?= base_url() ?>Manager/Tipo_normativa" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> Tipo Normativa ss</span></a></li>
 
+						<li class="sidebar-item">
+							<a href="<?= base_url() ?>Manager/Tematicas/" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Temáticas </span></a>
 
+						</li>
 
 						<li class="sidebar-item"><a href="<?= base_url() ?>Manager/Ambito/" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> Ámbito de Publicación </span></a></li>
 						<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">Legislaturas </span></a>
@@ -83,9 +87,9 @@
 				<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">Parámetros </span></a>
 					<ul aria-expanded="false" class="collapse  first-level">
 						<li class="sidebar-item">
-						<a href="<?= base_url() ?>Manager/Tipo_publicacion" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> Tipo Publicación </span></a></li>
+						<a href="<?= base_url() ?>Manager/Tipo_publicacion" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class=""> Tipo Publicación s</span></a></li>
 						<li class="sidebar-item">
-						<a href="<?= base_url() ?>Manager/Tipo_normativa" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> Tipo Normativa </span></a></li>
+						<a href="<?= base_url() ?>Manager/Tipo_normativa" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> Tipo Normativa s </span></a></li>
 
 
 
@@ -115,9 +119,9 @@
 				<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">Parámetros </span></a>
 					<ul aria-expanded="false" class="collapse  first-level">
 						<li class="sidebar-item">
-						<a href="<?= base_url() ?>Manager/Tipo_publicacion" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> Tipo Publicación </span></a></li>
+						<a href="<?= base_url() ?>Manager/Tipo_publicacion" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class=""> Tipo Publicación sa</span></a></li>
 						<li class="sidebar-item">
-						<a href="<?= base_url() ?>Manager/Tipo_normativa" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> Tipo Normativa </span></a></li>
+						<a href="<?= base_url() ?>Manager/Tipo_normativa" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> Tipo Normativa sa</span></a></li>
 						<li class="sidebar-item">
 							<a href="<?= base_url() ?>Manager/Tematicas/" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Temáticas </span></a>
 

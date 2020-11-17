@@ -31,53 +31,71 @@ class MY_controller extends CI_Controller {
 			
 				$this->provincias 	 = $this->Provincias_model->get_provincias();
 				$this->tipos_camaras = $this->Tipos_camaras_model->get_tipos_camaras();
+			
+			switch($_SERVER['REMOTE_ADDR']){
+					
+					
+					case '127.0.0.1';
+//					echo 'local';
+//					die();
+					break;
+			}
 
 
- 		}
+		}
 	
 	
-	function _enviar_email($data, $usr = false, $html = "consultas")
+ function _enviar_email($data, $usr = false, $html = "consultas_nuevo")
   {
-    
+   
     $this->load->library('email');
     $this->load->helper('url');
     /* configuro el envio */
- 
-    $this->email->from('no-reply@mysetup.com.ar', 'Legislaturas Conectadas'); 
- 
+
+    $this->email->from('webmaster@legislaturasconectadas.gob.ar', 'Legislaturas Conectadas - Contacto web'); 
+
     if($usr)
     {
-     
-      $this->email->to('tutinocarlos@gmail.com'); 
-     
+    
+      $this->email->to($data["datos"]["email"]); 
+    		$data["subject"] = 'Gracias por contactarnos, responderemos a la brevedad';
     }
     else
     {
-       
-//      $this->email->to('dirivero@legislatura.gov.ar');
-      $this->email->to('tutinocarlos@gmail.com'); 
-      $this->email->bcc('tutinocarlos@gmail.com'); 
-      $this->email->reply_to('tutinocarlos@gmail.com', 'jose luis');
-       
+      switch($_SERVER['REMOTE_ADDR']){
+					
+					
+				case '127.0.0.1':
+					$this->email->to('tutinocarlos@gmail.com',$data["datos"]["apellido"].', '.$data["datos"]["nombre"]);
+					break;
+				case '10.1.1.38':
+					$this->email->to('soporte.lc@legislatura.gov.ar',$data["datos"]["apellido"].', '.$data["datos"]["nombre"]);
+					break;
+				case '10.1.1.77':
+					$this->email->to('info@legislaturasconectadas.gob.ar',$data["datos"]["apellido"].', '.$data["datos"]["nombre"]);
+					break;
+					
+					
+			}
+ 
+      $this->email->reply_to($data["datos"]["email"], $data["datos"]["apellido"].', '.$data["datos"]["nombre"]);
+//      $this->email->cc('another@another-example.com');
     }
-     
-   $this->email->subject($data["subject"]);
- 
+    
+    $this->email->subject($data["datos"]["apellido"].', '.$data["datos"]["nombre"].'-'.$data["subject"]);
+
     /* Renderizo el html para enviar */
-    $body = $this->load->view('emails/'.$html, $data, TRUE); 
- 
+    $body = $this->load->view('emails/consultas_nuevo', $data, TRUE);
+
     $this->email->message($body);   
- 
-    if($this->email->send(FALSE))
+
+    if($this->email->send())
     {
         return TRUE;
     }
-//
-		//var_dump($this->email->print_debugger());
-//		die();
+
     return FALSE;
- 
-  }
+	}
    
 	public function load_panel(){
 

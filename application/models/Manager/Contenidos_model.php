@@ -3,7 +3,94 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  
 class Contenidos_model extends CI_Model
 {
+	function insert_log(){
 
+		//echo get_ip_address();
+		$this->load->library('user_agent');
+		$referrer = '';
+		if ($this->agent->is_referral())
+		{
+			$referrer = $this->agent->referrer();
+		}
+
+		if(!$this->user){
+			$user_id = 0;
+		}else{
+			$user_id = $this->user->id;
+		};
+
+		$data=array(
+		'log_ip'=>get_ip_address(),
+		'log_user'=>$user_id,
+		'log_url_1'=>$referrer,
+		'log_url'=>current_url(),
+		);
+
+		$tabla ='db_logs';
+
+		$this->db->insert($tabla,$data);
+		$this->db->last_query();
+
+//		die();
+}
+
+		/*Nuevo listado de normativas del home 01/07/2020*/
+	public function get_listado_normativas_ajax2(){
+		
+			$draw = intval(2);
+      $start = intval(0);
+      $length = intval(1);
+		
+//		comento para desabilitar la fucionalidad de aplicar filtros
+
+//			$draw   =  intval($this->input->post("draw"));
+//			$start  =  intval($this->input->post("start"));
+//			$length =  intval($this->input->post("length"));
+			$data = array();
+		
+		/*
+		SELECT `legislaturas`.`id` as `id_legis`, `legislaturas`.`nombre` as `nombre_legis`, `legislaturas`.`lema` as `lema_legis`, `legislaturas`.`logo` as `logo_legis`, `legislaturas`.`facebook` as `facebook_legis`, `legislaturas`.`twitter` as `twitter_legis`, `legislaturas`.`instagram` as `instagram_legis`, `legislaturas`.`linkedin` as `linkedin_legis`, `legislaturas`.`youtube` as `youtube_legis`, `provincias`.`nombre` as `provincia`, `provincias`.`zona` as `zona`, `provincias`.`color` as `provincia_color`, `provincias`.`camara` as `camara`, `tipo_camara`.`nombre` as `tipo_camara`, `tipo_camara`.`color` as `color_camara`, `tipo_organismo`.`nombre` as `organismo` FROM `legislaturas` JOIN `provincias` ON `provincias`.`id` = `legislaturas`.`id_provincia` JOIN `tipo_organismo` ON `tipo_organismo`.`id` = `legislaturas`.`id_organismo` JOIN `tipo_camara` ON `tipo_camara`.`id` = `provincias`.`camara` WHERE `legislaturas`.`estado` = 1 ORDER BY `provincias`.`nombre` asc, `tipo_organismo`.`nombre` desc
+		
+		*/
+		
+	$query1 = "SELECT * FROM legislaturas WHERE legislaturas.estado = 1  AND legislaturas.borrado = 0 AND legislaturas.url_normativas != ''";
+	$resultados1 = $this->db->query($query1);
+
+		//$query = '	SELECT *';
+
+		//$query .= " FROM legislaturas ";
+	
+	//	$query .= " WHERE legislaturas.estado = 1  AND legislaturas.borrado = 0 AND legislaturas.url_normativas != ''" ;
+		
+	$query = "SELECT `legislaturas`.`url_normativas`,`legislaturas`.`id` as `id_legis`, `legislaturas`.`nombre` as `nombre`, `legislaturas`.`lema` as `lema_legis`, `legislaturas`.`logo` as `logo`, `legislaturas`.`facebook` as `facebook_legis`, `legislaturas`.`twitter` as `twitter_legis`, `legislaturas`.`instagram` as `instagram_legis`, `legislaturas`.`linkedin` as `linkedin_legis`, `legislaturas`.`youtube` as `youtube_legis`, `provincias`.`nombre` as `provincia`, `provincias`.`zona` as `zona`, `provincias`.`color` as `provincia_color`, `provincias`.`camara` as `camara`, `tipo_camara`.`nombre` as `tipo_camara`, `tipo_camara`.`color` as `color_camara`, `tipo_organismo`.`nombre` as `organismo` FROM `legislaturas` JOIN `provincias` ON `provincias`.`id` = `legislaturas`.`id_provincia` JOIN `tipo_organismo` ON `tipo_organismo`.`id` = `legislaturas`.`id_organismo` JOIN `tipo_camara` ON `tipo_camara`.`id` = `provincias`.`camara` WHERE legislaturas.estado = 1  AND legislaturas.borrado = 0 AND legislaturas.url_normativas != '' ORDER BY `provincias`.`nombre` asc, `tipo_organismo`.`nombre` desc ";
+		
+//				$query .=' LIMIT '.$start.','.$length;
+
+				$resultados = $this->db->query($query);
+
+//		var_dump($resultados->result());
+			foreach($resultados->result() as $r) {
+
+			$data[] = array(
+				$r->id_legis,
+				$r->logo_legis = '<img src="'.base_url($r->logo).'" class="img-fluid img-thumbnail" alt="'.$r->nombre.'">',
+				$r->nombre,
+				'<a href="'.$r->url_normativas.' " target="_blank">Ver normativas Publicadas</a>',
+			);
+
+			}
+		
+//		var_dump($data);
+      $result = array(
+					"draw" => $draw,
+					"recordsTotal" => $resultados1->num_rows(),
+					"recordsFiltered" => $resultados1->num_rows(),
+					"data" => $data
+			);
+
+      echo json_encode($result);
+		 exit();
+	}
 	/*listado de normativas del home*/
 	public function get_listado_normativas_ajax(){
 		
@@ -133,15 +220,16 @@ class Contenidos_model extends CI_Model
 	public function get_listado_legislaturas_contacto_ajax(){
 		
 			$draw = intval(2);
-      $start = intval(2);
-      $length = intval(2);
+			$start = intval(2);
+			$length = intval(2);
 
 
-      $query = $this->db->select("legislaturas.nombre as nombre_legis,
+			$query = $this->db->select("legislaturas.nombre as nombre_legis,
 			legislaturas.logo as logo_legis,
 			legislaturas.direccion as direccion_legis,
 			legislaturas.telefono as telefono_legis,
 			legislaturas.email as email_legis,
+				legislaturas.url_normativas as url_normativas,
 																provincias.nombre as nombre_provincia,
 																tipo_camara.color as color_camara,
 																tipo_organismo.nombre as organismo")
@@ -157,11 +245,15 @@ class Contenidos_model extends CI_Model
 
 //			
 //			var_dump($query->result());
-      foreach($query->result() as $r) {
+			foreach($query->result() as $r) {
 				
 			
 //							$segments = array('Publicacion',convert_accented_characters(url_title($r->titulo_publicacion), 'underscore', TRUE),$r->id_publicacion);
+			$normativas = '';
 				
+			if (!empty($r->url_normativas)) {
+			$normativas = '<a href="'.$r->url_normativas.' " target="_blank">Ver normativas Publicadas</a>';	
+			}
 
 			$data[] = array(
 				$r->logo_legis = '<img src="'.base_url($r->logo_legis).'" class="img-fluid img-thumbnail" alt="'.$r->nombre_legis.'">',
@@ -171,6 +263,7 @@ class Contenidos_model extends CI_Model
 //				$r->titulo_publicacion = '<a href="' .base_url($segments).'">'.$r->titulo_publicacion.'</a>	',
 				$r->telefono_legis,
 				$r->email_legis,
+				$normativas
 			);
 
 			}
@@ -497,7 +590,6 @@ class Contenidos_model extends CI_Model
 		}
 	}
 	
-		
 	public function buscar_videos($id_post){
 		$query = $this->db->select('*')
                           ->where('id_post',$id_post)
@@ -507,8 +599,6 @@ class Contenidos_model extends CI_Model
 				return $query->result();
 		}
 	}
-	
-	
 	
 	/*
 	Envio $id_cate si estoy listando el filtro de las categorias de las lista de noticias de legis
@@ -651,15 +741,6 @@ class Contenidos_model extends CI_Model
 
 
 		foreach($query->result() as $data){
-			
-			
-//echo $data->id_subcategoria;
-//			$ambito = $this->_obtener_dato('sub_categorias',$data->id_subcategoria);
-//			var_dump($ambito);
-			
-//			$data->sub_categoria = $ambito->nombre;
-			
-			
 			$data->fecha_add = fecha_es($data->fecha_add,"L d F a");
 		}
 
@@ -672,15 +753,17 @@ class Contenidos_model extends CI_Model
        
 	}
 	
-	public function obtener_publicaciones($tabla,$id_tipo, $orden='id ASC'){
- 			$tipo = $this->_obtener_tipo($id_tipo);
-		
+	public function obtener_publicaciones($tabla,$id_tipo, $orden='id ASC', $limit = ''){
+ 		 	$tipo = $this->_obtener_tipo($id_tipo);
+	
       $query = $this->db->select('*')
                         ->order_by($orden)
 												->where('estado',1)
 												->where('id_tipo',$id_tipo)
+												->limit($limit)
                         ->get($tabla);
  
+//		echo $this->db->last_query();
       if ($query->result() > 0)
       {
 				$data['tipo']=$tipo[0];
@@ -889,14 +972,17 @@ class Contenidos_model extends CI_Model
 													legislaturas.nombre as nombre_legis')
                           ->where('publicaciones.estado',1)
                           ->where('publicaciones.borrado',0)
-                          ->where('id_tipo',2)
+				->group_start()
+				->where('id_tipo',2)
+				->or_where('id_tipo',3)
+			 ->group_end()
 				  								->join('ambito','ambito.id = publicaciones.id_ambito')
 													->join('categorias','categorias.id = publicaciones.id_categoria')
 													->join('legislaturas','legislaturas.id = publicaciones.id_legislatura')
                           ->order_by('fecha_add DESC')
                           ->get($tabla,$per_page,$offset);
 			
-
+//echo $this->db->last_query();
 //       	echo count($query->result()); die();
       if ($query->result() > 0){
 
@@ -974,5 +1060,109 @@ class Contenidos_model extends CI_Model
 		}
 		return FALSE;
 	}
-     
+  
+	
+	/*listado de legoslaturas seccion links de interes*/
+	
+		public function get_listado_legislaturas_links(){
+
+			$query = $this->db->select("links.id_link,legislaturas.id as id_legis,legislaturas.nombre as nombre_legis,
+			legislaturas.logo as logo_legis,
+			legislaturas.direccion as direccion_legis,
+			legislaturas.telefono as telefono_legis,
+			legislaturas.email as email_legis,
+			legislaturas.url_normativas as url_normativas,
+																provincias.nombre as nombre_provincia,
+																tipo_camara.color as color_camara,
+																tipo_organismo.nombre as organismo")
+												->where("legislaturas.estado", 1)
+												->where("legislaturas.id !=", 91)
+												->join('provincias', 'provincias.id = legislaturas.id_provincia')
+												->join('tipo_organismo','tipo_organismo.id = legislaturas.id_organismo')
+												->join('tipo_camara','tipo_camara.id = provincias.camara')
+												->join('links','links.id_legislatura = legislaturas.id', 'letf')
+//												->join('ambito', 'ambito.id = publicaciones.id_ambito')
+//												->join('tipo_normativa', 'tipo_normativa.id = publicaciones.id_ambito')
+				->order_by('provincias.nombre asc, tipo_organismo.nombre desc')
+												->get("legislaturas");
+			
+			
+			if ($query->result() > 0){
+
+				
+				$resultado =$query->result(); 
+				
+				foreach($resultado as $data){
+					$data->links = $this->buscar_links($data->id_legis);
+				}	
+				
+				
+				return $resultado;
+//			echo '<pre>';
+//				var_dump($resultado);
+//			echo '</pre>';
+			}
+			
+		}
+	
+	function buscar_links($id_legis){
+		$query = $this->db->select("*")->where('id_legislatura',$id_legis)->get('links');
+		if ($query->result() > 0){
+			return $query->result();
+		}
+	}
+	
+	
+	public function get_listado_links(){
+			$query = $this->db->select('links.url_link, links.titulo_link, legislaturas.nombre as nombre_legis, provincias.nombre as provincia,tipo_organismo.nombre as organismo')
+				->join('legislaturas','legislaturas.id = links.id_legislatura_link')
+				->join('provincias','provincias.id = legislaturas.id_provincia')
+				->join('tipo_organismo','tipo_organismo.id = legislaturas.id_organismo')
+				->order_by('provincias.nombre asc, tipo_organismo.nombre desc')
+				->get("links");
+				if ($query->result() > 0){
+					return $query->result();
+				}
+			
+		}
+	
+	
+	public function get_links_ajax(){
+			$draw = intval(2);
+			$start = intval(2);
+			$length = intval(2);
+
+
+			$query = $this->db->select("*")
+				->where("estado_link", 1)
+				->order_by('orden_link','DESC')
+				->get("links");
+		
+			$this->db->last_query();
+
+			foreach($query->result() as $r) {
+		$titulo = '<a href="'.$r->url_link.'" target="_blank">'.$r->titulo_link.' </a>';
+		$detalle = '<a href="'.$r->url_link.'" target="_blank">'.$r->detalle_link.' </a>';
+		$url			= '<a href="'.$r->url_link.'" target="_blank">'.$r->url_link.' </a>';
+
+			$data[] = array(
+				$titulo,
+				$detalle,
+				$url,
+
+			);
+
+			}
+      $result = array(
+					"draw" => $draw,
+					"recordsTotal" => $query->num_rows(),
+					"recordsFiltered" => $query->num_rows(),
+					"data" => $data
+			);
+
+      echo json_encode($result);
+		
+		
+	}
+	
 }

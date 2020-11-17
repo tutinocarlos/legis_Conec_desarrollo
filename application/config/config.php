@@ -1,15 +1,18 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 	switch ($_SERVER['REMOTE_ADDR']) {
 
-    case "181.13.81.251":
+		case "181.13.81.251":
 					$config['base_url'] = 'http://testargentina.ddns.net';
 				break;
 		case "192.168.1.103":
 				$config['base_url'] = 'http://ci2';
 			break;
 		case "10.1.1.27":
+				$config['base_url'] = 'http://ci2';
+			break;	
+		case "127.0.0.1":
+		
 				$config['base_url'] = 'http://ci2';
 			break;
 	}

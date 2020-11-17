@@ -12,6 +12,7 @@ class Categorias extends MY_Controller {
 		 	$this->load->model('/Manager/Categorias_model');
 		 	
 			$this->user = $this->ion_auth->user()->row();
+	
 		}
 
 	public function index(){
@@ -61,7 +62,7 @@ class Categorias extends MY_Controller {
 	}
 	
 	public function grabar_categorias(){
-	
+
 		
 		if($this->input->post("botonSubmit")){
 			$this->form_validation->set_rules('detalle', 'Detalle', 'required|min_length[3]');
@@ -72,6 +73,8 @@ class Categorias extends MY_Controller {
 				$datos = array(
 					'nombre'=> $this->input->post('nombre') ,
 					'detalle' => $this->input->post('detalle') ,
+					'user_upd' => $this->user->id ,
+					'user_id' => $this->user->id ,
 				);
 	
 				if($this->Categorias_model->Guardar_datos('categorias',$datos )){
@@ -109,12 +112,14 @@ class Categorias extends MY_Controller {
 	}
 	
 	function buscar_item($id){
-			
-			if (!$this->ion_auth->is_super() ){
-				redirect('auth/logout');
-			}
-				$item = $this->Categorias_model->buscar_item($id);
-		
+
+			// cambiado a pedido de SIl - Eli 07/08/2020 poder adm categorias(tematicas)
+//			if ((!$this->ion_auth->is_super() )|| ($this->ion_auth->is_members() )){
+//		
+//				redirect('auth/logout');
+//			}
+		$item = $this->Categorias_model->buscar_item($id);
+
 //		echo $item->fecha_upd;
 			$newDate = date("d-m-Y H:i:s", strtotime($item->fecha_ins));
 			$item->fecha_ins = $newDate;
@@ -142,11 +147,12 @@ class Categorias extends MY_Controller {
 	}
 	
 	function update_categoria(){
+// cambiado a pedido de SIl - Eli 07/08/2020 poder adm categorias(tematicas)
+//		if (!$this->ion_auth->is_super() || $this->ion_auth->is_admin() ){
+//			
+//				redirect('auth/logout');
+//		}
 
-		if (!$this->ion_auth->is_super() ){
-				redirect('auth/logout');
-		}
-		
 		if($this->input->post("botonSubmit")){
 			
 			$this->form_validation->set_rules('detalle', 'Detalle', 'required|min_length[3]');
@@ -204,17 +210,28 @@ class Categorias extends MY_Controller {
 		}
 			
 	}
-
-	function borrar_categoria(){
-		$response = [];
-		if(!$this->Categorias_model->borrar($this->input->post('id'))){
-			$response['estado'] = false;
-		}
-		$response['estado'] = true;		
-		echo json_encode($response);	
-	}
 		
-	
+	function borrar_tematica(){
+		$data = array(
+			'es_borrado' => 1
+		);
+		
+		if($this->db->update('categorias', $data, "id =".$this->input->post('id'))){
+			$estado = true;
+			$mensaje = 'El registro Modificado !!!';
+		}else{
+			$estado = false;
+			$mensaje = 'Ocurrió un error al mofificar el registro';
+		}
+		
+		$result = array(
+			'estado'=>$estado,
+			'mensaje'=>$mensaje,
+		);
+		
+		echo json_encode($result);
+		
+	}
 }
 
 ?>

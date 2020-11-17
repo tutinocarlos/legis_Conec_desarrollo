@@ -42,6 +42,25 @@ class Errors extends MY_Controller
 		$this->load->view('web/head',$data);
 		$this->load->view('web/index',$data);
 		$this->load->view('web/footer',$data);
+} 
+	
+	function forbidden()
+ {
+ //llamamos a la vista que muestra el error 404 personalizado
+ 	
+		$seccion = $this->load->view('errors/html/error_403', 'dada',TRUE);
+ 
+		
+		$data = array(
+				'nav' => $this->nav,
+				'fecha' => $this->fecha,
+				'content' => $seccion,
+				'script' => 'static/web/scripts/error.js'
+		);
+
+		$this->load->view('web/head',$data);
+		$this->load->view('web/index',$data);
+		$this->load->view('web/footer',$data);
 }
 }
 ?>

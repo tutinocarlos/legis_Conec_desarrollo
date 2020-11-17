@@ -48,7 +48,6 @@ class Tipo_normativa extends MY_Controller {
 	
 	public function editar_datos($id){
 		
-		
 		if (!$this->ion_auth->logged_in())
     {
       redirect('auth/login');

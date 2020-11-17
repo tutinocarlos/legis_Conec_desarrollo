@@ -110,7 +110,7 @@ if(!$this->ion_auth->is_members() && ($this->user->id_legislatura == 1 && $this-
 </style>
 	<div class="card" id="tutos">
 		<div class="card-body">
-			<h4 class="card-title m-b-0">Listado de Tutoriales</h4>
+			<h4 class="card-title m-b-0">Tutoriales</h4>
 		</div>
 		<ul class="list-style-none" id="tutoriales_legis">
 			<?= $tutoriales?>

@@ -1,7 +1,7 @@
 $(document).ready(function () {
 /*BORRAR TUTORIAL*/
 	
-	$("div#tutos > ul#tutoriales_legis").on("click", "div.borrar", function (e) {
+	$("div#tutos > ul#tutoriales_legis").on("click", "a.borrar_tutorial", function (e) {
 		e.preventDefault();
 		var dato = new FormData();
 		dato.append('video', $(this).data('video'));
@@ -43,11 +43,10 @@ $(document).ready(function () {
 								
 								$('li#tutorial_'+result.id).remove();
 								
-								toastr.success('Registro Borrado correctamente! ', 'Tutoriales');
+								toastr.success(result.mensaje, 'Tutoriales');
 							} else {
-								toastr.error('Registro no Borrado!', 'Tutoriales');
+								toastr.error(result.mensaje, 'Tutoriales');
 							}
-								$('#example').DataTable().ajax.reload();
 
 						},
 						error: function (xhr, errmsg, err) {
@@ -165,7 +164,7 @@ $(document).ready(function () {
 						toastr.success(result.mensaje+'<br>'+result.archivo, 'Tutoriales');
 						//reseteo el formulario
 						$("#userfile_pdf").removeClass('text-success').html('Seleccione el Archivo PDF');
-						$('span').html('');
+						$('span#titulo_error,span#descripcion_error').html('');
 						$('#form_alta_archivo').trigger("reset");
 						// agrego elemento al ul
 						$("#tutoriales_legis").prepend(result.html);

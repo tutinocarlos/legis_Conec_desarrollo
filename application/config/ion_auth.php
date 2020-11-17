@@ -272,7 +272,10 @@ $config['email_forgot_password'] = 'forgot_password.tpl.php';
  | Message Delimiters.
  | -------------------------------------------------------------------------
  */
+
+/* cambio delimitadores de mensajes uso los de codeigniter*/
 $config['delimiters_source']       = 'config'; 	// "config" = use the settings defined here, "form_validation" = use the settings defined in CI's form validation library
+//$config['delimiters_source']       = 'form_validation'; 	// "config" = use the settings defined here, "form_validation" = use the settings defined in CI's form validation library
 $config['message_start_delimiter'] = '<div class="alert alert-success" role="alert">'; 	// Message start delimiter
 $config['message_end_delimiter']   = '</div>'; 	// Message end delimiter
 $config['error_start_delimiter']   = '<div class="alert alert-danger" role="alert">';		// Error message start delimiter

@@ -66,11 +66,11 @@ $lang['group_name_admin_not_alter']             = 'El nombre del grupo de admini
 $lang['email_activation_subject']               = 'Activación de la cuenta';
 $lang['email_activate_heading']                 = 'Cuenta creada para %s';
 $lang['email_contraseña_temporal']              = 'Su contraseña temporal es: %s';
-$lang['email_activate_subheading']              = 'Por favor, haga click en este link para %s.';
+$lang['email_activate_subheading']              = 'Click aquí para %s.';
 $lang['email_activate_link']                    = 'Activa tu cuenta';
 
 // Forgot Password Email
 $lang['email_forgotten_password_subject']       = 'Verificación de contraseña olvidada';
 $lang['email_forgot_password_heading']          = 'Proceso de Reseteo de contraseña para:  %s';
-$lang['email_forgot_password_subheading']       = 'Por favor, haga click en este link para %s.';
+$lang['email_forgot_password_subheading']       = 'Click aquí para %s.';
 $lang['email_forgot_password_link']             = 'Resetea tu contraseña';

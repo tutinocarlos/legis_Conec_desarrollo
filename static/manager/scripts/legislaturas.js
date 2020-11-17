@@ -518,6 +518,54 @@ console.log('results');
 		});
 
 	});
+	
+	
+	/* 27/10/2020*/
+$( "select#select_pais" ).change(function() {
+	
+	var id_pais = $("select#select_pais option:selected").val();
+	var dato = new FormData();
+	dato.append('id_pais', id_pais);
+	
+	$.ajax({
+		type: "POST",
+		contentType: false,
+		dataType: 'json',
+		data: dato,
+		processData: false,
+		cache: false,
+		beforeSend: function () {
+		$(".preloader").fadeIn();
+		},
+		url: $("body").data('base_url') + "Manager/Paises/buscar_provincias",
+		success: function (result) {
+			$(".preloader").fadeOut();
+			console.log('resultado');
+//			console.log(result.datos);
+			 $("#select_provincias").empty();
+			if (result.estado == true) {
+				toastr.success('Seleccione Provincia!', 'Legislaturas');
+				$("#select_provincias ").append('<option selected value="0">SELECCIONE</option>');
+				$.each(result.datos, function(id,value){
+					console.log(result);
+ 				$("#select_provincias ").append('<option value="'+value["id"]+'">'+value["nombre"]+'</option>');
+     });
+			} else {
+				$("#select_provincias").siblings("span").html('Debe ingresar la provincia o región').css('color','red');
+				$("div#response_ajax").html('<a href="'+$("body").data('base_url')+'Manager/Provincias/agregar"><div class="card card-hover"><div class="box  text-center" style="background-color: #00b19d;"><h1 class="font-light text-white"><i class="fas fa-pencil-alt"></i></h1><h6 class="text-white">Agregar Provincia / Región</h6></div></div></a>');
+				toastr.error('No se han encontrado regiones relacionadas !', 'Legislaturas');
+			}
+//									location.reload();
+		},
+		error: function (xhr, errmsg, err) {
+		console.log(xhr.status + ": " + xhr.responseText);
+		}
+	});
+	
+  	
+});
+	
+	/*FIN*/
 
 });
 

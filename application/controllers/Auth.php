@@ -26,8 +26,6 @@ class Auth extends CI_Controller
 	 */
 	public function index()
 	{
-
-		
 		// defecto password
 		//		$2y$10$4/I7YxbZekurFZAZN.ktcuRYS/vHJp/W9fcZEp4S0j5DUk9EQW3qq
 		
@@ -68,15 +66,42 @@ class Auth extends CI_Controller
 	 */
 	public function login_url(){
 
-		
+		var_dump($_GET);
 
-echo '<br>-->1'.$this->encryption->decrypt('5e7a30668790647317ad91eb9be1a7bb8f5046b98684d35c865acd5aafc56b026ee8113128ab912e17b84e38bf180f4108664cea9c8e4fd6475f92c7a1d89ae6P/Q7o/CjawuPLHl7YqlLgIt0j0Lu8D04REYnVRymbHLL/4v+lWy997EGRuUpMaXF&');
-echo '<br>-->2'.$this->encryption->decrypt($_GET['pass']);
-		die();
+$usuario = $this->encryption->decrypt($_GET['email']);
+$password =$this->encryption->decrypt($_GET['pass']);
+//		die();
 		$this->ion_auth->login($this->encryption->decrypt($usuario), $this->encryption->decrypt($password), $remember=FALSE, $url_login=TRUE);
 		
 	}
 	public function login(){
+		
+//		var_dump($_SESSION);
+		
+		/*Chequeo que llegue GET desde email de cambiar passowrd*/
+		if(isset($_GET['email']) AND isset($_GET['pass'])){
+
+			$email = $this->encryption->decrypt($_GET['email']);	
+			$pass = $this->encryption->decrypt($_GET['pass']);
+			if ($this->ion_auth->login($email, $pass, $remember=TRUE)){
+				//redirect them back to the home page
+				$this->session->set_flashdata('message', $this->ion_auth->messages());
+
+				redirect('Manager', 'refresh');
+			}
+			else
+			{
+
+				// if the login was un-successful
+				// redirect them back to the login page
+				$this->session->set_flashdata('message', $this->ion_auth->errors());	
+				
+//			die($this->ion_auth->errors().'--<--<z'.$this->session->set_flashdata('message', $this->ion_auth->errors()));
+				
+				redirect('auth/login', 'refresh'); // use redirects instead of loading views for compatibility with MY_Controller libraries
+			}
+		}
+		
 // 
 //
 //echo '<br>-->'.$user;
@@ -116,7 +141,7 @@ echo '<br>-->2'.$this->encryption->decrypt($_GET['pass']);
 				$this->session->set_flashdata('message', $this->ion_auth->errors());	
 				
 //			die($this->ion_auth->errors().'--<--<z'.$this->session->set_flashdata('message', $this->ion_auth->errors()));
-				
+//				var_dump($_SESSION); 
 				redirect('auth/login', 'refresh'); // use redirects instead of loading views for compatibility with MY_Controller libraries
 			}
 		}

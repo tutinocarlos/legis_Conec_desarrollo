@@ -135,6 +135,16 @@ class Tutoriales extends MY_Controller {
 
 
 					$html = '<li class="card-body  border-top"><a id="tutorial_'.$last_id.'" href="'.base_url().'Manager/Tutoriales/visor/1/'.$url_video.'" class="m-b-0 p-0"><div class="row"><div class="col-md-1 text-center"><img src="'. base_url('static/manager/tutoriales/iconos/youtube.png').'" alt="" class="img-responsive"></div><div class="col-md-5 titulo">'.$this->input->post('titulo').'</div><div class="col-md-5">'.$this->input->post('detalle_video').'</div><div class="col-md-1" class="borrar" data-id='.$last_id.' data-video="1"><i class="fas fa-trash-alt borrar" title="Borrar"></i></div></div></a></li>';
+						
+						
+						$html ='<li class="card-body  border-top" id="tutorial_'.$last_id.'"><div class="row"><div class="col-md-1"><a href="'.base_url().'Manager/Tutoriales/visor/0/'.$url_video.'" class="m-b-0 p-0" ><img src="'. base_url('static/manager/tutoriales/iconos/youtube.png').'" alt="" class="img-responsive"></a></div><div class="col-md-4">
+			<a href="'.base_url().'Manager/Tutoriales/visor/0/'.$url_video.'" class="m-b-0 p-0" >
+					<strong>'.$this->input->post('titulo').'</strong></a></div><div class="col-md-4"><a href="'.base_url().'Manager/Tutoriales/visor/0/'.$url_video.'" class="m-b-0 p-0" >'.$this->input->post('detalle_video').'</a></div><div class="col-md-1">
+					<a style="color: white;" href="#" data-url="'.$url_video.'" data-id="'.$last_id.'" data-video="1"  class="borrar_tutorial btn btn-danger btn-xs"><i class="fas fa-trash-alt" title="Borrar"></i> </a></div>
+						<?php endif;?>
+
+				</div>
+		</li>';
 
 						
 						$response = array(
@@ -231,6 +241,15 @@ class Tutoriales extends MY_Controller {
 						$html = '<li class="card-body  border-top"><a id="tutorial_'.$last_id.'" href="'.base_url().'Manager/Tutoriales/visor/0/'.$this->upload->data('file_name').'" class="m-b-0 p-0"><div class="row"><div class="col-md-1 text-center"><img src="'. base_url('static/manager/tutoriales/iconos/pdf.png').'" alt="" class="img-responsive"></div>
 						<div class="col-md-5 titulo">'.$this->input->post('titulo').'</div><div class="col-md-5">'.$this->input->post('descripcion').'</div><div class="col-md-1" class="borrar" data-id='.$last_id.' data-video="1" data-url="'.$nombre_archivo.'"><i class="fas fa-trash-alt borrar" title="Borrar"></i></div></div></a></li>';
 						
+						$html ='<li class="card-body  border-top" id="tutorial_'.$last_id.'"><div class="row"><div class="col-md-1"><a href="'.base_url().'Manager/Tutoriales/visor/0/'.$this->upload->data('file_name').'" class="m-b-0 p-0" ><img src="'. base_url('static/manager/tutoriales/iconos/youtube.png').'" alt="" class="img-responsive"></a></div><div class="col-md-4">
+			<a href="'.base_url().'Manager/Tutoriales/visor/0/'.$this->upload->data('file_name').'" class="m-b-0 p-0" >
+					<strong>'.$this->input->post('titulo').'</strong></a></div><div class="col-md-4"><a href="'.base_url().'Manager/Tutoriales/visor/0/'.$this->upload->data('file_name').'" class="m-b-0 p-0" >'.$this->input->post('detalle_video').'</a></div><div class="col-md-1">
+					<a style="" href="#" data-url="'.$this->upload->data('file_name').'" data-id="'.$last_id.'" data-video="0"  class="borrar_tutorial btn btn-danger btn-xs"><i class="fas fa-trash-alt" title="Borrar"></i> </a></div>
+						<?php endif;?>
+
+				</div>
+		</li>';
+						
 						$mensaje .= '<br> Se han guardado los datos en la base de datos';
 					}else{
 						$mensaje .= '<br> Ocurrió un error al guardar los datos en la base de datos';
@@ -283,33 +302,36 @@ class Tutoriales extends MY_Controller {
 
 	public function borrar(){
 
+	
+$mensaje ='<br>Tutoriales';
 		if($this->input->is_ajax_request()){
 				
 				if($this->input->post('video') == '1'){
-				
+
 					if( $this->db->delete('tutoriales', array('id' => $this->input->post('id')))){
-						$mensaje = 'Video Tutorial eliminado con exito';
+						$mensaje .= 'Video Tutorial eliminado con exito';
 						$estado = true;
 					}else{
-						$mensaje = 'Ocurrió un error al eliminar el Video Tutorial.';
+						$mensaje .= 'Ocurrió un error al eliminar el Video Tutorial.';
 						$estado = false;
 					}
 						
 				}else{
-
+					
 					$url = 'static/manager/tutoriales/'.$this->input->post('url');
 					
 						if(unlink($url) && $this->db->delete('tutoriales', array('id' => $this->input->post('id')))){
 							$estado = true;
-							$mensaje = '<br> Se elimino el archivo Tutorial';
+							$mensaje .= '<br> Se borro registro <br>Se elimino el archivo Tutorial';
 						}else{
 							
 						$estado = false;
-							$mensaje = '<br> Ocurrió un error al eliminar el archivo';
+							$mensaje .= '<br> Ocurrió un error al eliminar el archivo';
 						}
 				}
 				
 				$response = array(
+					'mensaje'=>$mensaje,
 					'estado'=>$estado,
 					'id'=>$this->input->post('id'),
 				);

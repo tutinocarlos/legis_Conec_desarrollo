@@ -3,8 +3,9 @@
 //var_dump($data_select_provincia); 
 
 ?>
-	<div class="col-md-12" data-select2-id="15">
-<div class="col-md-6 col-lg-2 col-xlg-3">
+<div class="row">
+	
+<div class="col-md-6 col-lg-3 ">
 	<a href="<?= base_url('Manager/Legislaturas/listado')?>">
 		<div class="card card-hover">
 			<div class="box  text-center" style="background: #f7aa47;">
@@ -14,6 +15,10 @@
 		</div>
 	</a>
 </div>
+<div class="col-md-6 col-lg-3 " id="response_ajax"></div>
+</div>
+<div class="row">
+
 	<div class="card ">
 
 		<?php
@@ -34,19 +39,44 @@
 			<h4 class="card-title"></h4>
 			
 		<div class="row">
-		<div class="form-group m-t-20 col-md-3 ">
-		<label>Tipo de Organismo: </label>
+		<div class="form-group m-t-20 col-md-3">
+		<label>Pais: </label>
+		<?php
+		$js = array(
+			'id'=>'select_pais',
+			'class'=>'select2 form-control custom-select select2-hidden-accessible',
+		);	
+			
+		?>
 
-		<?= 	form_dropdown('organismo', $data_select_tipo_organismo, set_value('organismo'), $js); ?>
-		<?php echo form_error('organismo','<div class="invalid-feedback" style="display:block;">',"</div>");?>
+		<?= 	form_dropdown('pais', $data_select_paises, set_value('pais'), $js); ?>
+
+		<?php echo form_error('pais','<div class="invalid-feedback" style="display:block;">',"</div>");?>
 		<span class="aclaracion">* Campo requerido</span>
 		</div>
 		<div class="form-group m-t-20 col-md-3">
-		<label>Provincia: </label>
-
+		<label>Provincia / Región: </label>
+		<?php
+		$js = array(
+			'id'=>'select_provincias',
+			'class'=>'select2 form-control custom-select select2-hidden-accessible',
+		);	
+			
+		?>
 		<?= 	form_dropdown('provincia', $data_select_provincia, set_value('provincia'), $js); ?>
 
 		<?php echo form_error('provincia','<div class="invalid-feedback" style="display:block;">',"</div>");?>
+		<span class="aclaracion">* Campo requerido</span>
+		</div>		
+		<div class="form-group m-t-20 col-md-3 ">
+		<label>Tipo de Organismo: </label>
+		<?php
+			$js = array(
+				'class'=>'select2 form-control custom-select select2-hidden-accessible',
+			);	
+		?>
+		<?= 	form_dropdown('organismo', $data_select_tipo_organismo, set_value('organismo'), $js); ?>
+		<?php echo form_error('organismo','<div class="invalid-feedback" style="display:block;">',"</div>");?>
 		<span class="aclaracion">* Campo requerido</span>
 		</div>
 
@@ -197,8 +227,31 @@
 			</div>
 				<!--
 </div>
--->
-	
+-->	<div style="margin-top: 30px;"><h4>Normativas</h4></div>
+				<div class="row">
+								<div class="col-sm-6">
+					<?php
+						$data = array(
+							'class' => '',
+						);
+						echo form_label('URL Normativas:', 'url_normativas', $data);
+						$data = array(
+							'name'  => 'url_normativas',
+							'id'    => 'url_normativas',
+							'class' => 'form-control ',
+							'value' => set_value('url_normativas')
+//						'placeholder' =>	'Detalle categoría',
+//						'required'    => 	'required'
+							);
+							echo form_input($data);	
+							echo form_error('url_normativas','<div class="invalid-feedback" style="display:block;">',"</div>");
+
+						?>
+						<span class="aclaracion">Ingrese la URL de destino.</span>
+					<!--						<input type="text" class="form-control" name="detalle" placeholder="Last Name Here">-->
+				</div>
+				
+			</div>
 		<div style="margin-top: 30px;"><h4>Redes Sociales</h4></div>
 			<div class="row">
 				<div class="col-sm-3">

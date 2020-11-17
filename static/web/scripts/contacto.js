@@ -1,5 +1,6 @@
 		$(document).ready(function () {
-							$("label#captcha_error").html('Validar Recaptcha ');
+			
+			$("label#captcha_error").html('Validar Recaptcha ');
 //			toastr["success"]("El mensaje se ha enviado correctamente", "Legislaturas Conectadas");
 
 			var name = " minomnnbr e";
@@ -56,8 +57,7 @@
 
 
 				submitHandler: function (form) {
- event.preventDefault();
-					
+					event.preventDefault();
 					if(grecaptcha.getResponse()){
 
 					}else{
@@ -67,7 +67,6 @@
 						return false;
 						
 					}
-
 
 					$.ajax({
 						type: "POST",
@@ -84,6 +83,7 @@
 						success: function (response) {
 							console.log('response');
 							console.log(response);
+							
 							if (response.error) {
 								if (response.nombre_error != '') {
 									$('#nombre_error').html(response.nombre_error);
@@ -113,8 +113,19 @@
 								
 							}
 							$('#enviar_correo').attr('disabled', false);
-							if (response.success) {
+							if (response.successForm ) {
 								toastr["success"]("El mensaje se ha enviado correctamente", "Legislaturas Conectadas");
+								$('#nombre_error').html('');
+								$('#apellido_error').html('');
+								$('#legislatura_error').html('');
+								$('#mensaje_error').html('');
+
+								$("#enviar_correo").html('Enviar Mensaje');
+								$("form#form_cantacto_legis")[0].reset();
+								$('#enviar_correo').attr('disabled', false);
+							}							
+							if (response.successCopia) {
+								toastr["success"]("Hemos enviado una copia de su mensaje", "Legislaturas Conectadas");
 								$('#nombre_error').html('');
 								$('#apellido_error').html('');
 								$('#legislatura_error').html('');

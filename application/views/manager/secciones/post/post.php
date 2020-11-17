@@ -1,14 +1,9 @@
-	<style>
-
-
-</style>
 
 
 <?php
 		
 $js = array(
-	'class'=>'select2 form-control custom-select select2-hidden-accessible',
-   
+	'class'=>'select2 form-control  select2-hidden-accessible',
 );
 
 ?>
@@ -39,7 +34,7 @@ $js = array(
 							<?php
 								if ($this->ion_auth->is_super()){
 							?>
-							<div class="row">
+							<div class="row invisible">
 								<div class="col-md-6">
 									<div class="form-group ">
 										<label>Publicacióna de Legislaturas Conectadas:</label>
@@ -70,17 +65,47 @@ $js = array(
 											?>
 										<?= form_checkbox($data);?>
 									</div>
+								</div>							
+									<div class="col-md-6">
+									<div class="form-group ">
+										<label>Tipo Notificacion:</label>
+										<?php 
+												$data = array(
+													'name'          => 'notificacion',
+													'id'            => 'notificacion',
+													'value'         => 3,
+													'checked'       => set_checkbox('notificacion',3),
+													'style'         => 'width: 20px; height: 20px;margin: 0 15px;'
+												);
+											?>
+										<?= form_checkbox($data);?>
+									</div>
 								</div>
 
 
 							</div>
 							<?php } ?>
 							<div class="row">
+								<div class="form-group  col-md-3">
+									<label>Pais: </label>
+									<?php
+									
+									$js['id'] = 'id_pais';
+									
+									?>
+									<?= 	form_dropdown('pais', $data_select_pais, set_value('data_select_pais'), $js); ?>
 
-								<div class="form-group col-md-4">
+									<?php echo form_error('pais','<div class="invalid-feedback" style="display:block;">',"</div>");?>
+									<span class="aclaracion">* Campo requerido</span>
+								</div>
+
+								<div class="form-group col-md-6">
 									<!--								<h5 class="card-title m-b-0">Publicación de <?php echo $user->nombre_legislatura;?><br>Autor: <?php echo $user->last_name.', '.$user->first_name;?></h5>-->
 									<label>Legislatura:</label>
-									<?= 	form_dropdown('id_legislatura', $data_select_legi, $user->id_legislatura, $js); ?>
+									<?php
+									$js['id'] = 'legis_id';
+									?>
+									<?= 	form_dropdown('id_legislatura', $data_select_legi, '', $js); ?>
 									<?php echo form_error('id_legislatura','<div class="invalid-feedback" style="display:block;">',"</div>");?>
 									<span class="aclaracion">* Campo requerido
 										<?php	if ($this->ion_auth->is_super() && $this->ion_auth->is_admin() ):?>
@@ -88,47 +113,24 @@ $js = array(
 										<?php endif;?>
 									</span>
 								</div>
-								<div class="form-group col-md-2">
+								<div class="form-group col-md-2 ">
 									<label>Tipo de publicación: </label>
-									<?= 	form_dropdown('tipo', $data_select_tipo, set_value('tipo'), $js); ?>
+		
+								<?php
+									$js['id'] = '';
+									?>
+									<?= 	form_dropdown('tipo', $data_select_tipo,2,$js,); ?>
 
 									<?php echo form_error('tipo','<div class="invalid-feedback" style="display:block;">',"</div>");?>
 									<span class="aclaracion">* Campo requerido</span>
 								</div>
-								<div class="form-group  col-md-3 ">
+								<div class="form-group  col-md-2 invisible">
 									<label>Tipo de Normativa: </label>
 									<?= 	form_dropdown('normativa', $data_select_normativa, set_value('normativa'), $js); ?>
 									<?php echo form_error('normativa','<div class="invalid-feedback" style="display:block;">',"</div>");?>
 									<span class="aclaracion">* Campo requerido, <strong>si el tipo de Publicación es 'Normativa'</strong></span>
 								</div>
-								<!--
-									<div id="estado_art" class="form-group  col-md-2 ">
-									<label>Estado: </label>
-									<select id="estado_art" name="estado_art" class=" select2 form-control custom-select select2-hidden-accessible" style="width: 100%; height:36px;" data-select2-id="1" tabindex="-1" aria-hidden="true">
-										<option value="">-SELECCIONAR-</option>
-										<option value="1">Sancionada</option>
-										<option value="2">Presentada</option>
-									</select>
 
-									<?php //echo form_error('estado_art','<div class="invalid-feedback" style="display:block;">',"</div>");?>
-								</div>
--->
-
-								<!--
-								<div class="col-md-5 invisible">
-								<h5 class="card-title m-b-0">Publicación de <?php //echo $user->nombre_legislatura;?><br>Autor: <?php //echo $user->last_name.', '.$user->first_name;?></h5>
-										<div class="form-group  ">
-											<label>Publicación a nombre de :</label>
-
-											<select id="id_user" name="id_user" class="select2 form-control custom-select select2-hidden-accessible" style="width: 100%; height:36px;" data-select2-id="1" tabindex="-1" aria-hidden="true">
-												<?php //echo $select_legislatura ?>
-											</select>
-										</div>
-
-								<?php //echo form_error('id_user','<div class="invalid-feedback" style="display:block;">',"</div>");?>
-
-								</div>
--->
 
 							</div>
 							<div class="row">
@@ -141,6 +143,8 @@ $js = array(
 									<?php echo form_error('ambito','<div class="invalid-feedback" style="display:block;">',"</div>");?>
 									<span class="aclaracion">* Campo requerido</span>
 								</div>
+								
+								
 								<div class="form-group m-t-20 col-md-2 ">
 									<label>Temática: </label>
 

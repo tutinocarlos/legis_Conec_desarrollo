@@ -316,6 +316,7 @@ $total = count((array)$legislaturas);
 					//var_dump($tipos_camaras);
 					echo $filterTitleReload;
 					$prov = '';
+					$pais = '';
 					$border = ''; 
 			 		$borderDetail = '';
 					$a = 0;	
@@ -336,7 +337,7 @@ $total = count((array)$legislaturas);
 // var_dump($legislaturas);
 // echo '</pre>';
 			 		foreach($legislaturas as $legislatura){
-
+						
 			 			if($legislatura->id_legis != 91){   /// if para que no me muestr legislaturas conectadas como organismo de la Ciudad Autónoma de BSAS
 
 						$organismos =  array_count($legislaturas2,'provincia',$legislatura->provincia);
@@ -345,6 +346,16 @@ $total = count((array)$legislaturas);
 						//if ($organismos == $a) echo 'Ya esta.<hr>';
 						
 						$filterTitle = $legislatura->provincia;
+						$filterPais = $legislatura->pais;
+							if($legislatura->pais == $pais){
+								$html ='';
+							}else{
+								$html = '<div class="title-left" >
+                        <h1 class="">'.$legislatura->pais.'</h1>
+                        <span class=""></span>
+                    </div>';
+								
+							}
 						
 						if ($legislatura->provincia == $prov){ //ya se guardo la enterior
 								//nada
@@ -365,7 +376,7 @@ $total = count((array)$legislaturas);
 
 							++$a;
 							
-							$headerOrganismo = '
+							$headerOrganismo = $html.'
 							<div class="business-title-left">
 								<h2 class= "'.$border.'">'.	$legislatura->provincia	.' </h2>
 								<span class="title-border-left"></span>
@@ -379,7 +390,62 @@ $total = count((array)$legislaturas);
 							<?php 
 							echo $headerOrganismo;
 							?>
-							<div class="media datos_legislatura <?php echo $borderDetail; ?> ">
+<!--							/* TIPO MOVIL*/-->
+							<?php 
+									$segments = array('Legislatura',$legislatura->id_legis,convert_accented_characters(url_title($legislatura->nombre_legis), 'underscore', TRUE));
+									?>
+							<section class="mobil d-block d-sm-none  ">
+										
+							<div class="row">
+
+								<div class="col-12">
+										<figure><a href="<?= base_url($segments) ?>"><img style="width:150px" class="img-fluid img-thumbnail" src="<?= base_url($legislatura->logo_legis)?>" alt="<?= $legislatura->nombre_legis?>"> <?php //echo $countOrg; ?></a>
+									</figure>
+								</div>
+								<div class="col-12 media-body">
+									<a href="<?= base_url($segments) ?>"><?= $legislatura->nombre_legis?></a>
+								</div>
+							</div>
+							<div class="row">
+									<div class="col-12">Tipo de organismo: <strong><?= $legislatura->organismo ?> </strong></div>
+									<p>	
+											<a href="<?= base_url($segments) ?>" style="font-size: 16px;">
+																<div class="col-12 alert alert-info" role="alert">
+                       		<i class="fa fa-users" style="color: #5a89a9; margin: 0 10px 0 0"></i>Ver <?= $legislatura->representantes?> Representantes
+                      	</div>
+                      </a>
+								</p>
+							</div>
+							<div class="col-12 text-center">
+								
+											<ul class="top-nav-social ">
+											<?php if($legislatura->facebook_legis != ''): ?>
+											<li><a href="<?= $legislatura->facebook_legis ?>" class="facebook" target="_blank"> <i class="fa fa-facebook"></i> </a>
+											</li>
+											<?php endif;?>
+											<?php if($legislatura->twitter_legis!= ''): ?>
+											<li><a href="<?= $legislatura->twitter_legis ?>" class="twitter" target="_blank"> <i class="fa fa-twitter"></i> </a>
+											</li>
+											<?php endif;?>
+											<?php if($legislatura->instagram_legis!= ''): ?>
+											<li><a href="<?= $legislatura->instagram_legis ?>" class="instagram" target="_blank"> <i class="fa fa-instagram"></i> </a>
+											</li>
+											<?php endif;?>
+											<?php if($legislatura->linkedin_legis!= ''): ?>
+											<li><a href="<?= $legislatura->linkedin_legis ?>" class="linkedin" target="_blank"> <i class="fa fa-linkedin" ></i> </a>
+											</li>
+											<?php endif;?>
+											<?php if($legislatura->youtube_legis != ''): ?>
+													<li><a href="<?= $legislatura->youtube_legis ?>" class="youtube" target="_blank"> <i class="fa fa-youtube"></i> </a>
+										</li>
+										<?php endif;?>
+										</ul>
+							</div>
+							
+									</section>
+<!--							/* FIN TIPO MOVIL*/-->
+							
+							<div class=" d-none d-sm-block media datos_legislatura <?php echo $borderDetail; ?> ">
 								<div class="hover01">
 									<?php 
 									$segments = array('Legislatura',$legislatura->id_legis,convert_accented_characters(url_title($legislatura->nombre_legis), 'underscore', TRUE));
@@ -392,8 +458,7 @@ $total = count((array)$legislaturas);
 									<p>
 										<?= @$legislatura->lema_legis ?>
 									</p>
-									<p>Tipo de organismo: <strong><?= $legislatura->organismo ?> </strong>
-									</p>
+									<p>Tipo de organismo: <strong><?= $legislatura->organismo ?> </strong></p>
 									<?php if ($legislatura->representantes > 0): ?>
 										<p>
 											<a href="<?= base_url($segments) ?>" style="font-size: 16px;">
@@ -437,6 +502,7 @@ $total = count((array)$legislaturas);
 					<?php 
 						$countOrg = 0;
 						$prov = $legislatura->provincia; 
+						$pais = $legislatura->pais; 
 						
 					} // fin if si es legis conectadas id 91
 				}//fin loop legislaturas
@@ -460,8 +526,8 @@ $total = count((array)$legislaturas);
 					
 					$tipoCamara .= '
 					<div class="row" style="margin-top: 30px ">
-						<div class="col-md-2" style="background: '.$camara["color"].'"></div>
-						<div class="col-md-10"> '.$camara["detalle"].'</div>
+						<div class="col-1 col-md-2" style="background: '.$camara["color"].'"></div>
+						<div class="col-11 col-md-10"> '.$camara["detalle"].'</div>
 					</div>
 					';
 					

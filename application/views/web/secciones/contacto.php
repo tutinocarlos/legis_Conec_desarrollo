@@ -34,7 +34,7 @@
 						<div class="media-body">
 
 							<div class="row">
-								<div class="col-md-4"><img style="width: 150px" lass="img-fluid " src="<?php echo base_url()?>static/web/images/logos/logo2.jpg" alt="Logo" style="padding: 10px"> </div>
+								<div class="col-md-4"><img style="width: 150px" lass="img-fluid " src="<?php echo base_url()?>static/web/images/logos/LC_logo2.jpg" alt="Logo" style="padding: 10px"> </div>
 								<div class="col-md-8"><strong> la RED interparlamentaria ABIERTA a la participación CIUDADANA.</strong>
 								</div>
 							</div>
@@ -143,9 +143,6 @@
 						?>
 						</div>
 					</div>
-	
-						
-
 					<div class="col-md-12">
 						<div class="form-group">
 							<button href="javascript:void(0)" class="btn btn-block bussiness-btn-larg" onclick="enviar_formulario();" id="enviar_correo">Enviar mensaje</button>
@@ -155,6 +152,7 @@
 			</div>
 		</div>
 	</div>
+
 </div>
 <div class="padding-top-large"></div>
 <div class="bussiness-our-address">
@@ -221,8 +219,8 @@
 <?php echo $this->recaptcha->getScriptTag();?>
 <script>
 	/*paso la imagen en base64 al archivo legislatura.js*/
-	var img_base64 = '<?php echo img_base64('http://10.1.1.77/static/web/images/logos/logo1.png')?>';
-	//	var img_base64 = '<?php //echo img_base64( base_url('static/web/images/logos/logo1.png'))?>';
+	//var img_base64 = '<?php //echo img_base64('http://10.1.1.77/static/web/images/logos/LC_logo.png')?>';
+		var img_base64 = '<?php echo img_base64( base_url('static/web/images/logos/LC_logo.png'))?>';
 
 
 	var base_url = '<?= base_url()?>';

@@ -1,4 +1,4 @@
-</div>
+
 <?php 
 	//var_dump($provincias);
 	//var_dump($tematicas);
@@ -83,8 +83,10 @@
 	<div id="tablaDetalle_filter"></div>
 </div>
 <div class="padding-top-small"></div>
-				<div class="container">
-					
+			
+<!--			esta seccion se oculta a pedido de Diego 01/07/2020-->
+				<div class="container " style="display:none;">
+				
 					<div class=" row portfolio-header-menu " >
 							<div class="col-md-1">
 								<strong>Provincia:</strong>
@@ -154,12 +156,18 @@
 						
 				</div>
 <style>
-	#portfolio{
+	#portfolio1{
 		background-image: url('/static/web/images/11.jpg');
 		background-size: cover;
 	}
+	
+	#fondo_lista,.container-fluid{
+		padding: 0!important;
+	}
+	
 </style>
-<div class="business-portfolio-1x" id="portfolio">
+<!--			esta seccion se oculta a pedido de Diego 01/07/2020-->
+<div class="business-portfolio-1x" id="" style="display:none;">
 	<div class="container fondo_lista">
 		<div class="bussiness-portfolio-light ">
 			<div class="portfolio-body">
@@ -191,6 +199,38 @@
 		</div>
 	</div>
 </div>
+<!--nuevo datatables a pedido de Diego 01/07/2020-->
+<div class="business-portfolio-1x" id="portfolio1" >
+	<div class="container fondo_lista" id="fondo_lista">
+		<div class="bussiness-portfolio-light ">
+			<div class="portfolio-body">
+				<div class="col-md-12">
+				</div>
+				<div class="table-responsive publicaciones_home">
+					<div id="zero_config_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+						<table id="publicaciones2" class="display" style="width:100%">
+							<thead>
+								<tr>
+									<th width="10%">id</th>
+									<th width="10%">Provincia</th>
+									<th width="40%" >Organismo</th>
+									<th width="40%" >Normativas</th>
+					
+								</tr>
+							</thead>
+							<tbody></tbody>
+						<tfoot>
+
+						</tfoot>
+
+						</table>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
 
 <div class="padding-top-large"></div>
 
@@ -199,7 +239,7 @@
 
 <?php
 // Nombre de la imagen
-$path = 'http://10.1.1.77/static/web/images/logos/logo1.png';
+$path = base_url().'/static/web/images/logos/LC_logo.png';
  
 // Extensión de la imagen
 $type = pathinfo($path, PATHINFO_EXTENSION);

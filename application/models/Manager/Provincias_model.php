@@ -4,17 +4,24 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Provincias_model extends CI_Model
 {
 
-		public function get_datatable()
+		public function get_datatable($id_pais)
     {
 			
 			$draw = intval(2);
       $start = intval(0);
       $length = intval(1);
 
-
-      $query = $this->db->select("provincias.*, tipo_camara.nombre as camara, tipo_camara.color as color_camara")
-												->join('tipo_camara', 'tipo_camara.id = provincias.camara')
-												->get("provincias");
+/*
+$this->db->select('title, content, date');
+$query = $this->db->get('mytable');
+*/
+      $this->db->select("_paises.nombre_pais as text_pais,provincias.*, tipo_camara.nombre as camara, tipo_camara.color as color_camara");
+			$this->db->join('tipo_camara', 'tipo_camara.id = provincias.camara');
+			$this->db->join('_paises', '_paises.id_pais = provincias.id_pais');
+			if($id_pais >0){
+			$this->db->where('id_pais', $id_pais);
+			}
+			$query = $this->db->get("provincias");
 
 
       $data = [];
@@ -42,8 +49,8 @@ class Provincias_model extends CI_Model
                 $r->nombre,
                 $r->color = $color_provincia,
                 $r->zona,
-                $r->color_camara = $color_camara,
                 $r->camara,
+                $r->text_pais,
                 $r->acciones = $publicar.$editar
            );
       }

@@ -95,6 +95,8 @@ if (isset($_SESSION['save_data'])){
 		}
 
 	?>
-    </body>
+   
 
-    </html>
+	</body>
+
+</html>

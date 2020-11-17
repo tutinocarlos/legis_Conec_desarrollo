@@ -14,8 +14,9 @@ class Post extends MY_Controller {
 		$this->load->model('/Manager/Subcategorias_model');
 		$this->load->model('/Manager/Post_model');
 		$this->load->model('/Manager/Contenidos_model');
+		$this->load->model('/Manager/Pais_model');
 		
-		$this->page_title = 'Publicaciones';
+		$this->page_title = 'Noticias';
 // 		$this->output->enable_profiler(TRUE);
 //		$this->user = $this->ion_auth->user()->row();
 // var_dump($this->user);
@@ -274,7 +275,6 @@ define('SMTP_IP','10.1.1.62');
 	
 	public function index($id_post=null){
 
-
 		if (!$this->ion_auth->logged_in())
 		{
 			redirect('auth/login');
@@ -285,6 +285,13 @@ define('SMTP_IP','10.1.1.62');
 			$this->form_validation->set_rules('id_user_login', 'Usuario', 'required');	
 			$this->form_validation->set_rules('id_legislatura', 'Legislatura', 'required|callback_check');
 			
+			// si la publicacion es notificacion
+			if(isset($_POST['notificacion'])){
+				$tipo_publicacion = $_POST['notificacion'];
+			}else{
+				$tipo_publicacion = $this->input->post('tipo');
+				
+			}
 			// si la publicacion no es de Legislaturas conectadas el parametro Legislatura es obligatorio
 			if(!isset($_POST['is_legis_conectadas'])){
 				
@@ -315,13 +322,13 @@ define('SMTP_IP','10.1.1.62');
 		}
 		if($this->form_validation->run() === true){
 			
-			
+			$this->load->library('user_agent');
 			
 			$datos = array(
 				'is_legis_conectadas' => $is_legis_comenctadas ,
 				'id_legislatura' => $this->input->post('id_legislatura') ,
 				'id_tipo_normativa' => $this->input->post('normativa') ,
-				'id_tipo' => $this->input->post('tipo') ,
+				'id_tipo' => $tipo_publicacion ,
 				'is_destacado' => $this->input->post('destacada') ,
 				'id_usuario' => $this->input->post('id_user_login') ,
 				'id_categoria' => $this->input->post('tematica') ,
@@ -332,6 +339,7 @@ define('SMTP_IP','10.1.1.62');
 				'resumen' => $this->input->post('resumen_prev',FALSE) ,
 				'cuerpo' => $this->input->post('cuerpo_prev',FALSE) ,
 				'extra' => $this->input->post('extra_prev',FALSE) ,
+				'log_ip'=>get_ip_address(),
 //				'id_user_login' => $this->user->id ,
 			);
 			
@@ -344,25 +352,23 @@ define('SMTP_IP','10.1.1.62');
 	
 				// parametos 1-id publicacion, 2-array de datos, 3-tabla
 				if($this->Post_model->update_post($id_post, $datos, 'publicaciones')){
-					
-					$array_session_data = array(
-        		'msj_update'  => 'La publicación se Actualizó con éxito',
-        		'class'     => 'alert-success',
-					);
-				
-					redirect('Manager/Post/edit_post/'.$id_post, 'refresh');
+
+				$estado = "success";
+				$mensaje = "Se ha Ingresado Correctamente";
 					
 				}else{
+					$estado = "error";
+					$mensaje = "Se ha Producido un error 366";
 					
-					$array_session_data = array(
-        		'msj_update'  => 'Ha ocurrido un error al actualizar la publicación',
-        		'class'     => 'alert-danger',
-					);
-					
-					$this->session->set_userdata($array_session_data);
+				}
+					$grabar_datos_array = array(
+                'seccion' => 'Editar Publicación',
+                'mensaje' => $mensaje,
+                'estado' => $estado,
+            );
+					$this->session->set_userdata('save_data',$grabar_datos_array);
 					
 					redirect('Manager/Post/edit_post/'.$id_post, 'refresh');
-				}
 				
 			}
 			
@@ -423,6 +429,7 @@ define('SMTP_IP','10.1.1.62');
 				'data_select_legi'    	=> $data_select_legi,
 				'data_select_ambito'  	=> $data_select_ambito,
 				'data_select_normativa' => $data_select_normativa,
+				'data_select_pais'=>$this->Pais_model->obtener_contenido_select('_paises', 'id_pais ASC',true),
 			);
 
 			$seccion = $this->load->view('manager/secciones/post/post',$datos, TRUE);
@@ -495,7 +502,7 @@ define('SMTP_IP','10.1.1.62');
         if (!$this->upload->do_upload($file_element_name))
         {
           $status = 'error';
-          $msg = $this->upload->display_errors('', '');
+          echo $msg = $this->upload->display_errors('', '');
         }
         else
         {
@@ -536,6 +543,7 @@ define('SMTP_IP','10.1.1.62');
                 unlink($data['full_path']);
                 $status = "error";
                 $msg = "Ocurrión un error al intentar adjuntar un archivo.";
+													$html = 'algo';
             }
         }
 			
@@ -1001,7 +1009,6 @@ echo 'si';
 			return $usuarios ;
 		}
 	}
-	
 	
 	public function get_subcategorias_id(){
 	
