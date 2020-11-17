@@ -525,6 +525,7 @@ if ( $this->_enviar_email( $email_data, 'tutinocarlos@gmail.com' ) ){
 	}
 	
 	function cambiar_pwd(){
+		/*funcionando*/
 		
 		$password = randon_password(5);
 		
