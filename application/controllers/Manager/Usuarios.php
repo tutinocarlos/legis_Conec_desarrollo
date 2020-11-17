@@ -27,7 +27,7 @@ class Usuarios extends MY_Controller {
 1826
 $2y$12$gWqvtPfUkpGtI9zQBUuCGeVz7HmG6BwFpR6J/J/X/69DmSrSAZEzO
 */
-
+var_dump($_POST);die();
 		$forgotten = $this->ion_auth->reset_password('tutinocarlos@gmail.com', 'porroporro');
 
 	 	if ($forgotten) { //if there were no errors
@@ -537,43 +537,63 @@ if ( $this->_enviar_email( $email_data, 'tutinocarlos@gmail.com' ) ){
 		$message = '';
 		$status = false;
 		if ($this->ion_auth->update($this->input->post('id_user'), $data)){
-				$status = true;
-				$messages = $this->ion_auth->messages_array();
-						foreach ($messages as $message)
-      {
-        $message .=  $message;
-      }
-			$data = array(
-				"nombre" => $usuario->first_name,
-				"apellido" => $usuario->last_name,
-				"identity" => $usuario->email,
-				"temporal" => $password,
-				'datoss'=> 'completar el proceso'
-			);
+			$status = true;
+			$messages = $this->ion_auth->messages_array();
 			
-				$html = $this->load->view($this->config->item('email_templates', 'ion_auth').$this->config->item('reset_pwd', 'ion_auth'), $data, true);
+			foreach ($messages as $message){
+				$message =  $message;
+			}
+
+		$data = array(
+			"nombre" => $usuario->first_name,
+			"apellido" => $usuario->last_name,
+			"identity" => $usuario->email,
+			"temporal" => $password,
+			'datoss'=> 'completar el proceso'
+		);
 			
-				$subject = 'Cambio de contraseña - Legislaturas Conectadas';
+		$this->load->library('email');
+		$this->load->helper('url');
+    /* configuro el envio */
+		$html = $this->load->view($this->config->item('email_templates', 'ion_auth').$this->config->item('reset_pwd', 'ion_auth'), $data, true);
 			
-				$set_pass = semdMailGmail($usuario->email,$subject, $html,$attach=FALSE );
+		$subject = 'Cambio de contraseña - Legislaturas Conectadas';
+	/*NUEVO*/
+		$this->email->from('webmaster@legislaturasconectadas.gob.ar', 'Legislaturas Conectadas - Cambio de contraseña de acceso');
+			
+		$this->email->to($usuario->email,'Cambio de contraseña de acceso');
+		$this->email->subject('Legislaturas Conectadas - cambio de contraseña');
+			
+	 	$this->email->message($html);   
+
+    if($this->email->send())
+    {
+			$message .= '<br> Se ha enviado email al usuario';
+			$status = true;
+    }else{
+			$message .= '<br> Error al enviar email al usuario';
+			$status = false;
+		}
+//			die();
+	/*NUEVO*/
+//				$set_pass = semdMailGmail($usuario->email,$subject, $html,$attach=FALSE );
 
     }
-    else
-    {
-      $errors = $this->ion_auth->errors_array();
-      foreach ($errors as $error)
-      {
-        $message .= $error;
-      }
+    else{
+			$errors = $this->ion_auth->errors_array();
+			foreach ($errors as $error)
+			{
+				$message .= $error;
+			}
     }
 
 		$response = array(
 				'estado'=>$status,
 				'password'=>$password,
 				'message'=>$message,
-				'message'=>$message,
 				'html'=>$html
 			);
+
 		echo json_encode($response);
 	}
 	
